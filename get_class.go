@@ -26,9 +26,11 @@ type Type struct {
 // Abi -
 type Abi struct {
 	Type
-	Members []Type `json:"members,omitempty"`
-	Inputs  []Type `json:"inputs,omitempty"`
-	Outputs []Type `json:"outputs,omitempty"`
+	Members []Type   `json:"members,omitempty"`
+	Inputs  []Type   `json:"inputs,omitempty"`
+	Outputs []Type   `json:"outputs,omitempty"`
+	Data    []Type   `json:"data,omitempty"`
+	Keys    []string `json:"keys,omitempty"`
 }
 
 // EntrypointsByType -
@@ -38,51 +40,10 @@ type EntrypointsByType struct {
 	L1HANDLER   []Handler `json:"L1_HANDLER"`
 }
 
-// GetClassByBlockNumber -
-func (api API) GetClassByBlockNumber(ctx context.Context, blockNumber uint64, classHash string, opts ...RequestOption) (*Response[Class], error) {
+// GetClass -
+func (api API) GetClass(ctx context.Context, block BlockFilter, classHash string, opts ...RequestOption) (*Response[Class], error) {
 	request := api.prepareRequest(ctx, "starknet_getClass", []any{
-		&BlockRequest{
-			BlockNumber: &blockNumber,
-		},
-		classHash,
-	}, opts...)
-
-	var response Response[Class]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetClassByBlockHash -
-func (api API) GetClassByBlockHash(ctx context.Context, hash, classHash string, opts ...RequestOption) (*Response[Class], error) {
-	request := api.prepareRequest(ctx, "starknet_getClass", []any{
-		&BlockRequest{
-			BlockHash: &hash,
-		},
-		classHash,
-	}, opts...)
-
-	var response Response[Class]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetClassByLatestBlock -
-func (api API) GetClassByLatestBlock(ctx context.Context, classHash string, opts ...RequestOption) (*Response[Class], error) {
-	request := api.prepareRequest(ctx, "starknet_getClass", []any{
-		latest,
-		classHash,
-	}, opts...)
-
-	var response Response[Class]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetClassByPendingBlock -
-func (api API) GetClassByPendingBlock(ctx context.Context, classHash string, opts ...RequestOption) (*Response[Class], error) {
-	request := api.prepareRequest(ctx, "starknet_getClass", []any{
-		pending,
-		classHash,
+		block, classHash,
 	}, opts...)
 
 	var response Response[Class]

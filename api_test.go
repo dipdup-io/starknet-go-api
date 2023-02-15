@@ -37,131 +37,155 @@ func TestChainIDCall(t *testing.T) {
 	})
 }
 
-func TestGetBlockWithTxHashesByHashCall(t *testing.T) {
+func TestGetBlockWithTxHashesCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
 	t.Run("test get block with tx hashes by hash call", func(t *testing.T) {
-		if _, err := api.GetBlockWithTxHashesByHash(
+		if _, err := api.GetBlockWithTxHashes(
 			context.Background(),
-			"0x144282ad24c23c724b537f5afe759de928e30048862caf105a36e121aaedbe",
+			BlockFilter{
+				Hash: "0x144282ad24c23c724b537f5afe759de928e30048862caf105a36e121aaedbe",
+			},
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetBlockWithTxHashesByHash() error = %v", err)
+			t.Errorf("GetBlockWithTxHashes(hash) error = %v", err)
+		}
+
+		if _, err := api.GetBlockWithTxHashes(
+			context.Background(),
+			BlockFilter{
+				Number: 1,
+			},
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetBlockWithTxHashes(number) error = %v", err)
+		}
+
+		if _, err := api.GetBlockWithTxHashes(
+			context.Background(),
+			BlockFilter{
+				String: Latest,
+			},
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetBlockWithTxHashes(latest) error = %v", err)
 		}
 	})
 }
 
-func TestGetBlockWithTxHashesByNumberCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get block with tx hashes by number call", func(t *testing.T) {
-		if _, err := api.GetBlockWithTxHashesByNumber(
-			context.Background(),
-			1,
-			WithTimeout(2),
-		); err != nil {
-			t.Errorf("GetBlockWithTxHashesByNumber() error = %v", err)
-		}
-	})
-}
-
-func TestGetBlockWithTxsByHashCall(t *testing.T) {
+func TestGetBlockWithTxsCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
 	t.Run("test get block with txs by hash call", func(t *testing.T) {
-		if _, err := api.GetBlockWithTxsByHash(
+		if _, err := api.GetBlockWithTxs(
 			context.Background(),
-			"0x144282ad24c23c724b537f5afe759de928e30048862caf105a36e121aaedbe",
+			BlockFilter{
+				Hash: "0x144282ad24c23c724b537f5afe759de928e30048862caf105a36e121aaedbe",
+			},
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("TestGetBlockWithTxsByHashCall() error = %v", err)
+			t.Errorf("GetBlockWithTxs(hash) error = %v", err)
+			return
+		}
+
+		if _, err := api.GetBlockWithTxs(
+			context.Background(),
+			BlockFilter{
+				Number: 1,
+			},
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetBlockWithTxs(number) error = %v", err)
+			return
+		}
+
+		if _, err := api.GetBlockWithTxs(
+			context.Background(),
+			BlockFilter{
+				String: Latest,
+			},
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetBlockWithTxs(latest) error = %v", err)
+			return
 		}
 	})
 }
 
-func TestGetBlockWithTxsByNumberCall(t *testing.T) {
+func TestGetClassAtCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
-	t.Run("test get block with txs by number call", func(t *testing.T) {
-		if _, err := api.GetBlockWithTxsByNumber(
+	t.Run("test get get class at call", func(t *testing.T) {
+		if _, err := api.GetClassAt(
 			context.Background(),
-			1,
-			WithTimeout(2),
-		); err != nil {
-			t.Errorf("GetBlockWithTxsByNumber() error = %v", err)
-		}
-	})
-}
-
-func TestGetClassAtBlockHashCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get get class at block hash call", func(t *testing.T) {
-		if _, err := api.GetClassAtBlockHash(
-			context.Background(),
-			"0x75e00250d4343326f322e370df4c9c73c7be105ad9f532eeb97891a34d9e4a5",
+			BlockFilter{
+				Hash: "0x75e00250d4343326f322e370df4c9c73c7be105ad9f532eeb97891a34d9e4a5",
+			},
 			"0x2fb7ff5b1b474e8e691f5bebad9aa7aa3009f6ef22ccc2816f96cdfe217604d",
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassAtBlockHash() error = %v", err)
+			t.Errorf("GetClassAt(hash) error = %v", err)
 		}
-	})
-}
 
-func TestGetClassAtBlockNumberCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get class at block number call", func(t *testing.T) {
-		if _, err := api.GetClassAtBlockNumber(
+		if _, err := api.GetClassAt(
 			context.Background(),
-			1,
+			BlockFilter{
+				Number: 20,
+			},
 			"0x2fb7ff5b1b474e8e691f5bebad9aa7aa3009f6ef22ccc2816f96cdfe217604d",
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassAtBlockNumber() error = %v", err)
+			t.Errorf("GetClassAt(number) error = %v", err)
 		}
-	})
-}
 
-func TestGetClassAtLatestBlockCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get class at latest call", func(t *testing.T) {
-		if _, err := api.GetClassAtLatestBlock(
+		if _, err := api.GetClassAt(
 			context.Background(),
+			BlockFilter{
+				String: Latest,
+			},
 			"0x2fb7ff5b1b474e8e691f5bebad9aa7aa3009f6ef22ccc2816f96cdfe217604d",
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassAtLatestBlock() error = %v", err)
+			t.Errorf("GetClassAt(latest) error = %v", err)
 		}
 	})
 }
 
-func TestGetClassAtPendingBlockCall(t *testing.T) {
+func TestGetClassHashAtCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
-	t.Run("test get class at pending call", func(t *testing.T) {
-		if _, err := api.GetClassAtPendingBlock(
+	t.Run("test get get class hash at call", func(t *testing.T) {
+		if _, err := api.GetClassHashAt(
 			context.Background(),
+			BlockFilter{
+				Hash: "0x75e00250d4343326f322e370df4c9c73c7be105ad9f532eeb97891a34d9e4a5",
+			},
 			"0x2fb7ff5b1b474e8e691f5bebad9aa7aa3009f6ef22ccc2816f96cdfe217604d",
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassAtPendingBlock() error = %v", err)
+			t.Errorf("GetClassHashAt(hash) error = %v", err)
 		}
-	})
-}
 
-func TestGetClassByBlockHashCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get class by block hash call", func(t *testing.T) {
-		if _, err := api.GetClassByBlockHash(
+		if _, err := api.GetClassHashAt(
 			context.Background(),
-			"0x11172ea58125f54df2c07df73accd9236558944ec0ee650d80968f863267764",
-			"0x10455c752b86932ce552f2b0fe81a880746649b9aee7e0d842bf3f52378f9f8",
+			BlockFilter{
+				Number: 20,
+			},
+			"0x2fb7ff5b1b474e8e691f5bebad9aa7aa3009f6ef22ccc2816f96cdfe217604d",
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassByBlockHash() error = %v", err)
+			t.Errorf("GetClassHashAt(number) error = %v", err)
+		}
+
+		if _, err := api.GetClassHashAt(
+			context.Background(),
+			BlockFilter{
+				String: Latest,
+			},
+			"0x2fb7ff5b1b474e8e691f5bebad9aa7aa3009f6ef22ccc2816f96cdfe217604d",
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetClassHashAt(latest) error = %v", err)
 		}
 	})
 }
@@ -169,56 +193,74 @@ func TestGetClassByBlockHashCall(t *testing.T) {
 func TestGetClassByBlockNumberCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
-	t.Run("test get class by block number call", func(t *testing.T) {
-		if _, err := api.GetClassByBlockNumber(
+	t.Run("test get class call", func(t *testing.T) {
+		if _, err := api.GetClass(
 			context.Background(),
-			2,
+			BlockFilter{
+				Hash: "0x11172ea58125f54df2c07df73accd9236558944ec0ee650d80968f863267764",
+			},
 			"0x10455c752b86932ce552f2b0fe81a880746649b9aee7e0d842bf3f52378f9f8",
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassByBlockNumber() error = %v", err)
+			t.Errorf("GetClass(hash) error = %v", err)
+		}
+
+		if _, err := api.GetClass(
+			context.Background(),
+			BlockFilter{
+				Number: 2,
+			},
+			"0x10455c752b86932ce552f2b0fe81a880746649b9aee7e0d842bf3f52378f9f8",
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetClass(number) error = %v", err)
+		}
+
+		if _, err := api.GetClass(
+			context.Background(),
+			BlockFilter{
+				String: Latest,
+			},
+			"0x10455c752b86932ce552f2b0fe81a880746649b9aee7e0d842bf3f52378f9f8",
+			WithTimeout(2),
+		); err != nil {
+			t.Errorf("GetClass(number) error = %v", err)
 		}
 	})
 }
 
-func TestGetClassByLatestCall(t *testing.T) {
+func TestGetBlockTransactionCountCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
-	t.Run("test get class by latest block call", func(t *testing.T) {
-		if _, err := api.GetClassByLatestBlock(
+	t.Run("test get transaction count call", func(t *testing.T) {
+		if _, err := api.GetBlockTransactionCount(
 			context.Background(),
-			"0x10455c752b86932ce552f2b0fe81a880746649b9aee7e0d842bf3f52378f9f8",
+			BlockFilter{
+				Number: 10,
+			},
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassByLatestBlock() error = %v", err)
+			t.Errorf("GetBlockTransactionCount(number) error = %v", err)
 		}
-	})
-}
 
-func TestGetClassByPendingCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get class by pending block call", func(t *testing.T) {
-		if _, err := api.GetClassByPendingBlock(
+		if _, err := api.GetBlockTransactionCount(
 			context.Background(),
-			"0x10455c752b86932ce552f2b0fe81a880746649b9aee7e0d842bf3f52378f9f8",
+			BlockFilter{
+				Hash: "0x144282ad24c23c724b537f5afe759de928e30048862caf105a36e121aaedbe",
+			},
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetClassByPendingBlock() error = %v", err)
+			t.Errorf("GetBlockTransactionCount(hash) error = %v", err)
 		}
-	})
-}
 
-func TestGetTransactionCountByBlockNumberCall(t *testing.T) {
-	api := NewAPI(testUrl)
-
-	t.Run("test get transaction count by block number call", func(t *testing.T) {
-		if _, err := api.GetTransactionCountByBlockNumber(
+		if _, err := api.GetBlockTransactionCount(
 			context.Background(),
-			10,
+			BlockFilter{
+				String: Latest,
+			},
 			WithTimeout(2),
 		); err != nil {
-			t.Errorf("GetTransactionCountByBlockNumber() error = %v", err)
+			t.Errorf("GetBlockTransactionCount(latest) error = %v", err)
 		}
 	})
 }

@@ -48,5 +48,3 @@ func (api API) prepareRequest(ctx context.Context, method string, params []any, 
 
 	return &req
 }
-
-// TODO: implement starknet_getEvents, starknet_call and starknet_estimateFee

@@ -14,48 +14,9 @@ type BlockWithTxs struct {
 	Transactions     []Transaction `json:"transactions"`
 }
 
-// GetBlockWithTxsByNumber -
-func (api API) GetBlockWithTxsByNumber(ctx context.Context, blockNumber uint64, opts ...RequestOption) (*Response[BlockWithTxs], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{
-		&BlockRequest{
-			BlockNumber: &blockNumber,
-		},
-	}, opts...)
-
-	var response Response[BlockWithTxs]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetBlockWithTxsByHash -
-func (api API) GetBlockWithTxsByHash(ctx context.Context, hash string, opts ...RequestOption) (*Response[BlockWithTxs], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{
-		&BlockRequest{
-			BlockHash: &hash,
-		},
-	}, opts...)
-
-	var response Response[BlockWithTxs]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetLatestBlockWithTxs -
-func (api API) GetLatestBlockWithTxs(ctx context.Context, opts ...RequestOption) (*Response[BlockWithTxs], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{
-		latest,
-	}, opts...)
-
-	var response Response[BlockWithTxs]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetPendingBlockWithTxs -
-func (api API) GetPendingBlockWithTxs(ctx context.Context, opts ...RequestOption) (*Response[BlockWithTxs], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{
-		pending,
-	}, opts...)
+// GetBlockWithTxs -
+func (api API) GetBlockWithTxs(ctx context.Context, filter BlockFilter, opts ...RequestOption) (*Response[BlockWithTxs], error) {
+	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{filter}, opts...)
 
 	var response Response[BlockWithTxs]
 	err := post(ctx, api.client, api.baseURL, *request, &response)

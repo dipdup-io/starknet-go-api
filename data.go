@@ -2,12 +2,13 @@ package starknetgoapi
 
 import (
 	stdJSON "encoding/json"
+	"fmt"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const defaultJSONRPC = "2.0"
-const latest = "latest"
-const pending = "pending"
 
 // Request -
 type Request struct {
@@ -108,4 +109,58 @@ type Event struct {
 type Message struct {
 	ToAddress string   `json:"to_address"`
 	Payload   []string `json:"payload"`
+}
+
+// errors
+var (
+	ErrInvalidBlockFilter = errors.New("Only one field of Hash, Number or String in BlockFilter should be set")
+	ErrEmptyBlockFilter   = errors.New("empty BlockFilter")
+)
+
+// default block string names
+const (
+	Latest  = "latest"
+	Pending = "pending"
+)
+
+// BlockFilter -
+type BlockFilter struct {
+	Hash   string
+	Number uint64
+	String string
+}
+
+func (bf BlockFilter) validate() error {
+	hash := bf.Hash != ""
+	number := bf.Number > 0
+	str := bf.String != ""
+	switch {
+	case hash && number:
+		return ErrInvalidBlockFilter
+	case hash && str:
+		return ErrInvalidBlockFilter
+	case number && str:
+		return ErrInvalidBlockFilter
+	case !hash && !number && !str:
+		return ErrEmptyBlockFilter
+	}
+
+	if bf.String != Latest && bf.String != Pending && bf.String != "" {
+		return errors.Errorf("String field in block filter has to be 'latest' or 'pending', but '%s' was passed", bf.String)
+	}
+	return nil
+}
+
+// MarshalJSON -
+func (bf BlockFilter) MarshalJSON() ([]byte, error) {
+	if bf.Hash != "" {
+		return []byte(fmt.Sprintf(`{"block_hash": "%s"}`, bf.Hash)), nil
+	}
+	if bf.Number > 0 {
+		return []byte(fmt.Sprintf(`{"block_number": %d}`, bf.Number)), nil
+	}
+	if bf.String != "" {
+		return json.Marshal(bf.String)
+	}
+	return nil, ErrEmptyBlockFilter
 }

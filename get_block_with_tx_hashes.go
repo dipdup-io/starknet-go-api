@@ -14,48 +14,9 @@ type BlockWithTxHashes struct {
 	Transactions     []string `json:"transactions"`
 }
 
-// GetBlockWithTxHashesByNumber -
-func (api API) GetBlockWithTxHashesByNumber(ctx context.Context, blockNumber uint64, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{
-		&BlockRequest{
-			BlockNumber: &blockNumber,
-		},
-	}, opts...)
-
-	var response Response[BlockWithTxHashes]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetBlockWithTxHashesByHash -
-func (api API) GetBlockWithTxHashesByHash(ctx context.Context, hash string, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{
-		&BlockRequest{
-			BlockHash: &hash,
-		},
-	}, opts...)
-
-	var response Response[BlockWithTxHashes]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetLatestBlockWithTxHashes -
-func (api API) GetLatestBlockWithTxHashes(ctx context.Context, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{
-		latest,
-	}, opts...)
-
-	var response Response[BlockWithTxHashes]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
-	return &response, err
-}
-
-// GetPendingBlockWithTxHashes -
-func (api API) GetPendingBlockWithTxHashes(ctx context.Context, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{
-		pending,
-	}, opts...)
+// GetBlockWithTxHashes -
+func (api API) GetBlockWithTxHashes(ctx context.Context, filters BlockFilter, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
+	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{filters}, opts...)
 
 	var response Response[BlockWithTxHashes]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
