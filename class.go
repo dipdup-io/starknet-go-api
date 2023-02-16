@@ -61,11 +61,11 @@ type Member struct {
 
 // Abi -
 type Abi struct {
-	Functions   []*FunctionAbiItem `json:"-"`
-	L1Handlers  []*FunctionAbiItem `json:"-"`
-	Constructor []*FunctionAbiItem `json:"-"`
-	Events      []*EventAbiItem    `json:"-"`
-	Structs     []*StructAbiItem   `json:"-"`
+	Functions   map[string]*FunctionAbiItem `json:"-"`
+	L1Handlers  map[string]*FunctionAbiItem `json:"-"`
+	Constructor map[string]*FunctionAbiItem `json:"-"`
+	Events      map[string]*EventAbiItem    `json:"-"`
+	Structs     map[string]*StructAbiItem   `json:"-"`
 }
 
 // UnmarshalJSON -
@@ -93,24 +93,24 @@ func (a *Abi) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	a.Constructor = make([]*FunctionAbiItem, 0)
-	a.Events = make([]*EventAbiItem, 0)
-	a.Functions = make([]*FunctionAbiItem, 0)
-	a.L1Handlers = make([]*FunctionAbiItem, 0)
-	a.Structs = make([]*StructAbiItem, 0)
+	a.Constructor = make(map[string]*FunctionAbiItem)
+	a.Events = make(map[string]*EventAbiItem)
+	a.Functions = make(map[string]*FunctionAbiItem)
+	a.L1Handlers = make(map[string]*FunctionAbiItem)
+	a.Structs = make(map[string]*StructAbiItem)
 
 	for i := range types {
 		switch types[i].Type {
 		case AbiL1HandlerType:
-			a.L1Handlers = append(a.L1Handlers, items[i].(*FunctionAbiItem))
+			a.L1Handlers[types[i].Name] = items[i].(*FunctionAbiItem)
 		case AbiFunctionType:
-			a.Functions = append(a.Functions, items[i].(*FunctionAbiItem))
+			a.Functions[types[i].Name] = items[i].(*FunctionAbiItem)
 		case AbiConstructorType:
-			a.Constructor = append(a.Constructor, items[i].(*FunctionAbiItem))
+			a.Constructor[types[i].Name] = items[i].(*FunctionAbiItem)
 		case AbiEventType:
-			a.Events = append(a.Events, items[i].(*EventAbiItem))
+			a.Events[types[i].Name] = items[i].(*EventAbiItem)
 		case AbiStructType:
-			a.Structs = append(a.Structs, items[i].(*StructAbiItem))
+			a.Structs[types[i].Name] = items[i].(*StructAbiItem)
 		default:
 			return errors.Errorf("unknown abi type: %s", types[i].Type)
 		}

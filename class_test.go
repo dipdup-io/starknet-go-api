@@ -345,8 +345,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 				}
 			]`),
 			want: Abi{
-				Functions: []*FunctionAbiItem{
-					{
+				Functions: map[string]*FunctionAbiItem{
+					"advance_counter": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "advance_counter",
@@ -364,7 +364,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"xor_counters": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "xor_counters",
@@ -376,7 +377,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"call_xor_counters": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "call_xor_counters",
@@ -391,7 +393,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"add_signature_to_counters": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "add_signature_to_counters",
@@ -403,7 +406,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"set_value": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "set_value",
@@ -418,7 +422,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"get_value": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "get_value",
@@ -435,14 +440,16 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "res",
 							},
 						},
-					}, {
+					},
+					"entry_point": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "entry_point",
 						},
 						Inputs:  []Type{},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_builtins": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_builtins",
@@ -454,7 +461,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "res",
 							},
 						},
-					}, {
+					},
+					"send_message": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "send_message",
@@ -466,7 +474,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_call_contract": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_call_contract",
@@ -487,7 +496,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_delegate_call": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_delegate_call",
@@ -508,7 +518,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_get_caller_address": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_get_caller_address",
@@ -520,7 +531,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_get_sequencer_address": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_get_sequencer_address",
@@ -532,7 +544,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_get_contract_address": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_get_contract_address",
@@ -544,7 +557,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_call_storage_consistency": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_call_storage_consistency",
@@ -559,7 +573,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_re_entrance": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_re_entrance",
@@ -574,7 +589,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"add_value": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "add_value",
@@ -586,7 +602,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"recursive_add_value": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "recursive_add_value",
@@ -601,7 +618,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"increase_value": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "increase_value",
@@ -613,7 +631,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 							},
 						},
 						Outputs: []Type{},
-					}, {
+					},
+					"test_call_with_array": {
 						Type: Type{
 							Type: AbiFunctionType,
 							Name: "test_call_with_array",
@@ -633,8 +652,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 						Outputs: []Type{},
 					},
 				},
-				L1Handlers: []*FunctionAbiItem{
-					{
+				L1Handlers: map[string]*FunctionAbiItem{
+					"deposit": {
 						Type: Type{
 							Type: AbiL1HandlerType,
 							Name: "deposit",
@@ -651,8 +670,8 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 						Outputs: []Type{},
 					},
 				},
-				Constructor: []*FunctionAbiItem{
-					{
+				Constructor: map[string]*FunctionAbiItem{
+					"constructor": {
 						Type: Type{
 							Type: AbiConstructorType,
 							Name: "constructor",
@@ -669,9 +688,9 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 						Outputs: []Type{},
 					},
 				},
-				Events: []*EventAbiItem{},
-				Structs: []*StructAbiItem{
-					{
+				Events: map[string]*EventAbiItem{},
+				Structs: map[string]*StructAbiItem{
+					"IndexAndValues": {
 						Type: Type{
 							Type: AbiStructType,
 							Name: "IndexAndValues",
@@ -706,18 +725,23 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 
 			if !assert.Len(t, a.Functions, len(tt.want.Functions), "invalid functions count") {
 				t.Errorf("invalid functions count: want = %d got=%d", len(tt.want.Functions), len(a.Functions))
+				return
 			}
 			if !assert.Len(t, a.L1Handlers, len(tt.want.L1Handlers), "invalid l1 handlers count") {
 				t.Errorf("invalid l1_handlers count: want = %d got=%d", len(tt.want.L1Handlers), len(a.L1Handlers))
+				return
 			}
 			if !assert.Len(t, a.Constructor, len(tt.want.Constructor), "invalid constructors count") {
 				t.Errorf("invalid constructors count: want = %d got=%d", len(tt.want.Constructor), len(a.Constructor))
+				return
 			}
 			if !assert.Len(t, a.Structs, len(tt.want.Structs), "invalid structs count") {
 				t.Errorf("invalid structs count: want = %d got=%d", len(tt.want.Structs), len(a.Structs))
+				return
 			}
 			if !assert.Len(t, a.Events, len(tt.want.Events), "invalid events count") {
 				t.Errorf("invalid events count: want = %d got=%d", len(tt.want.Events), len(a.Events))
+				return
 			}
 		})
 	}
