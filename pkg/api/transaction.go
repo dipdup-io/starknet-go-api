@@ -50,7 +50,8 @@ type Declare struct {
 	Nonce         string   `json:"nonce"`
 	SenderAddress string   `json:"sender_address"`
 	Signature     []string `json:"signature"`
-	ContractClass Class    `json:"contract_class"`
+	ContractClass Class    `json:"contract_class,omitempty"`
+	ClassHash     string   `json:"class_hash,omitempty"`
 }
 
 func (d Declare) toMap() map[string]any {
@@ -67,7 +68,8 @@ func (d Declare) toMap() map[string]any {
 type Deploy struct {
 	ContractAddressSalt string   `json:"contract_address_salt"`
 	ConstructorCalldata []string `json:"constructor_calldata"`
-	ContractClass       Class    `json:"contract_class"`
+	ClassHash           string   `json:"class_hash,omitempty"`
+	ContractClass       Class    `json:"contract_class,omitempty"`
 }
 
 func (d Deploy) toMap() map[string]any {
