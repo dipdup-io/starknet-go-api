@@ -15,8 +15,12 @@ type BlockWithTxHashes struct {
 }
 
 // GetBlockWithTxHashes -
-func (api API) GetBlockWithTxHashes(ctx context.Context, filters BlockFilter, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{filters}, opts...)
+func (api API) GetBlockWithTxHashes(ctx context.Context, block BlockFilter, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
+	if err := block.validate(); err != nil {
+		return nil, err
+	}
+
+	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{block}, opts...)
 
 	var response Response[BlockWithTxHashes]
 	err := post(ctx, api.client, api.baseURL, *request, &response)

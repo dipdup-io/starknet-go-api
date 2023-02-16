@@ -40,7 +40,7 @@ func TestChainIDCall(t *testing.T) {
 func TestGetBlockWithTxHashesCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
-	t.Run("test get block with tx hashes by hash call", func(t *testing.T) {
+	t.Run("test get block with tx hashes call", func(t *testing.T) {
 		if _, err := api.GetBlockWithTxHashes(
 			context.Background(),
 			BlockFilter{
@@ -76,7 +76,7 @@ func TestGetBlockWithTxHashesCall(t *testing.T) {
 func TestGetBlockWithTxsCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
-	t.Run("test get block with txs by hash call", func(t *testing.T) {
+	t.Run("test get block with txs call", func(t *testing.T) {
 		if _, err := api.GetBlockWithTxs(
 			context.Background(),
 			BlockFilter{
@@ -190,7 +190,7 @@ func TestGetClassHashAtCall(t *testing.T) {
 	})
 }
 
-func TestGetClassByBlockNumberCall(t *testing.T) {
+func TestGetClassCall(t *testing.T) {
 	api := NewAPI(testUrl)
 
 	t.Run("test get class call", func(t *testing.T) {

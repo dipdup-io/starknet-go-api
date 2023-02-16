@@ -12,6 +12,10 @@ type StateUpdate struct {
 
 // GetStateUpdate -
 func (api API) GetStateUpdate(ctx context.Context, block BlockFilter, opts ...RequestOption) (*Response[StateUpdate], error) {
+	if err := block.validate(); err != nil {
+		return nil, err
+	}
+
 	request := api.prepareRequest(ctx, "starknet_getStateUpdate", []any{block}, opts...)
 
 	var response Response[StateUpdate]

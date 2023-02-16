@@ -4,6 +4,10 @@ import "context"
 
 // GetStorageAt -
 func (api API) GetStorageAt(ctx context.Context, contract, key string, block BlockFilter, opts ...RequestOption) (*Response[string], error) {
+	if err := block.validate(); err != nil {
+		return nil, err
+	}
+
 	request := api.prepareRequest(ctx, "starknet_getStorageAt", []any{
 		contract,
 		key,

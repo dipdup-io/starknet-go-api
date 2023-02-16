@@ -15,8 +15,12 @@ type BlockWithTxs struct {
 }
 
 // GetBlockWithTxs -
-func (api API) GetBlockWithTxs(ctx context.Context, filter BlockFilter, opts ...RequestOption) (*Response[BlockWithTxs], error) {
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{filter}, opts...)
+func (api API) GetBlockWithTxs(ctx context.Context, bloxk BlockFilter, opts ...RequestOption) (*Response[BlockWithTxs], error) {
+	if err := bloxk.validate(); err != nil {
+		return nil, err
+	}
+
+	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{bloxk}, opts...)
 
 	var response Response[BlockWithTxs]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
