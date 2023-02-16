@@ -4,7 +4,7 @@ Go implementation of Starknet API
 ## Install
 
 ```bash
-go get github.com/dipdup-io/starknet-api-go
+go get github.com/dipdup-io/starknet-api-go/pkg/api
 ```
 
 ## Usage
@@ -72,7 +72,7 @@ import (
 	"context"
 	"log"
 
-	starknet "github.com/dipdup-io/starknet-go-api"
+	starknet "github.com/dipdup-io/starknet-go-api/pkg/api"
 )
 
 func main() {

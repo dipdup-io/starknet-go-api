@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	starknet "github.com/dipdup-io/starknet-go-api"
+	starknet "github.com/dipdup-io/starknet-go-api/pkg/api"
 )
 
 func main() {
