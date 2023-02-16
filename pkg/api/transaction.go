@@ -99,6 +99,23 @@ func (d DeployAccount) toMap() map[string]any {
 	}
 }
 
+// L1Handler -
+type L1Handler struct {
+	Nonce              string   `json:"nonce"`
+	ContractAddress    string   `json:"contract_address"`
+	EntrypointSelector string   `json:"entry_point_selector"`
+	Calldata           []string `json:"calldata"`
+}
+
+func (l1handler L1Handler) toMap() map[string]any {
+	return map[string]any{
+		"nonce":                l1handler.Nonce,
+		"contract_address":     l1handler.ContractAddress,
+		"entry_point_selector": l1handler.EntrypointSelector,
+		"calldata":             l1handler.Calldata,
+	}
+}
+
 // Transaction -
 type Transaction struct {
 	Type            string `json:"type"`
@@ -133,6 +150,8 @@ func (t *Transaction) UnmarshalJSON(data []byte) error {
 		t.Body = &Deploy{}
 	case TransactionTypeDeployAccount:
 		t.Body = &DeployAccount{}
+	case TransactionTypeL1Handler:
+		t.Body = &L1Handler{}
 	default:
 		return errors.Errorf("unknown transaction type: %s", t.Type)
 	}
@@ -181,6 +200,12 @@ func (t *Transaction) MarshalJSON() ([]byte, error) {
 			m = deploy.toMap()
 		} else {
 			return nil, errors.Errorf("invalid invoke transaction type: expected DeployAccount (non-pointer)")
+		}
+	case TransactionTypeL1Handler:
+		if l1handler, ok := t.Body.(L1Handler); ok {
+			m = l1handler.toMap()
+		} else {
+			return nil, errors.Errorf("invalid invoke transaction type: expected L1Handler (non-pointer)")
 		}
 	default:
 		return nil, errors.Errorf("unknown transaction type: %s", t.Type)

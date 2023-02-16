@@ -8,4 +8,5 @@ const (
 	TransactionTypeDeclare       = "DECLARE"
 	TransactionTypeDeploy        = "DEPLOY"
 	TransactionTypeDeployAccount = "DEPLOY_ACCOUNT"
+	TransactionTypeL1Handler     = "L1_HANDLER"
 )
