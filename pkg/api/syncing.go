@@ -34,6 +34,12 @@ func (s *Syncing) UnmarshalJSON(data []byte) error {
 func (api API) Syncing(ctx context.Context, opts ...RequestOption) (*Response[Syncing], error) {
 	request := api.prepareRequest(ctx, "starknet_syncing", []any{}, opts...)
 
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return nil, err
+		}
+	}
+
 	var response Response[Syncing]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err

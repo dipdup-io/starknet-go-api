@@ -22,6 +22,12 @@ func (api API) GetBlockWithTxHashes(ctx context.Context, block BlockFilter, opts
 
 	request := api.prepareRequest(ctx, "starknet_getBlockWithTxHashes", []any{block}, opts...)
 
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return nil, err
+		}
+	}
+
 	var response Response[BlockWithTxHashes]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err

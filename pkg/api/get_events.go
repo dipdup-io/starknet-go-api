@@ -31,6 +31,12 @@ func (api API) GetEvents(ctx context.Context, filters EventsFilters, opts ...Req
 
 	request := api.prepareRequest(ctx, "", []any{filters}, opts...)
 
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return nil, err
+		}
+	}
+
 	var response Response[EventsResponse]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err

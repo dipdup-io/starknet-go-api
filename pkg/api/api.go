@@ -7,19 +7,21 @@ import (
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
+	"golang.org/x/time/rate"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // API - wrapper of starknet node API.
 type API struct {
-	client  *http.Client
-	baseURL string
-	id      *atomic.Uint64
+	client    *http.Client
+	baseURL   string
+	id        *atomic.Uint64
+	rateLimit *rate.Limiter
 }
 
 // NewAPI - constructor of API
-func NewAPI(baseURL string) API {
+func NewAPI(baseURL string, opts ...ApiOption) API {
 	t := http.DefaultTransport.(*http.Transport).Clone()
 	t.MaxIdleConns = 100
 	t.MaxConnsPerHost = 100
@@ -28,8 +30,17 @@ func NewAPI(baseURL string) API {
 	client := &http.Client{
 		Transport: t,
 	}
+	api := API{
+		client:  client,
+		baseURL: baseURL,
+		id:      new(atomic.Uint64),
+	}
 
-	return API{client, baseURL, new(atomic.Uint64)}
+	for i := range opts {
+		opts[i](&api)
+	}
+
+	return api
 }
 
 func (api API) prepareRequest(ctx context.Context, method string, params []any, opts ...RequestOption) *Request {

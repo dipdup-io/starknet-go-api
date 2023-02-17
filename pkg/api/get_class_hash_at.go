@@ -12,6 +12,12 @@ func (api API) GetClassHashAt(ctx context.Context, block BlockFilter, contractAd
 		block, contractAddress,
 	}, opts...)
 
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return nil, err
+		}
+	}
+
 	var response Response[string]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err

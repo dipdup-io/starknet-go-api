@@ -17,6 +17,12 @@ func (api API) EstimateFee(ctx context.Context, tx Transaction, block BlockFilte
 
 	request := api.prepareRequest(ctx, "starknet_estimateFee", []any{tx})
 
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return nil, err
+		}
+	}
+
 	var response Response[EstmatedGas]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err

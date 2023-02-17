@@ -1,6 +1,10 @@
 package api
 
-import "time"
+import (
+	"time"
+
+	"golang.org/x/time/rate"
+)
 
 // RequestOption -
 type RequestOption func(*Request)
@@ -24,6 +28,18 @@ func WithTimeout(timeout uint64) RequestOption {
 	return func(req *Request) {
 		if timeout > 0 {
 			req.timeout = time.Second * time.Duration(timeout)
+		}
+	}
+}
+
+// ApiOption -
+type ApiOption func(*API)
+
+// WithRateLimit -
+func WithRateLimit(requestPerSecond int) ApiOption {
+	return func(api *API) {
+		if requestPerSecond > 0 {
+			api.rateLimit = rate.NewLimiter(rate.Every(time.Second/time.Duration(requestPerSecond)), requestPerSecond)
 		}
 	}
 }
