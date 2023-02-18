@@ -79,7 +79,11 @@ func (api API) get(ctx context.Context, baseURL, path string, args map[string]st
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return errors.Errorf("invalid status code: %d", response.StatusCode)
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+		return errors.Errorf("invalid status code: %d %s", response.StatusCode, string(body))
 	}
 
 	err = json.NewDecoder(response.Body).Decode(output)

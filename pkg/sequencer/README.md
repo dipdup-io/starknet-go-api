@@ -23,6 +23,10 @@ CallContract(ctx context.Context, block data.BlockID, contractAddress, entrypoin
 
 GetTransaction(ctx context.Context, hash string) (response Trace, err error) 
 
+GetCode(ctx context.Context, block data.BlockID, contractAddress string) (response Code, err error)
+
+GetNonce(ctx context.Context, block data.BlockID, contractAddress string) (response string, err error)
+
 TraceBlock(ctx context.Context, block data.BlockID) (response TraceResponse, err error)
 
 TraceTransaction(ctx context.Context, hash string) (response Trace, err error)
