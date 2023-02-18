@@ -102,7 +102,7 @@ if err != nil {
 requestCtx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 defer cancel()
 
-response, err := api.GetBlockTransactionCount(ctx, starknetData.BlockID{
+response, err := api.GetBlockTransactionCount(requestCtx, starknetData.BlockID{
     Number: 100,
 })
 if err != nil {

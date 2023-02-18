@@ -18,6 +18,7 @@ Full example of usage can be found [here](/example/sequencer/main.go).
 Wrapper implements next methods:
 
 ```go
+
 CallContract(ctx context.Context, block data.BlockID, contractAddress, entrypointSelector string, calldata []string) (response Response[[]string], err error)
 
 GetTransaction(ctx context.Context, hash string) (response Trace, err error) 

@@ -6,7 +6,7 @@ Library contains package for working with Starknet.
 
 Package contains wrapper over Starknet node RPC API. Docs can be found [here](/pkg/rpc/).
 
-## Sequncer API
+## Sequencer API
 
 Package contains wrapper over Sequencer API. Docs can be found [here](/pkg/sequencer/).
 
