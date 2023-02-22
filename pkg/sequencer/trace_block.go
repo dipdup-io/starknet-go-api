@@ -23,8 +23,8 @@ type Invocation struct {
 	Result             []string           `json:"result"`
 	ExecutionResources ExecutionResources `json:"execution_resources"`
 	InternalCalls      []Invocation       `json:"internal_calls"`
-	Events             []TraceEvent       `json:"events"`
-	Messages           []TraceMessage     `json:"messages"`
+	Events             []data.Event       `json:"events"`
+	Messages           []data.Message     `json:"messages"`
 }
 
 // ExecutionResources -
@@ -40,20 +40,6 @@ type BuiltinInstanceCounter struct {
 	EcdsaBuiltin      int `json:"ecdsa_builtin"`
 	PedersenBuiltin   int `json:"pedersen_builtin"`
 	BitwiseBuiltin    int `json:"bitwise_builtin"`
-}
-
-// TraceEvent -
-type TraceEvent struct {
-	Order uint64   `json:"order"`
-	Keys  []string `json:"keys"`
-	Data  []string `json:"data"`
-}
-
-// TraceMessage -
-type TraceMessage struct {
-	Order     uint64   `json:"order"`
-	ToAddress string   `json:"to_address"`
-	Payload   []string `json:"payload"`
 }
 
 // Trace -

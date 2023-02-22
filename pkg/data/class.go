@@ -1,16 +1,26 @@
 package data
 
 import (
-	"encoding/json"
+	stdJSON "encoding/json"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
 )
 
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 // Class -
 type Class struct {
-	Program           string            `json:"program"`
-	EntryPointsByType EntrypointsByType `json:"entry_points_by_type"`
-	Abi               Abi               `json:"abi"`
+	EntryPointsByType EntrypointsByType  `json:"entry_points_by_type"`
+	Abi               Abi                `json:"-"`
+	RawAbi            stdJSON.RawMessage `json:"abi"`
+}
+
+// GetAbi -
+func (c *Class) GetAbi() (Abi, error) {
+	var abi Abi
+	err := json.Unmarshal(c.RawAbi, &abi)
+	return abi, err
 }
 
 // Handler -

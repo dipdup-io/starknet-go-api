@@ -1,8 +1,6 @@
 package data
 
 import (
-	"encoding/json"
-
 	"github.com/pkg/errors"
 )
 

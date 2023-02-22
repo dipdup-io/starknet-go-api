@@ -22,3 +22,25 @@ const (
 	AbiEventType       = "event"
 	AbiStructType      = "struct"
 )
+
+// call types
+const (
+	CallTypeCall     = "CALL"
+	CallTypeDelegate = "DELEGATE"
+)
+
+// entrypoint types
+const (
+	EntrypointTypeExternal    = "EXTERNAL"
+	EntrypointTypeConstructor = "CONSTRUCTOR"
+)
+
+// statuses
+const (
+	StatusNotReceived  = "NOT_RECEIVED"
+	StatusReceived     = "RECEIVED"
+	StatusPending      = "PENDING"
+	StatusRejected     = "REJECTED"
+	StatusAcceptedOnL2 = "ACCEPTED_ON_L2"
+	StatusAcceptedOnL1 = "ACCEPTED_ON_L1"
+)
