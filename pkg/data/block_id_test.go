@@ -5,10 +5,11 @@ import (
 )
 
 func Test_BlockFilterValidation(t *testing.T) {
-
+	number := new(uint64)
+	*number = 1
 	goodTests := []BlockID{
 		{Hash: "test"},
-		{Number: 1},
+		{Number: number},
 		{String: Latest},
 		{String: Pending},
 	}
@@ -21,13 +22,13 @@ func Test_BlockFilterValidation(t *testing.T) {
 
 	badTests := []BlockID{
 		{},
-		{Hash: "test", Number: 1},
+		{Hash: "test", Number: number},
 		{Hash: "test", String: Latest},
 		{Hash: "test", String: Pending},
-		{Number: 1, String: Latest},
-		{Number: 1, String: Pending},
-		{Hash: "test", Number: 1, String: Latest},
-		{Hash: "test", Number: 1, String: Pending},
+		{Number: number, String: Latest},
+		{Number: number, String: Pending},
+		{Hash: "test", Number: number, String: Latest},
+		{Hash: "test", Number: number, String: Pending},
 		{String: "invalid"},
 	}
 

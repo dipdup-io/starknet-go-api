@@ -46,12 +46,13 @@ func (i InvokeV1) toMap() map[string]any {
 
 // Declare -
 type Declare struct {
-	MaxFee        string   `json:"max_fee"`
-	Nonce         string   `json:"nonce"`
-	SenderAddress string   `json:"sender_address"`
-	Signature     []string `json:"signature"`
-	ContractClass Class    `json:"contract_class,omitempty"`
-	ClassHash     string   `json:"class_hash,omitempty"`
+	MaxFee          string   `json:"max_fee"`
+	Nonce           string   `json:"nonce"`
+	SenderAddress   string   `json:"sender_address"`
+	Signature       []string `json:"signature"`
+	ContractAddress string   `json:"contract_address"`
+	ContractClass   Class    `json:"contract_class,omitempty"`
+	ClassHash       string   `json:"class_hash,omitempty"`
 }
 
 func (d Declare) toMap() map[string]any {
@@ -70,6 +71,7 @@ type Deploy struct {
 	ConstructorCalldata []string `json:"constructor_calldata"`
 	ClassHash           string   `json:"class_hash,omitempty"`
 	ContractClass       Class    `json:"contract_class,omitempty"`
+	ContractAddress     string   `json:"contract_address"`
 }
 
 func (d Deploy) toMap() map[string]any {

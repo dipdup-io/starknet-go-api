@@ -16,14 +16,14 @@ var (
 // BlockID -
 type BlockID struct {
 	Hash   string
-	Number uint64
+	Number *uint64
 	String string
 }
 
 // Validate -
 func (bf BlockID) Validate() error {
 	hash := bf.Hash != ""
-	number := bf.Number > 0
+	number := bf.Number != nil
 	str := bf.String != ""
 	switch {
 	case hash && number:
@@ -47,8 +47,8 @@ func (bf BlockID) MarshalJSON() ([]byte, error) {
 	if bf.Hash != "" {
 		return []byte(fmt.Sprintf(`{"block_hash": "%s"}`, bf.Hash)), nil
 	}
-	if bf.Number > 0 {
-		return []byte(fmt.Sprintf(`{"block_number": %d}`, bf.Number)), nil
+	if bf.Number != nil {
+		return []byte(fmt.Sprintf(`{"block_number": %d}`, *bf.Number)), nil
 	}
 	if bf.String != "" {
 		return json.Marshal(bf.String)
@@ -61,8 +61,8 @@ func (bf BlockID) GetArg() (string, string) {
 	if bf.Hash != "" {
 		return "blockHash", bf.Hash
 	}
-	if bf.Number > 0 {
-		return "blockNumber", strconv.FormatUint(bf.Number, 10)
+	if bf.Number != nil {
+		return "blockNumber", strconv.FormatUint(*bf.Number, 10)
 	}
 	if bf.String != "" {
 		return "blockNumber", bf.String

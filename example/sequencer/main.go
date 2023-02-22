@@ -26,8 +26,9 @@ func main() {
 
 	log.Printf("call contract result %##v", response.Result)
 
+	number := uint64(1)
 	block, err := api.GetBlock(ctx, data.BlockID{
-		Number: 1000,
+		Number: &number,
 	})
 	if err != nil {
 		log.Panic(err)

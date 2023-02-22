@@ -15,7 +15,7 @@ func main() {
 	blockNumber := uint64(100)
 
 	response, err := api.GetBlockTransactionCount(ctx, data.BlockID{
-		Number: blockNumber,
+		Number: &blockNumber,
 	}, starknet.WithTimeout(10))
 	if err != nil {
 		log.Panic(err)
