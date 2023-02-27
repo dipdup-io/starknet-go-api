@@ -67,6 +67,12 @@ func (api API) get(ctx context.Context, baseURL, path string, args map[string]st
 	}
 	u.RawQuery = values.Encode()
 
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return err
+		}
+	}
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
@@ -117,6 +123,12 @@ func (api API) post(ctx context.Context, baseURL, path string, args map[string]s
 		values.Add(key, value)
 	}
 	u.RawQuery = values.Encode()
+
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return err
+		}
+	}
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodPost, u.String(), buf)
 	if err != nil {
