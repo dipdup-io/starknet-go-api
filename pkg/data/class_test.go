@@ -3,6 +3,7 @@ package data
 import (
 	"testing"
 
+	"github.com/dipdup-io/starknet-go-api/pkg/abi"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -10,7 +11,7 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 	tests := []struct {
 		name    string
 		data    []byte
-		want    Abi
+		want    abi.Abi
 		wantErr bool
 	}{
 		{
@@ -344,14 +345,14 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 					"outputs": []
 				}
 			]`),
-			want: Abi{
-				Functions: map[string]*FunctionAbiItem{
+			want: abi.Abi{
+				Functions: map[string]*abi.FunctionItem{
 					"advance_counter": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "advance_counter",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "index",
@@ -363,27 +364,27 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "diffs",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"xor_counters": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "xor_counters",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "IndexAndValues",
 								Name: "index_and_x",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"call_xor_counters": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "call_xor_counters",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "address",
@@ -392,27 +393,27 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "index_and_x",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"add_signature_to_counters": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "add_signature_to_counters",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "index",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"set_value": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "set_value",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "address",
@@ -421,20 +422,20 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "value",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"get_value": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "get_value",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "address",
 							},
 						},
-						Outputs: []Type{
+						Outputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "res",
@@ -442,20 +443,20 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 						},
 					},
 					"entry_point": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "entry_point",
 						},
-						Inputs:  []Type{},
-						Outputs: []Type{},
+						Inputs:  []abi.Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_builtins": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_builtins",
 						},
-						Inputs: []Type{},
-						Outputs: []Type{
+						Inputs: []abi.Type{},
+						Outputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "res",
@@ -463,24 +464,24 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 						},
 					},
 					"send_message": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "send_message",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "to_address",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_call_contract": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_call_contract",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "contract_address",
@@ -495,14 +496,14 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "calldata",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_delegate_call": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_delegate_call",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "contract_address",
@@ -517,53 +518,53 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "calldata",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_get_caller_address": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_get_caller_address",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "expected_address",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_get_sequencer_address": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_get_sequencer_address",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "expected_address",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_get_contract_address": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_get_contract_address",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "expected_address",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_call_storage_consistency": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_call_storage_consistency",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "other_contract_address",
@@ -572,14 +573,14 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "address",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_re_entrance": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_re_entrance",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "other_contract_address",
@@ -588,27 +589,27 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "depth",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"add_value": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "add_value",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "value",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"recursive_add_value": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "recursive_add_value",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "self_address",
@@ -617,27 +618,27 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "value",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"increase_value": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "increase_value",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "address",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 					"test_call_with_array": {
-						Type: Type{
-							Type: AbiFunctionType,
+						Type: abi.Type{
+							Type: abi.FunctionType,
 							Name: "test_call_with_array",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "self_address",
@@ -649,16 +650,16 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "arr",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 				},
-				L1Handlers: map[string]*FunctionAbiItem{
+				L1Handlers: map[string]*abi.FunctionItem{
 					"deposit": {
-						Type: Type{
-							Type: AbiL1HandlerType,
+						Type: abi.Type{
+							Type: abi.L1HandlerType,
 							Name: "deposit",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "from_address",
@@ -667,16 +668,16 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "amount",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 				},
-				Constructor: map[string]*FunctionAbiItem{
+				Constructor: map[string]*abi.FunctionItem{
 					"constructor": {
-						Type: Type{
-							Type: AbiConstructorType,
+						Type: abi.Type{
+							Type: abi.ConstructorType,
 							Name: "constructor",
 						},
-						Inputs: []Type{
+						Inputs: []abi.Type{
 							{
 								Type: "felt",
 								Name: "address",
@@ -685,25 +686,25 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 								Name: "value",
 							},
 						},
-						Outputs: []Type{},
+						Outputs: []abi.Type{},
 					},
 				},
-				Events: map[string]*EventAbiItem{},
-				Structs: map[string]*StructAbiItem{
+				Events: map[string]*abi.EventItem{},
+				Structs: map[string]*abi.StructItem{
 					"IndexAndValues": {
-						Type: Type{
-							Type: AbiStructType,
+						Type: abi.Type{
+							Type: abi.StructType,
 							Name: "IndexAndValues",
 						},
-						Members: []Member{
+						Members: []abi.Member{
 							{
-								Type: Type{
+								Type: abi.Type{
 									Type: "felt",
 									Name: "index",
 								},
 								Offset: 0,
 							}, {
-								Type: Type{
+								Type: abi.Type{
 									Type: "(felt, felt)",
 									Name: "values",
 								},
@@ -717,7 +718,7 @@ func TestAbi_UnmarshalJSON(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var a Abi
+			var a abi.Abi
 			if err := a.UnmarshalJSON(tt.data); (err != nil) != tt.wantErr {
 				t.Errorf("Abi.UnmarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
 				return

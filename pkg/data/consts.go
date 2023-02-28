@@ -14,15 +14,6 @@ const (
 	Version1 = "0x1"
 )
 
-// abi types
-const (
-	AbiFunctionType    = "function"
-	AbiL1HandlerType   = "l1_handler"
-	AbiConstructorType = "constructor"
-	AbiEventType       = "event"
-	AbiStructType      = "struct"
-)
-
 // call types
 const (
 	CallTypeCall     = "CALL"

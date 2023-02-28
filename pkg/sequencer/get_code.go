@@ -3,13 +3,14 @@ package sequencer
 import (
 	"context"
 
+	"github.com/dipdup-io/starknet-go-api/pkg/abi"
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 )
 
 // Code -
 type Code struct {
 	ByteCode []string `json:"bytecode"`
-	Abi      data.Abi `json:"abi"`
+	Abi      abi.Abi  `json:"abi"`
 }
 
 // GetBlock - Gets code of contract
