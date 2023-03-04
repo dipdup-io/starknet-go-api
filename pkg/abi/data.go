@@ -22,6 +22,8 @@ type Abi struct {
 	ConstructorBySelector map[string]*FunctionItem `json:"-"`
 	EventsBySelector      map[string]*EventItem    `json:"-"`
 	StructsBySelector     map[string]*StructItem   `json:"-"`
+
+	Names map[string]string
 }
 
 // Type -

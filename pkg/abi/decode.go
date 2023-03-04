@@ -40,9 +40,6 @@ func isTypeTuple(typ string) bool {
 
 // DecodeFunctionCallData -
 func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[string]*StructItem) (map[string]any, error) {
-	if len(calldata) < len(typ.Inputs) {
-		return nil, ErrTooShortCallData
-	}
 
 	var (
 		result = make(map[string]any, 0)
@@ -60,8 +57,29 @@ func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[str
 	return result, nil
 }
 
+// DecodeEventData -
+func DecodeEventData(data []string, typ EventItem, structs map[string]*StructItem) (map[string]any, error) {
+	var (
+		result = make(map[string]any, 0)
+		tail   = data
+		err    error
+	)
+
+	for _, input := range typ.Data {
+		tail, err = decodeItem(tail, input, structs, result)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+	return result, nil
+}
+
 func decodeItem(calldata []string, input Type, structs map[string]*StructItem, result map[string]any) ([]string, error) {
 	str, hasStruct := structs[input.Type]
+	if !hasStruct {
+		str, hasStruct = structs[strings.TrimSuffix(input.Type, "*")]
+	}
 	switch {
 	case isLenField(input.Name):
 		if len(calldata) == 0 {
@@ -69,6 +87,19 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		}
 		result[input.Name] = calldata[0]
 		return calldata[1:], nil
+
+	case hasStruct:
+		obj := make(map[string]any)
+		tail := calldata
+		var err error
+		for i := range str.Members {
+			tail, err = decodeItem(tail, str.Members[i].Type, structs, obj)
+			if err != nil {
+				return nil, err
+			}
+		}
+		result[input.Name] = obj
+		return tail, nil
 
 	case isTypeArray(input.Type):
 		lengthHex, ok := result[fmt.Sprintf("%s_len", input.Name)]
@@ -112,19 +143,6 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		tail := calldata
 		for i := range tupleItems {
 			tail, err = decodeItem(tail, tupleItems[i].Type, structs, obj)
-			if err != nil {
-				return nil, err
-			}
-		}
-		result[input.Name] = obj
-		return tail, nil
-
-	case hasStruct:
-		obj := make(map[string]any)
-		tail := calldata
-		var err error
-		for i := range str.Members {
-			tail, err = decodeItem(tail, str.Members[i].Type, structs, obj)
 			if err != nil {
 				return nil, err
 			}

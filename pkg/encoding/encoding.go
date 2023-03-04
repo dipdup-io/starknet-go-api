@@ -18,7 +18,12 @@ const (
 	ValidateDeclareEntrypoint = "__validate_declare__"
 	ValidateDeployEntrypoint  = "__validate_deploy__"
 
-	DefaultEntrypoitSelector = "0"
+	DefaultEntrypoitSelector = 0x0
+)
+
+var (
+	ExecuteEntrypointSelector = MustDecodeHex("0x15d40a3d6ca2ac30f4031e42be28da9b056fef9bb7357ac5e85627ee876e5ad")
+	ConstructorSelector       = MustDecodeHex("0x28ffe4ff0f226a9107253e17a904099aa4f63a02a5621de0576e5aa71bc5194")
 )
 
 // Keccak - A variant of eth-keccak that computes a value that fits in a StarkNet field element.

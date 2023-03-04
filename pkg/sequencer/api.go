@@ -7,10 +7,12 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/time/rate"
 )
 
@@ -78,11 +80,14 @@ func (api API) get(ctx context.Context, baseURL, path string, args map[string]st
 		return err
 	}
 
+	start := time.Now()
 	response, err := api.client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer response.Body.Close()
+
+	log.Trace().Msgf("[%d ms] %s", time.Since(start).Milliseconds(), u.String())
 
 	if response.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(response.Body)

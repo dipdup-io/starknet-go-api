@@ -26,6 +26,7 @@ type Receipt struct {
 	TransactionIndex   uint64             `json:"transaction_index"`
 	TransactionHash    string             `json:"transaction_hash"`
 	L2ToL1Messages     []data.Message     `json:"l2_to_l1_messages"`
+	L1ToL2Message      data.Message       `json:"l1_to_l2_consumed_message"`
 	Events             []data.Event       `json:"events"`
 	ExecutionResources ExecutionResources `json:"execution_resources"`
 	ActualFee          string             `json:"actual_fee"`

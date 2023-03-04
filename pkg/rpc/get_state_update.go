@@ -6,16 +6,8 @@ import (
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 )
 
-// StateUpdate -
-type StateUpdate struct {
-	BlockHash string    `json:"block_hash"`
-	NewRoot   string    `json:"new_root"`
-	OldRoot   string    `json:"old_root"`
-	StateDiff StateDiff `json:"state_diff"`
-}
-
 // GetStateUpdate -
-func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[StateUpdate], error) {
+func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[data.StateUpdate], error) {
 	if err := block.Validate(); err != nil {
 		return nil, err
 	}
@@ -28,7 +20,7 @@ func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...R
 		}
 	}
 
-	var response Response[StateUpdate]
+	var response Response[data.StateUpdate]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err
 }

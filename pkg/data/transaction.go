@@ -27,11 +27,12 @@ func (i InvokeV0) toMap() map[string]any {
 
 // InvokeV1 -
 type InvokeV1 struct {
-	MaxFee        string   `json:"max_fee"`
-	Nonce         string   `json:"nonce"`
-	SenderAddress string   `json:"sender_address"`
-	Signature     []string `json:"signature"`
-	Calldata      []string `json:"calldata"`
+	MaxFee          string   `json:"max_fee"`
+	Nonce           string   `json:"nonce"`
+	SenderAddress   string   `json:"sender_address"`
+	ContractAddress string   `json:"contract_address"`
+	Signature       []string `json:"signature"`
+	Calldata        []string `json:"calldata"`
 }
 
 func (i InvokeV1) toMap() map[string]any {
@@ -86,6 +87,7 @@ func (d Deploy) toMap() map[string]any {
 type DeployAccount struct {
 	MaxFee              string   `json:"max_fee"`
 	Nonce               string   `json:"nonce"`
+	ContractAddress     string   `json:"contract_address"`
 	ContractAddressSalt string   `json:"contract_address_salt"`
 	ClassHash           string   `json:"class_hash"`
 	ConstructorCalldata []string `json:"constructor_calldata"`
@@ -100,6 +102,7 @@ func (d DeployAccount) toMap() map[string]any {
 		"signature":             d.Signature,
 		"constructor_calldata":  d.ConstructorCalldata,
 		"class_hash":            d.ClassHash,
+		"contract_address":      d.ContractAddress,
 	}
 }
 
