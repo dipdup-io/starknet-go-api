@@ -16,7 +16,7 @@ type Block struct {
 	NewRoot          string             `json:"state_root"`
 	GasPrice         string             `json:"gas_price"`
 	SequencerAddress string             `json:"sequencer_address"`
-	StarknetVersion  string             `json:"starknet_version"`
+	StarknetVersion  *string            `json:"starknet_version,omitempty"`
 	Transactions     []data.Transaction `json:"transactions"`
 	Receipts         []Receipt          `json:"transaction_receipts"`
 }
