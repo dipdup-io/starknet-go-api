@@ -77,9 +77,6 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 
 func decodeItem(calldata []string, input Type, structs map[string]*StructItem, result map[string]any) ([]string, error) {
 	str, hasStruct := structs[input.Type]
-	if !hasStruct {
-		str, hasStruct = structs[strings.TrimSuffix(input.Type, "*")]
-	}
 	switch {
 	case isLenField(input.Name):
 		if len(calldata) == 0 {
@@ -112,17 +109,23 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		}
 		iLength := int(length)
 
+		if iLength == 0 {
+			return calldata, nil
+		}
+
 		if len(calldata) < iLength {
 			return nil, ErrTooShortCallData
 		}
 
 		parsed := make([]any, iLength)
+		tail := calldata
 		for i := 0; i < iLength; i++ {
 			obj := make(map[string]any)
-			if _, err := decodeItem(calldata[i:], Type{
+			tail, err = decodeItem(tail, Type{
 				Name: fmt.Sprintf("array_item_%d", i),
 				Type: strings.TrimSuffix(input.Type, "*"),
-			}, structs, obj); err != nil {
+			}, structs, obj)
+			if err != nil {
 				return nil, err
 			}
 			for _, value := range obj {
@@ -131,7 +134,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		}
 		result[input.Name] = parsed
 
-		return calldata[iLength:], nil
+		return tail, nil
 
 	case isTypeTuple(input.Type):
 		tupleItems, err := extractTupleTypes(input.Type)

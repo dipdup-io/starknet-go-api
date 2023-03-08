@@ -23,7 +23,7 @@ type Abi struct {
 	EventsBySelector      map[string]*EventItem    `json:"-"`
 	StructsBySelector     map[string]*StructItem   `json:"-"`
 
-	Names map[string]string
+	Names map[string]string `json:"-"`
 }
 
 // Type -

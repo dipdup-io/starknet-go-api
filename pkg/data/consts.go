@@ -24,6 +24,7 @@ const (
 const (
 	EntrypointTypeExternal    = "EXTERNAL"
 	EntrypointTypeConstructor = "CONSTRUCTOR"
+	EntrypointTypeL1Handler   = "L1_HANDLER"
 )
 
 // statuses

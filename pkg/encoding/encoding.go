@@ -61,3 +61,9 @@ func MustDecodeHex(s string) []byte {
 func EncodeHex(data []byte) string {
 	return "0x" + hex.EncodeToString(data)
 }
+
+// TrimmedHex -
+func TrimmedHex(data []byte) string {
+	s := hex.EncodeToString(data)
+	return strings.TrimLeft(s, "0")
+}
