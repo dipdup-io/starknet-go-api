@@ -13,7 +13,7 @@ type Message struct {
 	Order       uint64   `json:"order"`
 	FromAddress string   `json:"from_address"`
 	ToAddress   string   `json:"to_address"`
-	Selector    string   `json:"selector"`
+	Selector    Felt     `json:"selector"`
 	Payload     []string `json:"payload"`
-	Nonce       string   `json:"nonce"`
+	Nonce       Felt     `json:"nonce"`
 }

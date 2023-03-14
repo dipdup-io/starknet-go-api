@@ -13,12 +13,12 @@ type TraceResponse struct {
 
 // Invocation -
 type Invocation struct {
-	CallerAddress      string             `json:"caller_address"`
-	ContractAddress    string             `json:"contract_address"`
+	CallerAddress      data.Felt          `json:"caller_address"`
+	ContractAddress    data.Felt          `json:"contract_address"`
 	Calldata           []string           `json:"calldata"`
 	CallType           string             `json:"call_type"`
-	ClassHash          string             `json:"class_hash"`
-	Selector           string             `json:"selector"`
+	ClassHash          data.Felt          `json:"class_hash"`
+	Selector           data.Felt          `json:"selector"`
 	EntrypointType     string             `json:"entry_point_type"`
 	Result             []string           `json:"result"`
 	ExecutionResources ExecutionResources `json:"execution_resources"`
@@ -48,7 +48,7 @@ type Trace struct {
 	FunctionInvocation    *Invocation `json:"function_invocation,omitempty"`
 	FeeTransferInvocation *Invocation `json:"fee_transfer_invocation,omitempty"`
 	Signature             []string    `json:"signature"`
-	TransactionHash       string      `json:"transaction_hash"`
+	TransactionHash       data.Felt   `json:"transaction_hash"`
 }
 
 // TraceBlock -

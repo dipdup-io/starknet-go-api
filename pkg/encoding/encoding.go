@@ -2,9 +2,11 @@ package encoding
 
 import (
 	"encoding/hex"
+	"math/big"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/shopspring/decimal"
 )
 
 // entrypoint names
@@ -66,4 +68,13 @@ func EncodeHex(data []byte) string {
 func TrimmedHex(data []byte) string {
 	s := hex.EncodeToString(data)
 	return strings.TrimLeft(s, "0")
+}
+
+// DecimalFromHex -
+func DecimalFromHex(s string) decimal.Decimal {
+	if s == "" {
+		return decimal.Zero
+	}
+	i, _ := new(big.Int).SetString(s, 0)
+	return decimal.NewFromBigInt(i, 0)
 }

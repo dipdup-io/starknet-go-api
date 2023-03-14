@@ -4,56 +4,45 @@ import (
 	"github.com/pkg/errors"
 )
 
-// InvokeV0 -
-type InvokeV0 struct {
-	MaxFee             string   `json:"max_fee"`
-	Nonce              string   `json:"nonce"`
-	ContractAddress    string   `json:"contract_address"`
-	EntrypointSelector string   `json:"entry_point_selector"`
+// Invoke -
+type Invoke struct {
+	MaxFee             Felt     `json:"max_fee"`
+	Nonce              Felt     `json:"nonce"`
+	ContractAddress    Felt     `json:"contract_address"`
+	EntrypointSelector Felt     `json:"entry_point_selector"`
+	SenderAddress      Felt     `json:"sender_address"`
 	Signature          []string `json:"signature"`
 	Calldata           []string `json:"calldata"`
 }
 
-func (i InvokeV0) toMap() map[string]any {
-	return map[string]any{
-		"max_fee":              i.MaxFee,
-		"nonce":                i.Nonce,
-		"contract_address":     i.ContractAddress,
-		"entry_point_selector": i.EntrypointSelector,
-		"signature":            i.Signature,
-		"calldata":             i.Calldata,
+func (i Invoke) toMap(version Felt) map[string]any {
+	data := map[string]any{
+		"max_fee":          i.MaxFee,
+		"nonce":            i.Nonce,
+		"contract_address": i.ContractAddress,
+		"signature":        i.Signature,
+		"calldata":         i.Calldata,
 	}
-}
 
-// InvokeV1 -
-type InvokeV1 struct {
-	MaxFee          string   `json:"max_fee"`
-	Nonce           string   `json:"nonce"`
-	SenderAddress   string   `json:"sender_address"`
-	ContractAddress string   `json:"contract_address"`
-	Signature       []string `json:"signature"`
-	Calldata        []string `json:"calldata"`
-}
-
-func (i InvokeV1) toMap() map[string]any {
-	return map[string]any{
-		"max_fee":        i.MaxFee,
-		"nonce":          i.Nonce,
-		"sender_address": i.SenderAddress,
-		"signature":      i.Signature,
-		"calldata":       i.Calldata,
+	switch version {
+	case Version0:
+		data["entry_point_selector"] = i.EntrypointSelector
+	case Version1:
+		data["sender_address"] = i.SenderAddress
 	}
+
+	return data
 }
 
 // Declare -
 type Declare struct {
-	MaxFee          string   `json:"max_fee"`
-	Nonce           string   `json:"nonce"`
-	SenderAddress   string   `json:"sender_address"`
+	MaxFee          Felt     `json:"max_fee"`
+	Nonce           Felt     `json:"nonce"`
+	SenderAddress   Felt     `json:"sender_address"`
+	ContractAddress Felt     `json:"contract_address"`
 	Signature       []string `json:"signature"`
-	ContractAddress string   `json:"contract_address"`
 	ContractClass   Class    `json:"contract_class,omitempty"`
-	ClassHash       string   `json:"class_hash,omitempty"`
+	ClassHash       Felt     `json:"class_hash,omitempty"`
 }
 
 func (d Declare) toMap() map[string]any {
@@ -70,9 +59,9 @@ func (d Declare) toMap() map[string]any {
 type Deploy struct {
 	ContractAddressSalt string   `json:"contract_address_salt"`
 	ConstructorCalldata []string `json:"constructor_calldata"`
-	ClassHash           string   `json:"class_hash,omitempty"`
+	ClassHash           Felt     `json:"class_hash,omitempty"`
 	ContractClass       Class    `json:"contract_class,omitempty"`
-	ContractAddress     string   `json:"contract_address"`
+	ContractAddress     Felt     `json:"contract_address"`
 }
 
 func (d Deploy) toMap() map[string]any {
@@ -85,11 +74,11 @@ func (d Deploy) toMap() map[string]any {
 
 // DeployAccount -
 type DeployAccount struct {
-	MaxFee              string   `json:"max_fee"`
-	Nonce               string   `json:"nonce"`
-	ContractAddress     string   `json:"contract_address"`
+	MaxFee              Felt     `json:"max_fee"`
+	Nonce               Felt     `json:"nonce"`
+	ContractAddress     Felt     `json:"contract_address"`
 	ContractAddressSalt string   `json:"contract_address_salt"`
-	ClassHash           string   `json:"class_hash"`
+	ClassHash           Felt     `json:"class_hash"`
 	ConstructorCalldata []string `json:"constructor_calldata"`
 	Signature           []string `json:"signature"`
 }
@@ -108,9 +97,9 @@ func (d DeployAccount) toMap() map[string]any {
 
 // L1Handler -
 type L1Handler struct {
-	Nonce              string   `json:"nonce"`
-	ContractAddress    string   `json:"contract_address"`
-	EntrypointSelector string   `json:"entry_point_selector"`
+	Nonce              Felt     `json:"nonce"`
+	ContractAddress    Felt     `json:"contract_address"`
+	EntrypointSelector Felt     `json:"entry_point_selector"`
 	Calldata           []string `json:"calldata"`
 }
 
@@ -126,8 +115,8 @@ func (l1handler L1Handler) toMap() map[string]any {
 // Transaction -
 type Transaction struct {
 	Type            string `json:"type"`
-	Version         string `json:"version"`
-	TransactionHash string `json:"transaction_hash,omitempty"`
+	Version         Felt   `json:"version"`
+	TransactionHash Felt   `json:"transaction_hash,omitempty"`
 
 	Body any `json:"-"`
 }
@@ -141,16 +130,7 @@ func (t *Transaction) UnmarshalJSON(raw []byte) error {
 
 	switch t.Type {
 	case TransactionTypeInvoke, TransactionTypeInvokeFunction:
-
-		switch t.Version {
-		case Version0:
-			t.Body = &InvokeV0{}
-		case Version1:
-			t.Body = &InvokeV1{}
-		default:
-			return errors.Errorf("unknown transaction version: %s", t.Version)
-		}
-
+		t.Body = &Invoke{}
 	case TransactionTypeDeclare:
 		t.Body = &Declare{}
 	case TransactionTypeDeploy:
@@ -172,24 +152,11 @@ func (t *Transaction) MarshalJSON() ([]byte, error) {
 
 	switch t.Type {
 	case TransactionTypeInvoke, TransactionTypeInvokeFunction:
-
-		switch t.Version {
-		case Version0:
-			if invoke, ok := t.Body.(InvokeV0); ok {
-				m = invoke.toMap()
-			} else {
-				return nil, errors.Errorf("invalid invoke transaction type: expected InvokeV0 (non-pointer)")
-			}
-		case Version1:
-			if invoke, ok := t.Body.(InvokeV1); ok {
-				m = invoke.toMap()
-			} else {
-				return nil, errors.Errorf("invalid invoke transaction type: expected InvokeV1 (non-pointer)")
-			}
-		default:
-			return nil, errors.Errorf("unknown transaction version: %s", t.Version)
+		if invoke, ok := t.Body.(Invoke); ok {
+			m = invoke.toMap(t.Version)
+		} else {
+			return nil, errors.Errorf("invalid invoke transaction type: expected InvokeV0 (non-pointer)")
 		}
-
 	case TransactionTypeDeclare:
 		if declare, ok := t.Body.(Declare); ok {
 			m = declare.toMap()

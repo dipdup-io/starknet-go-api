@@ -62,3 +62,10 @@ type Member struct {
 
 	Offset uint64 `json:"offset"`
 }
+
+// entrypoint types
+const (
+	EntrypointTypeExternal    = "EXTERNAL"
+	EntrypointTypeConstructor = "CONSTRUCTOR"
+	EntrypointTypeL1Handler   = "L1_HANDLER"
+)

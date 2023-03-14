@@ -2,40 +2,40 @@ package data
 
 // Nonce -
 type Nonce struct {
-	ContractAddress string `json:"contract_address"`
-	Nonce           string `json:"nonce"`
+	ContractAddress Felt `json:"contract_address"`
+	Nonce           Felt `json:"nonce"`
 }
 
 // StorageDiff -
 type StorageDiff struct {
-	Address        string     `json:"address"`
+	Address        Felt       `json:"address"`
 	StorageEntries []KeyValue `json:"storage_entries"`
 }
 
 // KeyValue -
 type KeyValue struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Key   Felt `json:"key"`
+	Value Felt `json:"value"`
 }
 
 // DeployedContract -
 type DeployedContract struct {
-	Address   string `json:"address"`
-	ClassHash string `json:"class_hash"`
+	Address   Felt `json:"address"`
+	ClassHash Felt `json:"class_hash"`
 }
 
 // StateDiff -
 type StateDiff struct {
-	StorageDiffs      map[string][]KeyValue `json:"storage_diffs"`
-	DeclaredContracts []string              `json:"declared_contracts"`
-	DeployedContracts []DeployedContract    `json:"deployed_contracts"`
-	Nonces            map[string]string     `json:"nonces"`
+	StorageDiffs      map[Felt][]KeyValue `json:"storage_diffs"`
+	DeclaredContracts []Felt              `json:"declared_contracts"`
+	DeployedContracts []DeployedContract  `json:"deployed_contracts"`
+	Nonces            map[Felt]Felt       `json:"nonces"`
 }
 
 // StateUpdate -
 type StateUpdate struct {
-	BlockHash string    `json:"block_hash"`
-	NewRoot   string    `json:"new_root"`
-	OldRoot   string    `json:"old_root"`
+	BlockHash Felt      `json:"block_hash"`
+	NewRoot   Felt      `json:"new_root"`
+	OldRoot   Felt      `json:"old_root"`
 	StateDiff StateDiff `json:"state_diff"`
 }

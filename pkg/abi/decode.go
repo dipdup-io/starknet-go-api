@@ -12,6 +12,7 @@ import (
 var (
 	ErrTooShortCallData = errors.New("calldata is too short")
 	ErrInvalidTupleType = errors.New("invalid tuple type")
+	ErrNoLenField       = errors.New("can't find array length field")
 )
 
 func isLenField(name string) bool {
@@ -36,6 +37,13 @@ func isTypeTuple(typ string) bool {
 		return false
 	}
 	return typ[0] == '(' && typ[l-1] == ')'
+}
+
+// DecodeExecuteCallData -
+func DecodeExecuteCallData(calldata []string) (map[string]any, error) {
+	return DecodeFunctionCallData(calldata, ExecuteFunction, map[string]*StructItem{
+		"CallArray": &CallArray,
+	})
 }
 
 // DecodeFunctionCallData -
@@ -101,7 +109,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 	case isTypeArray(input.Type):
 		lengthHex, ok := result[fmt.Sprintf("%s_len", input.Name)]
 		if !ok {
-			return nil, errors.Errorf("can't find field %s_len", input.Name)
+			return nil, errors.Wrap(ErrNoLenField, input.Name)
 		}
 		length, err := strconv.ParseInt(lengthHex.(string), 0, 64)
 		if err != nil {

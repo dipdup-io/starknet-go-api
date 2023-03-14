@@ -7,6 +7,7 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.29.0
+	github.com/shopspring/decimal v1.3.1
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/time v0.3.0
 )

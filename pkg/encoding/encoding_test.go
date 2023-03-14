@@ -36,6 +36,26 @@ func TestGetSelectorFromName(t *testing.T) {
 			name:       "call_xor_counters",
 			entrypoint: "call_xor_counters",
 			want:       "30f842021fbf02caf80d09a113997c1e00a32870eee0c6136bed27acb348bea",
+		}, {
+			name:       "__l1_default__",
+			entrypoint: "__l1_default__",
+			want:       "1ac445d7a589d19896ced0342d3d23fc7a05f2d7feaf2cd89e84104c86b5937",
+		}, {
+			name:       "mint",
+			entrypoint: "mint",
+			want:       "2f0b3c5710379609eb5495f1ecd348cb28167711b73609fe565a72734550354",
+		}, {
+			name:       "__default__",
+			entrypoint: "__default__",
+			want:       "2e4c01ac72b840834c6c3146a782496a90a442ac831e5188090c1d33a7c0f50",
+		}, {
+			name:       "set_implementation",
+			entrypoint: "set_implementation",
+			want:       "c4e105e5276c704b5490fa2ab565b6b1904912203fbc6e7bcdeb51fa8c1ef2",
+		}, {
+			name:       "Transfer",
+			entrypoint: "Transfer",
+			want:       "99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9",
 		},
 	}
 	for _, tt := range tests {
