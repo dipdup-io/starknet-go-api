@@ -46,11 +46,11 @@ func (f Felt) Bytes() []byte {
 }
 
 // ToAsciiString -
-func (f Felt) ToAsciiString() (string, error) {
+func (f Felt) ToAsciiString() string {
 	s := strings.TrimPrefix(f.String(), "0x")
 	b, err := hex.DecodeString(s)
 	if err != nil {
-		return "", err
+		return f.String()
 	}
-	return string(b), nil
+	return string(b)
 }

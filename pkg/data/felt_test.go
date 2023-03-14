@@ -27,24 +27,23 @@ func Test_NewFromAsciiString(t *testing.T) {
 
 func TestFelt_ToAsciiString(t *testing.T) {
 	tests := []struct {
-		name    string
-		f       Felt
-		want    string
-		wantErr bool
+		name string
+		f    Felt
+		want string
 	}{
 		{
 			name: "test 1",
 			f:    Felt("0x7572692f706963742f7433382e6a7067"),
 			want: "uri/pict/t38.jpg",
+		}, {
+			name: "test 2",
+			f:    Felt("0x1"),
+			want: "0x1",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.f.ToAsciiString()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Felt.ToAsciiString() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			got := tt.f.ToAsciiString()
 			if got != tt.want {
 				t.Errorf("Felt.ToAsciiString() = %v, want %v", got, tt.want)
 			}
