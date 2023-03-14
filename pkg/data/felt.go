@@ -48,6 +48,9 @@ func (f Felt) Bytes() []byte {
 // ToAsciiString -
 func (f Felt) ToAsciiString() string {
 	s := strings.TrimPrefix(f.String(), "0x")
+	if len(s)%2 == 1 {
+		s = "0" + s
+	}
 	b, err := hex.DecodeString(s)
 	if err != nil {
 		return f.String()
