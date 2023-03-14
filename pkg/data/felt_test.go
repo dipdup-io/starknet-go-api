@@ -40,9 +40,9 @@ func TestFelt_ToAsciiString(t *testing.T) {
 			f:    Felt("0x1"),
 			want: "",
 		}, {
-			name: "test 2",
+			name: "test 3",
 			f:    Felt("0x0"),
-			want: "0x0",
+			want: string([]byte{0x00}),
 		},
 	}
 	for _, tt := range tests {
