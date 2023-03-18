@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bytes"
 	"encoding/hex"
 	"strconv"
 	"strings"
@@ -42,7 +43,15 @@ func (f Felt) Uint64() (uint64, error) {
 
 // Bytes -
 func (f Felt) Bytes() []byte {
-	return encoding.MustDecodeHex(f.String())
+	if len(f) == 0 {
+		return nil
+	}
+	data := encoding.MustDecodeHex(f.String())
+	if len(data) < AddressBytesLength {
+		padding := bytes.Repeat([]byte{0}, AddressBytesLength-len(data))
+		data = append(padding, data...)
+	}
+	return data
 }
 
 // ToAsciiString -

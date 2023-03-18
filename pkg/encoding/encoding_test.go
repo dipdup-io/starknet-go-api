@@ -56,6 +56,10 @@ func TestGetSelectorFromName(t *testing.T) {
 			name:       "Transfer",
 			entrypoint: "Transfer",
 			want:       "99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9",
+		}, {
+			name:       "balanceOf",
+			entrypoint: "balanceOf",
+			want:       "2e4263afad30923c891518314c3c95dbe830a16874e8abc5777a9a20b54c76e",
 		},
 	}
 	for _, tt := range tests {

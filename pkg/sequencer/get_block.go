@@ -29,7 +29,7 @@ type Receipt struct {
 	L1ToL2Message      data.Message       `json:"l1_to_l2_consumed_message"`
 	Events             []data.Event       `json:"events"`
 	ExecutionResources ExecutionResources `json:"execution_resources"`
-	ActualFee          string             `json:"actual_fee"`
+	ActualFee          data.Felt          `json:"actual_fee"`
 }
 
 // GetBlock - Gets block

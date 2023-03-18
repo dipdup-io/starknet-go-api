@@ -154,6 +154,6 @@ func (api API) post(ctx context.Context, baseURL, path string, args map[string]s
 		return errors.Errorf("invalid status code: %d %s", response.StatusCode, e.Message)
 	}
 
-	err = json.NewDecoder(io.TeeReader(response.Body, os.Stdout)).Decode(output)
+	err = json.NewDecoder(response.Body).Decode(output)
 	return err
 }

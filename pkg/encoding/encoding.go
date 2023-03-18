@@ -41,9 +41,19 @@ func GetSelectorFromName(name string) string {
 	return strings.TrimLeft(hex.EncodeToString(bytes), "0")
 }
 
+// GetSelectorWithPrefixFromName -
+func GetSelectorWithPrefixFromName(name string) string {
+	return AddHexPrefix(GetSelectorFromName(name))
+}
+
 // TrimHex - trims prefix '0x' if it exists and all padding left zeroes.
 func TrimHex(val string) string {
 	return strings.TrimLeft(strings.TrimPrefix(val, "0x"), "0")
+}
+
+// AddHexPrefix -
+func AddHexPrefix(s string) string {
+	return "0x" + s
 }
 
 // MustDecodeHex -
@@ -61,7 +71,7 @@ func MustDecodeHex(s string) []byte {
 
 // EncodeHex -
 func EncodeHex(data []byte) string {
-	return "0x" + hex.EncodeToString(data)
+	return AddHexPrefix(hex.EncodeToString(data))
 }
 
 // TrimmedHex -

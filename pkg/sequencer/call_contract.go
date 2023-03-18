@@ -7,7 +7,7 @@ import (
 )
 
 // CallContract -
-func (api API) CallContract(ctx context.Context, block data.BlockID, contractAddress, entrypointSelector string, calldata []string) (response Response[[]string], err error) {
+func (api API) CallContract(ctx context.Context, block data.BlockID, contractAddress, entrypointSelector string, calldata []string) (response Response[[]data.Felt], err error) {
 	if err = block.Validate(); err != nil {
 		return
 	}
