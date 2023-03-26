@@ -23,6 +23,7 @@ type API struct {
 	client           *http.Client
 	gatewayUrl       string
 	feederGatewayUrl string
+	cacheDir         string
 	rateLimit        *rate.Limiter
 }
 
@@ -49,11 +50,17 @@ func NewAPI(gatewayUrl, feederGatewayUrl string, opts ...ApiOption) API {
 	return api
 }
 
-func (api API) getFromFeederGateway(ctx context.Context, path string, args map[string]string, output any) error {
-	return api.get(ctx, api.feederGatewayUrl, path, args, output)
+func (api API) getFromFeederGateway(ctx context.Context, path, cacheFileName string, args map[string]string, output any) error {
+	return api.get(ctx, api.feederGatewayUrl, path, cacheFileName, args, output)
 }
 
-func (api API) get(ctx context.Context, baseURL, path string, args map[string]string, output any) error {
+func (api API) get(ctx context.Context, baseURL, path, cacheFileName string, args map[string]string, output any) error {
+	if api.cacheDir != "" && cacheFileName != "" {
+		if err := api.readJSONFromCache(path, cacheFileName, output); err == nil {
+			return nil
+		}
+	}
+
 	u, err := url.Parse(baseURL)
 	if err != nil {
 		return err
@@ -95,6 +102,10 @@ func (api API) get(ctx context.Context, baseURL, path string, args map[string]st
 			return err
 		}
 		return errors.Errorf("invalid status code: %d %s", response.StatusCode, string(body))
+	}
+
+	if api.cacheDir != "" && cacheFileName != "" {
+		return api.parseJSONWithCache(response.Body, path, cacheFileName, output)
 	}
 
 	err = json.NewDecoder(response.Body).Decode(output)

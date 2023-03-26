@@ -66,3 +66,8 @@ func (f Felt) ToAsciiString() string {
 	}
 	return string(b)
 }
+
+// Length -
+func (f Felt) Length() int {
+	return len(f)
+}

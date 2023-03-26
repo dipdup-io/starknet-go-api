@@ -152,31 +152,31 @@ func (t *Transaction) MarshalJSON() ([]byte, error) {
 
 	switch t.Type {
 	case TransactionTypeInvoke, TransactionTypeInvokeFunction:
-		if invoke, ok := t.Body.(Invoke); ok {
+		if invoke, ok := t.Body.(*Invoke); ok {
 			m = invoke.toMap(t.Version)
 		} else {
 			return nil, errors.Errorf("invalid invoke transaction type: expected InvokeV0 (non-pointer)")
 		}
 	case TransactionTypeDeclare:
-		if declare, ok := t.Body.(Declare); ok {
+		if declare, ok := t.Body.(*Declare); ok {
 			m = declare.toMap()
 		} else {
 			return nil, errors.Errorf("invalid invoke transaction type: expected Declare (non-pointer)")
 		}
 	case TransactionTypeDeploy:
-		if deploy, ok := t.Body.(Deploy); ok {
+		if deploy, ok := t.Body.(*Deploy); ok {
 			m = deploy.toMap()
 		} else {
 			return nil, errors.Errorf("invalid invoke transaction type: expected Deploy (non-pointer)")
 		}
 	case TransactionTypeDeployAccount:
-		if deploy, ok := t.Body.(DeployAccount); ok {
+		if deploy, ok := t.Body.(*DeployAccount); ok {
 			m = deploy.toMap()
 		} else {
 			return nil, errors.Errorf("invalid invoke transaction type: expected DeployAccount (non-pointer)")
 		}
 	case TransactionTypeL1Handler:
-		if l1handler, ok := t.Body.(L1Handler); ok {
+		if l1handler, ok := t.Body.(*L1Handler); ok {
 			m = l1handler.toMap()
 		} else {
 			return nil, errors.Errorf("invalid invoke transaction type: expected L1Handler (non-pointer)")

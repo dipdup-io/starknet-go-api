@@ -16,6 +16,6 @@ func (api API) GetTransactionStatus(ctx context.Context, txHash string) (respons
 		"transactionHash": txHash,
 	}
 
-	err = api.getFromFeederGateway(ctx, "get_transaction_status", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_transaction_status", "", args, &response)
 	return
 }

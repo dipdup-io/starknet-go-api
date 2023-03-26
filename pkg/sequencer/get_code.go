@@ -26,6 +26,6 @@ func (api API) GetCode(ctx context.Context, block data.BlockID, contractAddress 
 		args[name] = value
 	}
 
-	err = api.getFromFeederGateway(ctx, "get_code", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_code", "", args, &response)
 	return
 }

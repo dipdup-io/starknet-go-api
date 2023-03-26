@@ -18,6 +18,6 @@ func (api API) GetClassHashAt(ctx context.Context, block data.BlockID, contractA
 	}
 	args["contractAddress"] = contractAddress
 
-	err = api.getFromFeederGateway(ctx, "get_class_hash_at", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_class_hash_at", "", args, &response)
 	return
 }

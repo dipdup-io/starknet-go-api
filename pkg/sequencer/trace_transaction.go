@@ -9,6 +9,6 @@ func (api API) TraceTransaction(ctx context.Context, hash string) (response Trac
 	args := map[string]string{
 		"transactionHash": hash,
 	}
-	err = api.getFromFeederGateway(ctx, "get_transaction_trace", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_transaction_trace", "", args, &response)
 	return
 }

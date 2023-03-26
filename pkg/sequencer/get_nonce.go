@@ -19,6 +19,6 @@ func (api API) GetNonce(ctx context.Context, block data.BlockID, contractAddress
 		args[name] = value
 	}
 
-	err = api.getFromFeederGateway(ctx, "get_nonce", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_nonce", "", args, &response)
 	return
 }

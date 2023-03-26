@@ -17,3 +17,12 @@ func WithRateLimit(requestPerSecond int) ApiOption {
 		}
 	}
 }
+
+// WithCacheInFS -
+func WithCacheInFS(dir string) ApiOption {
+	return func(api *API) {
+		if dir != "" {
+			api.cacheDir = dir
+		}
+	}
+}

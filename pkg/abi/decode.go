@@ -46,6 +46,13 @@ func DecodeExecuteCallData(calldata []string) (map[string]any, error) {
 	})
 }
 
+// DecodeChangeModulesCallData -
+func DecodeChangeModulesCallData(calldata []string) (map[string]any, error) {
+	return DecodeFunctionCallData(calldata, ChangeModules, map[string]*StructItem{
+		"ModuleFunctionAction": &ModuleFunctionAction,
+	})
+}
+
 // DecodeFunctionCallData -
 func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[string]*StructItem) (map[string]any, error) {
 

@@ -20,6 +20,6 @@ func (api API) GetTransaction(ctx context.Context, hash string) (response Trace,
 	args := map[string]string{
 		"transactionHash": hash,
 	}
-	err = api.getFromFeederGateway(ctx, "get_transaction", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_transaction", "", args, &response)
 	return
 }

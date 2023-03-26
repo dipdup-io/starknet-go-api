@@ -12,6 +12,6 @@ type ContractAddresses struct {
 
 // GetContractAddresses -
 func (api API) GetContractAddresses(ctx context.Context) (response ContractAddresses, err error) {
-	err = api.getFromFeederGateway(ctx, "get_contract_addresses", nil, &response)
+	err = api.getFromFeederGateway(ctx, "get_contract_addresses", "", nil, &response)
 	return
 }

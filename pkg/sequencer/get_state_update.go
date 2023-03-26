@@ -2,6 +2,7 @@ package sequencer
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 )
@@ -17,6 +18,14 @@ func (api API) GetStateUpdate(ctx context.Context, block data.BlockID) (response
 		args[name] = value
 	}
 
-	err = api.getFromFeederGateway(ctx, "get_state_update", args, &response)
+	var cacheFileName string
+	switch {
+	case block.Number != nil:
+		cacheFileName = fmt.Sprintf("%d.json", *block.Number)
+	case block.Hash != "":
+		cacheFileName = block.Hash
+	}
+
+	err = api.getFromFeederGateway(ctx, "get_state_update", cacheFileName, args, &response)
 	return
 }

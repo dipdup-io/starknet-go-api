@@ -19,13 +19,16 @@ const (
 	ValidateEntrypoint        = "__validate__"
 	ValidateDeclareEntrypoint = "__validate_declare__"
 	ValidateDeployEntrypoint  = "__validate_deploy__"
+	ChangeModulesEntrypoint   = "changeModules"
 
 	DefaultEntrypoitSelector = 0x0
 )
 
 var (
-	ExecuteEntrypointSelector = MustDecodeHex("0x15d40a3d6ca2ac30f4031e42be28da9b056fef9bb7357ac5e85627ee876e5ad")
-	ConstructorSelector       = MustDecodeHex("0x28ffe4ff0f226a9107253e17a904099aa4f63a02a5621de0576e5aa71bc5194")
+	ExecuteEntrypointSelector         = MustDecodeHex("0x15d40a3d6ca2ac30f4031e42be28da9b056fef9bb7357ac5e85627ee876e5ad")
+	ConstructorSelector               = MustDecodeHex("0x28ffe4ff0f226a9107253e17a904099aa4f63a02a5621de0576e5aa71bc5194")
+	ValidateDeclareEntrypointSelector = MustDecodeHex("0x289da278a8dc833409cabfdad1581e8e7d40e42dcaed693fa4008dcdb4963b3")
+	ChangeModuleEntrypointSelector    = MustDecodeHex("0x3ffada7235f48d4811be030385f19e6d50e2cfa368ded42f1892666f834e407")
 )
 
 // Keccak - A variant of eth-keccak that computes a value that fits in a StarkNet field element.

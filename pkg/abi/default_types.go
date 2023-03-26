@@ -70,4 +70,68 @@ var (
 			},
 		},
 	}
+
+	ChangeModules = FunctionItem{
+		Type: Type{
+			Type: FunctionType,
+			Name: encoding.ChangeModulesEntrypoint,
+		},
+
+		Inputs: []Type{
+			{
+				Name: "actions_len",
+				Type: "felt",
+			}, {
+				Name: "actions",
+				Type: "ModuleFunctionAction*",
+			}, {
+				Name: "address",
+				Type: "felt",
+			}, {
+				Name: "calldata_len",
+				Type: "felt",
+			}, {
+				Name: "calldata",
+				Type: "felt*",
+			},
+		},
+		Outputs: []Type{
+			{
+				Name: "response_len",
+				Type: "felt",
+			}, {
+				Name: "response",
+				Type: "felt*",
+			},
+		},
+	}
+
+	ModuleFunctionAction = StructItem{
+		Type: Type{
+			Type: StructType,
+			Name: "ModuleFunctionAction",
+		},
+		Size: 3,
+		Members: []Member{
+			{
+				Type: Type{
+					Type: "felt",
+					Name: "module_address",
+				},
+				Offset: 0,
+			}, {
+				Type: Type{
+					Type: "felt",
+					Name: "action",
+				},
+				Offset: 1,
+			}, {
+				Type: Type{
+					Type: "felt",
+					Name: "selector",
+				},
+				Offset: 2,
+			},
+		},
+	}
 )

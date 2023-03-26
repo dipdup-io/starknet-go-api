@@ -20,6 +20,6 @@ func (api API) GetStorageAt(ctx context.Context, block data.BlockID, contractAdd
 		args[name] = value
 	}
 
-	err = api.getFromFeederGateway(ctx, "get_storage_at", args, &response)
+	err = api.getFromFeederGateway(ctx, "get_storage_at", "", args, &response)
 	return
 }
