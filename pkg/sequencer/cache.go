@@ -5,6 +5,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/goccy/go-json"
 )
 
 func (api API) parseJSONWithCache(body io.ReadCloser, path, cacheFileName string, output any) error {

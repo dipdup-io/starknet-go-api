@@ -1,13 +1,11 @@
 package abi
 
 import (
-	jsoniter "github.com/json-iterator/go"
+	"github.com/goccy/go-json"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/encoding"
 	"github.com/pkg/errors"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // UnmarshalJSON -
 func (a *Abi) UnmarshalJSON(raw []byte) error {

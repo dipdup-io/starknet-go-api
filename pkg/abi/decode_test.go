@@ -3,6 +3,8 @@ package abi
 import (
 	"reflect"
 	"testing"
+
+	"github.com/goccy/go-json"
 )
 
 func TestDecodeFunctionCallData(t *testing.T) {
@@ -146,7 +148,7 @@ func TestDecodeFunctionCallData(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var a Abi
-			if err := json.UnmarshalFromString(tt.args.abi, &a); err != nil {
+			if err := json.Unmarshal([]byte(tt.args.abi), &a); err != nil {
 				t.Errorf("DecodeFunctionCallData() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}

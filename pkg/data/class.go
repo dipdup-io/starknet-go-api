@@ -4,10 +4,8 @@ import (
 	stdJSON "encoding/json"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/abi"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/goccy/go-json"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // Class -
 type Class struct {
