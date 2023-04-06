@@ -37,13 +37,14 @@ func (i Invoke) toMap(version Felt) map[string]any {
 
 // Declare -
 type Declare struct {
-	MaxFee          Felt     `json:"max_fee"`
-	Nonce           Felt     `json:"nonce"`
-	SenderAddress   Felt     `json:"sender_address"`
-	ContractAddress Felt     `json:"contract_address"`
-	Signature       []string `json:"signature"`
-	ContractClass   Class    `json:"contract_class,omitempty"`
-	ClassHash       Felt     `json:"class_hash,omitempty"`
+	MaxFee            Felt     `json:"max_fee"`
+	Nonce             Felt     `json:"nonce"`
+	SenderAddress     Felt     `json:"sender_address"`
+	ContractAddress   Felt     `json:"contract_address"`
+	Signature         []string `json:"signature"`
+	ContractClass     *Class   `json:"contract_class,omitempty"`
+	ClassHash         Felt     `json:"class_hash,omitempty"`
+	CompiledClassHash Felt     `json:"compiled_class_hash,omitempty"`
 }
 
 func (d Declare) toMap() map[string]any {

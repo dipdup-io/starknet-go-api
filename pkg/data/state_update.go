@@ -24,12 +24,20 @@ type DeployedContract struct {
 	ClassHash Felt `json:"class_hash"`
 }
 
+// DeclaredClass -
+type DeclaredClass struct {
+	ClassHash         Felt `json:"class_hash"`
+	CompiledClassHash Felt `json:"compiled_class_hash"`
+}
+
 // StateDiff -
 type StateDiff struct {
-	StorageDiffs      map[Felt][]KeyValue `json:"storage_diffs"`
-	DeclaredContracts []Felt              `json:"declared_contracts"`
-	DeployedContracts []DeployedContract  `json:"deployed_contracts"`
-	Nonces            map[Felt]Felt       `json:"nonces"`
+	StorageDiffs         map[Felt][]KeyValue `json:"storage_diffs"`
+	DeclaredClasses      []DeclaredClass     `json:"declared_classes"`
+	ReplacedClasses      []any               `json:"replaced_classes"` // TODO:
+	OldDeclaredContracts []Felt              `json:"old_declared_contracts"`
+	DeployedContracts    []DeployedContract  `json:"deployed_contracts"`
+	Nonces               map[Felt]Felt       `json:"nonces"`
 }
 
 // StateUpdate -
