@@ -3,12 +3,14 @@ module github.com/dipdup-io/starknet-go-api
 go 1.19
 
 require (
+	github.com/dipdup-net/indexer-sdk v0.0.0-20230413120903-791a286443f9
 	github.com/ethereum/go-ethereum v1.11.2
 	github.com/goccy/go-json v0.10.2
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.29.0
 	github.com/shopspring/decimal v1.3.1
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
+	github.com/tfkhsr/jsonschema v0.0.0-20180218143334-273afdd5a88c
 	golang.org/x/time v0.3.0
 )
 
