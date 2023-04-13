@@ -164,9 +164,15 @@ func buildJsonSchemaForMembers(typ []Member, structs, out map[string]jsonschema.
 
 func getNameAndTypeForJsonSchema(typ Type, structs map[string]jsonschema.JSONSchema) (string, jsonschema.JSONSchema) {
 	switch typ.Type {
-	case "felt":
+	case "felt", "core::felt252", "core::starknet::contract_address::ContractAddress":
 		return typ.Name, jsonschema.JSONSchema{
 			Type:         jsonschema.ItemTypeString,
+			Title:        typ.Name,
+			InternalType: typ.Type,
+		}
+	case "core::integer::u8", "core::integer::u128", "core::integer::u256":
+		return typ.Name, jsonschema.JSONSchema{
+			Type:         jsonschema.ItemTypeInteger,
 			Title:        typ.Name,
 			InternalType: typ.Type,
 		}

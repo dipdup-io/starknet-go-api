@@ -273,6 +273,10 @@ func TestAbi_JsonSchema(t *testing.T) {
 				}
 			  ]`),
 		},
+		{
+			name: "test 2",
+			abi:  []byte(`[{"type": "event", "name": "Hello", "keys": [{"name": "from", "type": "core::starknet::contract_address::ContractAddress"}, {"name": "value", "type": "core::integer::u128"}]}]`),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
