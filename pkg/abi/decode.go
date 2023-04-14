@@ -23,14 +23,6 @@ func isTypeArray(typ string) bool {
 	return strings.Contains(typ, "*")
 }
 
-// func isTypeFelt(typ string) bool {
-// 	return typ == "felt"
-// }
-
-// func isTypeFeltArray(typ string) bool {
-// 	return typ == "felt*"
-// }
-
 func isTypeTuple(typ string) bool {
 	l := len(typ)
 	if l < 2 {
@@ -46,9 +38,23 @@ func DecodeExecuteCallData(calldata []string) (map[string]any, error) {
 	})
 }
 
+// DecodeExecuteResult -
+func DecodeExecuteResult(result []string) (map[string]any, error) {
+	return DecodeFunctionCallData(result, ExecuteFunction, map[string]*StructItem{
+		"CallArray": &CallArray,
+	})
+}
+
 // DecodeChangeModulesCallData -
 func DecodeChangeModulesCallData(calldata []string) (map[string]any, error) {
 	return DecodeFunctionCallData(calldata, ChangeModules, map[string]*StructItem{
+		"ModuleFunctionAction": &ModuleFunctionAction,
+	})
+}
+
+// DecodeChangeModulesResult -
+func DecodeChangeModulesResult(result []string) (map[string]any, error) {
+	return DecodeFunctionCallData(result, ChangeModules, map[string]*StructItem{
 		"ModuleFunctionAction": &ModuleFunctionAction,
 	})
 }
@@ -82,6 +88,24 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 
 	for _, input := range typ.Data {
 		tail, err = decodeItem(tail, input, structs, result)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+	return result, nil
+}
+
+// DecodeFunctionResult -
+func DecodeFunctionResult(data []string, typ FunctionItem, structs map[string]*StructItem) (map[string]any, error) {
+	var (
+		result = make(map[string]any, 0)
+		tail   = data
+		err    error
+	)
+
+	for _, output := range typ.Outputs {
+		tail, err = decodeItem(tail, output, structs, result)
 		if err != nil {
 			return nil, err
 		}
