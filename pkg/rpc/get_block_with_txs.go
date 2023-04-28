@@ -26,13 +26,7 @@ func (api API) GetBlockWithTxs(ctx context.Context, block data.BlockID, opts ...
 
 	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{block}, opts...)
 
-	if api.rateLimit != nil {
-		if err := api.rateLimit.Wait(ctx); err != nil {
-			return nil, err
-		}
-	}
-
 	var response Response[BlockWithTxs]
-	err := post(ctx, api.client, api.baseURL, *request, &response)
+	err := post(ctx, api, *request, &response)
 	return &response, err
 }

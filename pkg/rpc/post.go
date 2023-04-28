@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func post[T any](ctx context.Context, client *http.Client, url string, req Request, output *Response[T]) error {
+func post[T any](ctx context.Context, api API, req Request, output *Response[T]) error {
 	buf := new(bytes.Buffer)
 	if err := json.NewEncoder(buf).Encode(req); err != nil {
 		return err
@@ -18,12 +18,19 @@ func post[T any](ctx context.Context, client *http.Client, url string, req Reque
 	requestCtx, cancel := context.WithTimeout(ctx, req.timeout)
 	defer cancel()
 
-	request, err := http.NewRequestWithContext(requestCtx, http.MethodPost, url, buf)
+	request, err := http.NewRequestWithContext(requestCtx, http.MethodPost, api.baseURL, buf)
 	if err != nil {
 		return err
 	}
 	request.Header.Add("Content-Type", "application/json")
-	response, err := client.Do(request)
+
+	if api.rateLimit != nil {
+		if err := api.rateLimit.Wait(ctx); err != nil {
+			return err
+		}
+	}
+
+	response, err := api.client.Do(request)
 	if err != nil {
 		return err
 	}
