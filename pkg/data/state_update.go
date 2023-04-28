@@ -47,3 +47,53 @@ type StateUpdate struct {
 	OldRoot   Felt      `json:"old_root"`
 	StateDiff StateDiff `json:"state_diff"`
 }
+
+// StateDiffRpc -
+type StateDiffRpc struct {
+	DeclaredClasses      []DeclaredClass    `json:"declared_classes"`
+	ReplacedClasses      []any              `json:"replaced_classes"` // TODO:
+	OldDeclaredContracts []Felt             `json:"old_declared_contracts"`
+	DeployedContracts    []DeployedContract `json:"deployed_contracts"`
+	Nonces               []Nonce            `json:"nonces"`
+	StorageDiffs         []StorageDiff      `json:"storage_diffs"`
+}
+
+// ToStateDiff -
+func (sdr StateDiffRpc) ToStateDiff() StateDiff {
+	sd := StateDiff{
+		StorageDiffs:         make(map[Felt][]KeyValue),
+		Nonces:               make(map[Felt]Felt),
+		DeclaredClasses:      sdr.DeclaredClasses,
+		ReplacedClasses:      sdr.ReplacedClasses,
+		OldDeclaredContracts: sdr.OldDeclaredContracts,
+		DeployedContracts:    sdr.DeployedContracts,
+	}
+
+	for i := range sdr.Nonces {
+		sd.Nonces[sdr.Nonces[i].ContractAddress] = sdr.Nonces[i].Nonce
+	}
+
+	for i := range sdr.StorageDiffs {
+		sd.StorageDiffs[sdr.StorageDiffs[i].Address] = sdr.StorageDiffs[i].StorageEntries
+	}
+
+	return sd
+}
+
+// StateUpdateRpc -
+type StateUpdateRpc struct {
+	BlockHash Felt         `json:"block_hash"`
+	NewRoot   Felt         `json:"new_root"`
+	OldRoot   Felt         `json:"old_root"`
+	StateDiff StateDiffRpc `json:"state_diff"`
+}
+
+// ToStateUpdate -
+func (sur StateUpdateRpc) ToStateUpdate() StateUpdate {
+	return StateUpdate{
+		BlockHash: sur.BlockHash,
+		NewRoot:   sur.NewRoot,
+		OldRoot:   sur.OldRoot,
+		StateDiff: sur.StateDiff.ToStateDiff(),
+	}
+}

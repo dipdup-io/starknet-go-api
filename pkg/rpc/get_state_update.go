@@ -7,7 +7,7 @@ import (
 )
 
 // GetStateUpdate -
-func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[data.StateUpdate], error) {
+func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[data.StateUpdateRpc], error) {
 	if err := block.Validate(); err != nil {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...R
 		}
 	}
 
-	var response Response[data.StateUpdate]
+	var response Response[data.StateUpdateRpc]
 	err := post(ctx, api.client, api.baseURL, *request, &response)
 	return &response, err
 }
