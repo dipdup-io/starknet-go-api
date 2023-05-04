@@ -50,12 +50,12 @@ type StateUpdate struct {
 
 // StateDiffRpc -
 type StateDiffRpc struct {
-	DeclaredClasses      []DeclaredClass    `json:"declared_classes"`
-	ReplacedClasses      []any              `json:"replaced_classes"` // TODO:
-	OldDeclaredContracts []Felt             `json:"old_declared_contracts"`
-	DeployedContracts    []DeployedContract `json:"deployed_contracts"`
-	Nonces               []Nonce            `json:"nonces"`
-	StorageDiffs         []StorageDiff      `json:"storage_diffs"`
+	DeclaredClasses        []DeclaredClass    `json:"declared_classes"`
+	ReplacedClasses        []any              `json:"replaced_classes"` // TODO:
+	DeclaredContractHashes []Felt             `json:"declared_contract_hashes"`
+	DeployedContracts      []DeployedContract `json:"deployed_contracts"`
+	Nonces                 []Nonce            `json:"nonces"`
+	StorageDiffs           []StorageDiff      `json:"storage_diffs"`
 }
 
 // ToStateDiff -
@@ -65,7 +65,7 @@ func (sdr StateDiffRpc) ToStateDiff() StateDiff {
 		Nonces:               make(map[Felt]Felt),
 		DeclaredClasses:      sdr.DeclaredClasses,
 		ReplacedClasses:      sdr.ReplacedClasses,
-		OldDeclaredContracts: sdr.OldDeclaredContracts,
+		OldDeclaredContracts: sdr.DeclaredContractHashes,
 		DeployedContracts:    sdr.DeployedContracts,
 	}
 
