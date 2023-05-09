@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 	starknet "github.com/dipdup-io/starknet-go-api/pkg/rpc"
@@ -10,13 +11,14 @@ import (
 
 func main() {
 	api := starknet.NewAPI("LINK_TO_NODE_RPC")
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
 
 	blockNumber := uint64(100)
 
 	response, err := api.GetBlockTransactionCount(ctx, data.BlockID{
 		Number: &blockNumber,
-	}, starknet.WithTimeout(10))
+	})
 	if err != nil {
 		log.Panic(err)
 	}

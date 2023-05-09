@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"sync/atomic"
-	"time"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 	"golang.org/x/time/rate"
@@ -47,8 +46,6 @@ func (api API) prepareRequest(ctx context.Context, method string, params []any, 
 		ID:      api.id.Add(1),
 		Method:  method,
 		Params:  params,
-
-		timeout: 10 * time.Second,
 	}
 
 	for i := range opts {

@@ -23,15 +23,6 @@ func WithJsonRpcVersion(version string) RequestOption {
 	}
 }
 
-// WithTimeout - set custom timeout in seconds. Default: 10 seconds
-func WithTimeout(timeout uint64) RequestOption {
-	return func(req *Request) {
-		if timeout > 0 {
-			req.timeout = time.Second * time.Duration(timeout)
-		}
-	}
-}
-
 // ApiOption -
 type ApiOption func(*API)
 

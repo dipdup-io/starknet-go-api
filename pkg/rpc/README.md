@@ -79,7 +79,7 @@ And call any method:
 ```go
 response, err := api.GetBlockTransactionCount(ctx, starknetData.BlockID{
     Number: 100,
-}, rpc.WithTimeout(10))
+})
 if err != nil {
     log.Panic(err)
 }
@@ -87,16 +87,9 @@ if err != nil {
 
 ### Timeout
 
-If you need timeout on your request you can use option `WithTimeout` and set timeout by passing context:
+If you need timeout on your request you should set it by passing context:
 
 ```go
-// by option
-response, err := api.GetBlockTransactionCount(ctx, starknetData.BlockID{
-    Number: 100,
-}, rpc.WithTimeout(10))
-if err != nil {
-    log.Panic(err)
-}
 
 // by context
 requestCtx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -109,5 +102,3 @@ if err != nil {
     log.Panic(err)
 }
 ```
-
-If you pass both variants of timeout the least will be used.

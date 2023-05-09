@@ -1,8 +1,6 @@
 package api
 
 import (
-	"time"
-
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 )
 
@@ -12,8 +10,6 @@ type Request struct {
 	Method  string `json:"method"`
 	Params  []any  `json:"params"`
 	ID      uint64 `json:"id"`
-
-	timeout time.Duration
 }
 
 // Response -

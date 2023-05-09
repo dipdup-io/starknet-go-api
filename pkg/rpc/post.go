@@ -15,10 +15,7 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 		return err
 	}
 
-	requestCtx, cancel := context.WithTimeout(ctx, req.timeout)
-	defer cancel()
-
-	request, err := http.NewRequestWithContext(requestCtx, http.MethodPost, api.baseURL, buf)
+	request, err := http.NewRequestWithContext(ctx, http.MethodPost, api.baseURL, buf)
 	if err != nil {
 		return err
 	}
