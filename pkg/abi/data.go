@@ -7,6 +7,7 @@ const (
 	ConstructorType = "constructor"
 	EventType       = "event"
 	StructType      = "struct"
+	EnumType        = "enum"
 )
 
 // Abi -
@@ -16,6 +17,7 @@ type Abi struct {
 	Constructor map[string]*FunctionItem `json:"-"`
 	Events      map[string]*EventItem    `json:"-"`
 	Structs     map[string]*StructItem   `json:"-"`
+	Enums       map[string]*EnumItem     `json:"-"`
 
 	FunctionsBySelector   map[string]*FunctionItem `json:"-"`
 	L1HandlersBySelector  map[string]*FunctionItem `json:"-"`
@@ -44,8 +46,9 @@ type FunctionItem struct {
 type EventItem struct {
 	Type
 
-	Data []Type `json:"data"`
-	Keys []Type `json:"keys"`
+	Data   []Type `json:"data"`
+	Keys   []Type `json:"keys"`
+	Inputs []Type `json:"inputs"`
 }
 
 // StructItem -
@@ -54,6 +57,13 @@ type StructItem struct {
 
 	Size    uint64   `json:"size"`
 	Members []Member `json:"members"`
+}
+
+// EnumItem -
+type EnumItem struct {
+	Type
+
+	Variants []Type `json:"variants"`
 }
 
 // Member -

@@ -14,6 +14,7 @@ type JsonSchema struct {
 	Constructors map[string]JsonSchemaFunction    `json:"constructors"`
 	Events       map[string]JsonSchemaEvent       `json:"events"`
 	Structs      map[string]jsonschema.JSONSchema `json:"structs"`
+	Enums        map[string]jsonschema.JSONSchema `json:"enums"`
 }
 
 // JsonSchemaFunction -
@@ -53,35 +54,50 @@ func newJsonSchemaFunction(f FunctionItem, structs map[string]jsonschema.JSONSch
 
 // JsonSchemaEvent -
 type JsonSchemaEvent struct {
-	Keys *jsonschema.JSONSchema `json:"keys"`
-	Data *jsonschema.JSONSchema `json:"data"`
+	Keys   *jsonschema.JSONSchema `json:"keys,omitempty"`
+	Data   *jsonschema.JSONSchema `json:"data,omitempty"`
+	Inputs *jsonschema.JSONSchema `json:"inputs,omitempty"`
 }
 
 func newJsonSchemaEvent(f EventItem, structs map[string]jsonschema.JSONSchema) JsonSchemaEvent {
-	schema := JsonSchemaEvent{
-		Keys: &jsonschema.JSONSchema{
+	schema := JsonSchemaEvent{}
+	if f.Inputs != nil {
+		schema.Inputs = &jsonschema.JSONSchema{
 			Type: jsonschema.ItemTypeObject,
 			ObjectItem: jsonschema.ObjectItem{
 				Properties: make(map[string]jsonschema.JSONSchema),
 				Required:   []string{},
 			},
-		},
-		Data: &jsonschema.JSONSchema{
+		}
+		buildJsonSchema(f.Inputs, structs, schema.Inputs.ObjectItem.Properties)
+		for name := range schema.Inputs.ObjectItem.Properties {
+			schema.Inputs.ObjectItem.Required = append(schema.Inputs.ObjectItem.Required, name)
+		}
+	} else {
+		schema.Keys = &jsonschema.JSONSchema{
 			Type: jsonschema.ItemTypeObject,
 			ObjectItem: jsonschema.ObjectItem{
 				Properties: make(map[string]jsonschema.JSONSchema),
 				Required:   []string{},
 			},
-		},
+		}
+		schema.Data = &jsonschema.JSONSchema{
+			Type: jsonschema.ItemTypeObject,
+			ObjectItem: jsonschema.ObjectItem{
+				Properties: make(map[string]jsonschema.JSONSchema),
+				Required:   []string{},
+			},
+		}
+		buildJsonSchema(f.Keys, structs, schema.Keys.ObjectItem.Properties)
+		for name := range schema.Keys.ObjectItem.Properties {
+			schema.Keys.ObjectItem.Required = append(schema.Keys.ObjectItem.Required, name)
+		}
+		buildJsonSchema(f.Data, structs, schema.Data.ObjectItem.Properties)
+		for name := range schema.Data.ObjectItem.Properties {
+			schema.Data.ObjectItem.Required = append(schema.Data.ObjectItem.Required, name)
+		}
 	}
-	buildJsonSchema(f.Keys, structs, schema.Keys.ObjectItem.Properties)
-	for name := range schema.Keys.ObjectItem.Properties {
-		schema.Keys.ObjectItem.Required = append(schema.Keys.ObjectItem.Required, name)
-	}
-	buildJsonSchema(f.Data, structs, schema.Data.ObjectItem.Properties)
-	for name := range schema.Data.ObjectItem.Properties {
-		schema.Data.ObjectItem.Required = append(schema.Data.ObjectItem.Required, name)
-	}
+
 	return schema
 }
 
@@ -104,6 +120,21 @@ func newJsonSchemaForStruct(name string, item StructItem) jsonschema.JSONSchema 
 	return schema
 }
 
+func newJsonSchemaForEnum(name string, item EnumItem) jsonschema.JSONSchema {
+	schema := jsonschema.JSONSchema{
+		Title:        name,
+		InternalType: item.Type.Type,
+		Type:         jsonschema.ItemTypeString,
+		Enum:         make([]any, 0),
+	}
+
+	for i := range item.Variants {
+		schema.Enum = append(schema.Enum, item.Variants[i].Name)
+	}
+
+	return schema
+}
+
 // JsonSchema -
 func (abi Abi) JsonSchema() *JsonSchema {
 	schema := &JsonSchema{
@@ -112,6 +143,7 @@ func (abi Abi) JsonSchema() *JsonSchema {
 		Constructors: make(map[string]JsonSchemaFunction),
 		Events:       make(map[string]JsonSchemaEvent),
 		Structs:      make(map[string]jsonschema.JSONSchema),
+		Enums:        make(map[string]jsonschema.JSONSchema),
 	}
 
 	for name, typ := range abi.Structs {
@@ -119,6 +151,12 @@ func (abi Abi) JsonSchema() *JsonSchema {
 			continue
 		}
 		schema.Structs[name] = newJsonSchemaForStruct(name, *typ)
+	}
+	for name, typ := range abi.Enums {
+		if typ == nil {
+			continue
+		}
+		schema.Enums[name] = newJsonSchemaForEnum(name, *typ)
 	}
 
 	for name, typ := range abi.Functions {

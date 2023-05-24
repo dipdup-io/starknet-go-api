@@ -23,6 +23,9 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 			items = append(items, &EventItem{})
 		case StructType:
 			items = append(items, &StructItem{})
+		case EnumType:
+			items = append(items, &EnumItem{})
+
 		default:
 			return errors.Errorf("unknown abi type: %s", types[i].Type)
 		}
@@ -37,6 +40,7 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 	a.Functions = make(map[string]*FunctionItem)
 	a.L1Handlers = make(map[string]*FunctionItem)
 	a.Structs = make(map[string]*StructItem)
+	a.Enums = make(map[string]*EnumItem)
 
 	a.ConstructorBySelector = make(map[string]*FunctionItem)
 	a.EventsBySelector = make(map[string]*EventItem)
@@ -67,6 +71,9 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 			item := items[i].(*StructItem)
 			a.Structs[types[i].Name] = item
 			a.StructsBySelector[selector] = item
+		case EnumType:
+			item := items[i].(*EnumItem)
+			a.Enums[types[i].Name] = item
 		default:
 			return errors.Errorf("unknown abi type: %s", types[i].Type)
 		}
