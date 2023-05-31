@@ -53,11 +53,19 @@ func NewUint256FromString(value string) (Uint256, error) {
 
 // Decimal -
 func (uint256 Uint256) Decimal() (decimal.Decimal, error) {
-	high, ok := big.NewInt(0).SetString(uint256.high.String(), 0)
+	hVal := uint256.high.String()
+	if hVal == "" {
+		hVal = "0x0"
+	}
+	high, ok := big.NewInt(0).SetString(hVal, 0)
 	if !ok {
 		return decimal.Zero, errors.Errorf("invalid high of uint256: %s", uint256.high)
 	}
-	low, ok := big.NewInt(0).SetString(uint256.low.String(), 0)
+	lVal := uint256.low.String()
+	if lVal == "" {
+		lVal = "0x0"
+	}
+	low, ok := big.NewInt(0).SetString(lVal, 0)
 	if !ok {
 		return decimal.Zero, errors.Errorf("invalid low of uint256: %s", uint256.high)
 	}
