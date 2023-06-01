@@ -16,8 +16,8 @@ var (
 
 // Uint256 -
 type Uint256 struct {
-	low  Felt
-	high Felt
+	Low  Felt `json:"low"`
+	High Felt `json:"high"`
 }
 
 // NewUint256 -
@@ -53,21 +53,21 @@ func NewUint256FromString(value string) (Uint256, error) {
 
 // Decimal -
 func (uint256 Uint256) Decimal() (decimal.Decimal, error) {
-	hVal := uint256.high.String()
+	hVal := uint256.High.String()
 	if hVal == "" {
 		hVal = "0x0"
 	}
 	high, ok := big.NewInt(0).SetString(hVal, 0)
 	if !ok {
-		return decimal.Zero, errors.Errorf("invalid high of uint256: %s", uint256.high)
+		return decimal.Zero, errors.Errorf("invalid high of uint256: %s", uint256.High)
 	}
-	lVal := uint256.low.String()
+	lVal := uint256.Low.String()
 	if lVal == "" {
 		lVal = "0x0"
 	}
 	low, ok := big.NewInt(0).SetString(lVal, 0)
 	if !ok {
-		return decimal.Zero, errors.Errorf("invalid low of uint256: %s", uint256.high)
+		return decimal.Zero, errors.Errorf("invalid low of uint256: %s", uint256.High)
 	}
 
 	return decimal.NewFromBigInt(high.Lsh(high, 128).Add(high, low), 0), nil
@@ -78,13 +78,13 @@ func (uint256 Uint256) String() string {
 	if d, err := uint256.Decimal(); err == nil {
 		return d.String()
 	}
-	return fmt.Sprintf("low=%s high=%s", uint256.low, uint256.high)
+	return fmt.Sprintf("low=%s high=%s", uint256.Low, uint256.High)
 }
 
 // Calldata -
 func (uint256 Uint256) Calldata() []string {
 	return []string{
-		uint256.low.Decimal().String(),
-		uint256.high.Decimal().String(),
+		uint256.Low.Decimal().String(),
+		uint256.High.Decimal().String(),
 	}
 }

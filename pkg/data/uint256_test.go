@@ -18,15 +18,15 @@ func TestNewUint256FromString(t *testing.T) {
 			name:  "test 1",
 			value: "1000000000000000",
 			want: Uint256{
-				low:  "0x38d7ea4c68000",
-				high: "0x0",
+				Low:  "0x38d7ea4c68000",
+				High: "0x0",
 			},
 		}, {
 			name:  "test 2",
 			value: "340282366920938463463374607431768211456",
 			want: Uint256{
-				low:  "0x0",
-				high: "0x1",
+				Low:  "0x0",
+				High: "0x1",
 			},
 		},
 	}
@@ -60,8 +60,8 @@ func TestUint256_Decimal(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			uint256 := Uint256{
-				low:  tt.uint256.low,
-				high: tt.uint256.high,
+				Low:  tt.uint256.Low,
+				High: tt.uint256.High,
 			}
 			got, err := uint256.Decimal()
 			if (err != nil) != tt.wantErr {
