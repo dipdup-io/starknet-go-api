@@ -15,12 +15,16 @@ var (
 	ErrNoLenField       = errors.New("can't find array length field")
 )
 
+const (
+	coreArrayTypePrefix = "core::array::Array::<"
+)
+
 func isLenField(name string) bool {
 	return strings.HasSuffix(name, "_len")
 }
 
 func isTypeArray(typ string) bool {
-	return strings.Contains(typ, "*")
+	return strings.Contains(typ, "*") || (strings.HasPrefix(typ, coreArrayTypePrefix) && strings.HasSuffix(typ, ">"))
 }
 
 func isTypeTuple(typ string) bool {
@@ -29,6 +33,12 @@ func isTypeTuple(typ string) bool {
 		return false
 	}
 	return typ[0] == '(' && typ[l-1] == ')'
+}
+
+func unwrapArrayType(typ string) string {
+	s := strings.TrimSuffix(typ, "*")
+	s = strings.TrimPrefix(s, coreArrayTypePrefix)
+	return strings.TrimSuffix(s, ">")
 }
 
 // DecodeExecuteCallData -
@@ -138,15 +148,29 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		return tail, nil
 
 	case isTypeArray(input.Type):
-		lengthHex, ok := result[fmt.Sprintf("%s_len", input.Name)]
-		if !ok {
-			return nil, errors.Wrap(ErrNoLenField, input.Name)
+		var iLength int
+		switch {
+		case strings.HasSuffix(input.Type, "*"):
+			lengthHex, ok := result[fmt.Sprintf("%s_len", input.Name)]
+			if !ok {
+				return nil, errors.Wrap(ErrNoLenField, input.Name)
+			}
+			length, err := strconv.ParseInt(lengthHex.(string), 0, 64)
+			if err != nil {
+				return nil, errors.Wrap(err, input.Name)
+			}
+			iLength = int(length)
+		case strings.HasPrefix(input.Type, coreArrayTypePrefix):
+			if len(calldata) == 0 {
+				return nil, ErrTooShortCallData
+			}
+			length, err := strconv.ParseInt(calldata[0], 0, 64)
+			if err != nil {
+				return nil, errors.Wrap(err, input.Name)
+			}
+			iLength = int(length)
+			calldata = calldata[1:]
 		}
-		length, err := strconv.ParseInt(lengthHex.(string), 0, 64)
-		if err != nil {
-			return nil, errors.Wrap(err, input.Name)
-		}
-		iLength := int(length)
 
 		if iLength == 0 {
 			return calldata, nil
@@ -158,11 +182,13 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 
 		parsed := make([]any, iLength)
 		tail := calldata
+		var err error
+
 		for i := 0; i < iLength; i++ {
 			obj := make(map[string]any)
 			tail, err = decodeItem(tail, Type{
 				Name: fmt.Sprintf("array_item_%d", i),
-				Type: strings.TrimSuffix(input.Type, "*"),
+				Type: unwrapArrayType(input.Type),
 			}, structs, obj)
 			if err != nil {
 				return nil, err
