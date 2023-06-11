@@ -2,7 +2,6 @@ package abi
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/dipdup-net/indexer-sdk/pkg/jsonschema"
 )
@@ -202,21 +201,27 @@ func buildJsonSchemaForMembers(typ []Member, structs, out map[string]jsonschema.
 
 func getNameAndTypeForJsonSchema(typ Type, structs map[string]jsonschema.JSONSchema) (string, jsonschema.JSONSchema) {
 	switch typ.Type {
-	case "felt", "core::felt252", "core::starknet::contract_address::ContractAddress":
+	case coreTypeFelt, coreTypeFelt252, coreTypeContractAddress, coreTypeClassHash:
 		return typ.Name, jsonschema.JSONSchema{
 			Type:         jsonschema.ItemTypeString,
 			Title:        typ.Name,
 			InternalType: typ.Type,
 		}
-	case "core::integer::u8", "core::integer::u128", "core::integer::u256":
+	case coreTypeU8, coreTypeU16, coreTypeU32, coreTypeU64, coreTypeU128, coreTypeU256:
 		return typ.Name, jsonschema.JSONSchema{
 			Type:         jsonschema.ItemTypeInteger,
 			Title:        typ.Name,
 			InternalType: typ.Type,
 		}
+	case coreTypeBool:
+		return typ.Name, jsonschema.JSONSchema{
+			Type:         jsonschema.ItemTypeBoolean,
+			Title:        typ.Name,
+			InternalType: typ.Type,
+		}
 	default:
-		if strings.HasPrefix(typ.Type, "*") {
-			itemType := strings.TrimPrefix(typ.Type, "*")
+		if isTypeArray(typ.Type) {
+			itemType := unwrapArrayType(typ.Type)
 			_, item := getNameAndTypeForJsonSchema(Type{
 				Name: fmt.Sprintf("%s_item", typ.Name),
 				Type: itemType,

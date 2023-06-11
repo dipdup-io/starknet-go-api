@@ -10,6 +10,23 @@ const (
 	EnumType        = "enum"
 )
 
+// core types
+const (
+	coreTypeBool            = "core::bool"
+	coreTypeU8              = "core::integer::u8"
+	coreTypeU16             = "core::integer::u16"
+	coreTypeU32             = "core::integer::u32"
+	coreTypeU64             = "core::integer::u64"
+	coreTypeU128            = "core::integer::u128"
+	coreTypeU256            = "core::integer::u256"
+	coreTypeFelt            = "felt"
+	coreTypeFelt252         = "core::felt252"
+	coreTypeContractAddress = "core::starknet::contract_address::ContractAddress"
+	coreTypeArray           = "core::array::Array"
+	coreTypeSpan            = "core::array::Span"
+	coreTypeClassHash       = "core::starknet::class_hash::ClassHash"
+)
+
 // Abi -
 type Abi struct {
 	Functions   map[string]*FunctionItem `json:"-"`

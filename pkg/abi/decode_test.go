@@ -217,6 +217,47 @@ func TestDecodeFunctionCallData(t *testing.T) {
 					},
 				},
 			},
+		}, {
+			name: "test 5",
+			args: args{
+				calldata: []string{
+					"0x342be14f26ee1d8388f6bb876227311aec71cf9a38d962e78f57f18764c980a",
+					"0x7",
+					"0x0",
+					"0x1",
+				},
+				endpoint: "test_deploy",
+				abi: `[{
+					"name": "test_deploy",
+					"type": "function",
+					"inputs": [
+					  {
+						"name": "class_hash",
+						"type": "core::starknet::class_hash::ClassHash"
+					  },
+					  {
+						"name": "contract_address_salt",
+						"type": "core::felt252"
+					  },
+					  {
+						"name": "calldata",
+						"type": "core::array::Array::<core::felt252>"
+					  },
+					  {
+						"name": "deploy_from_zero",
+						"type": "core::bool"
+					  }
+					],
+					"outputs": [],
+					"state_mutability": "external"
+				  }]`,
+			},
+			want: map[string]any{
+				"class_hash":            "0x342be14f26ee1d8388f6bb876227311aec71cf9a38d962e78f57f18764c980a",
+				"contract_address_salt": "0x7",
+				"deploy_from_zero":      true,
+				"calldata":              []any{},
+			},
 		},
 	}
 	for _, tt := range tests {

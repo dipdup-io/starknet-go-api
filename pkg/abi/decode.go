@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/dipdup-io/starknet-go-api/pkg/encoding"
 	"github.com/pkg/errors"
 )
 
@@ -15,16 +16,14 @@ var (
 	ErrNoLenField       = errors.New("can't find array length field")
 )
 
-const (
-	coreArrayTypePrefix = "core::array::Array::<"
-)
-
 func isLenField(name string) bool {
 	return strings.HasSuffix(name, "_len")
 }
 
 func isTypeArray(typ string) bool {
-	return strings.Contains(typ, "*") || (strings.HasPrefix(typ, coreArrayTypePrefix) && strings.HasSuffix(typ, ">"))
+	return strings.HasSuffix(typ, "*") ||
+		strings.HasPrefix(typ, coreTypeArray) ||
+		strings.HasPrefix(typ, coreTypeSpan)
 }
 
 func isTypeTuple(typ string) bool {
@@ -36,9 +35,17 @@ func isTypeTuple(typ string) bool {
 }
 
 func unwrapArrayType(typ string) string {
-	s := strings.TrimSuffix(typ, "*")
-	s = strings.TrimPrefix(s, coreArrayTypePrefix)
-	return strings.TrimSuffix(s, ">")
+	switch {
+	case strings.HasSuffix(typ, "*"):
+		return strings.TrimSuffix(typ, "*")
+	case strings.HasPrefix(typ, coreTypeArray):
+		s := strings.TrimPrefix(typ, coreTypeArray+"::<")
+		return strings.TrimSuffix(s, ">")
+	case strings.HasPrefix(typ, coreTypeSpan):
+		s := strings.TrimPrefix(typ, coreTypeSpan+"::<")
+		return strings.TrimSuffix(s, ">")
+	}
+	return typ
 }
 
 // DecodeExecuteCallData -
@@ -160,7 +167,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 				return nil, errors.Wrap(err, input.Name)
 			}
 			iLength = int(length)
-		case strings.HasPrefix(input.Type, coreArrayTypePrefix):
+		case strings.HasPrefix(input.Type, coreTypeArray) || strings.HasPrefix(input.Type, coreTypeSpan):
 			if len(calldata) == 0 {
 				return nil, ErrTooShortCallData
 			}
@@ -173,6 +180,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		}
 
 		if iLength == 0 {
+			result[input.Name] = []any{}
 			return calldata, nil
 		}
 
@@ -222,7 +230,30 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		if len(calldata) == 0 {
 			return nil, ErrTooShortCallData
 		}
-		result[input.Name] = calldata[0]
+		decodeSimpleType(input, calldata[0], result)
 		return calldata[1:], nil
+	}
+}
+
+func decodeSimpleType(input Type, value string, result map[string]any) {
+	switch input.Type {
+	case coreTypeBool:
+		b, err := strconv.ParseBool(encoding.TrimHex(value))
+		if err != nil {
+			result[input.Name] = value
+			return
+		}
+		result[input.Name] = b
+	case coreTypeU8, coreTypeU16, coreTypeU32, coreTypeU64:
+		u, err := strconv.ParseUint(encoding.TrimHex(value), 16, 64)
+		if err != nil {
+			result[input.Name] = value
+			return
+		}
+		result[input.Name] = u
+	case coreTypeU128, coreTypeU256:
+		result[input.Name] = value
+	default:
+		result[input.Name] = value
 	}
 }
