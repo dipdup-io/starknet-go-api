@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/dipdup-io/starknet-go-api/pkg/abi"
 	"github.com/dipdup-io/starknet-go-api/pkg/encoding"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
@@ -53,24 +54,12 @@ func NewUint256FromString(value string) (Uint256, error) {
 
 // Decimal -
 func (uint256 Uint256) Decimal() (decimal.Decimal, error) {
-	hVal := uint256.High.String()
-	if hVal == "" {
-		hVal = "0x0"
-	}
-	high, ok := big.NewInt(0).SetString(hVal, 0)
-	if !ok {
-		return decimal.Zero, errors.Errorf("invalid high of uint256: %s", uint256.High)
-	}
-	lVal := uint256.Low.String()
-	if lVal == "" {
-		lVal = "0x0"
-	}
-	low, ok := big.NewInt(0).SetString(lVal, 0)
-	if !ok {
-		return decimal.Zero, errors.Errorf("invalid low of uint256: %s", uint256.High)
+	bigInt, err := abi.DecodeUint256(uint256.Low.String(), uint256.High.String())
+	if err != nil {
+		return decimal.Zero, err
 	}
 
-	return decimal.NewFromBigInt(high.Lsh(high, 128).Add(high, low), 0), nil
+	return decimal.NewFromBigInt(bigInt, 0), nil
 }
 
 // String -

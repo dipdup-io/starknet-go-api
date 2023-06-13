@@ -2,6 +2,7 @@ package abi
 
 import (
 	"fmt"
+	"math/big"
 	"strconv"
 	"strings"
 
@@ -225,6 +226,19 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		}
 		result[input.Name] = obj
 		return tail, nil
+	case input.Type == coreTypeU256:
+		if len(calldata) < 2 {
+			return nil, ErrTooShortCallData
+		}
+		bigInt, err := DecodeUint256(calldata[0], calldata[1])
+		if err != nil {
+			result[input.Name] = []string{
+				calldata[0], calldata[1],
+			}
+		} else {
+			result[input.Name] = bigInt.String()
+		}
+		return calldata[2:], nil
 
 	default:
 		if len(calldata) == 0 {
@@ -251,9 +265,22 @@ func decodeSimpleType(input Type, value string, result map[string]any) {
 			return
 		}
 		result[input.Name] = u
-	case coreTypeU128, coreTypeU256:
+	case coreTypeU128:
 		result[input.Name] = value
 	default:
 		result[input.Name] = value
 	}
+}
+
+// DecodeUint256 - parser 2 words and returns big.Int
+func DecodeUint256(low, high string) (*big.Int, error) {
+	highInt, ok := big.NewInt(0).SetString(high, 0)
+	if !ok {
+		return nil, errors.Errorf("invalid high of uint256: %s", high)
+	}
+	lowInt, ok := big.NewInt(0).SetString(low, 0)
+	if !ok {
+		return nil, errors.Errorf("invalid low of uint256: %s", low)
+	}
+	return highInt.Lsh(highInt, 128).Add(highInt, lowInt), nil
 }
