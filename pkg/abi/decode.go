@@ -266,7 +266,12 @@ func decodeSimpleType(input Type, value string, result map[string]any) {
 		}
 		result[input.Name] = u
 	case coreTypeU128:
-		result[input.Name] = value
+		bigInt, err := decodeUint128(value)
+		if err != nil {
+			result[input.Name] = value
+			return
+		}
+		result[input.Name] = bigInt.String()
 	default:
 		result[input.Name] = value
 	}
@@ -274,13 +279,21 @@ func decodeSimpleType(input Type, value string, result map[string]any) {
 
 // DecodeUint256 - parser 2 words and returns big.Int
 func DecodeUint256(low, high string) (*big.Int, error) {
-	highInt, ok := big.NewInt(0).SetString(high, 0)
-	if !ok {
-		return nil, errors.Errorf("invalid high of uint256: %s", high)
+	highInt, err := decodeUint128(high)
+	if err != nil {
+		return nil, errors.Wrap(err, "invalid high of uint256")
 	}
-	lowInt, ok := big.NewInt(0).SetString(low, 0)
-	if !ok {
-		return nil, errors.Errorf("invalid low of uint256: %s", low)
+	lowInt, err := decodeUint128(low)
+	if err != nil {
+		return nil, errors.Wrap(err, "invalid low of uint256")
 	}
 	return highInt.Lsh(highInt, 128).Add(highInt, lowInt), nil
+}
+
+func decodeUint128(value string) (*big.Int, error) {
+	bigInt, ok := big.NewInt(0).SetString(value, 0)
+	if !ok {
+		return nil, errors.Errorf("invalid uint128: %s", value)
+	}
+	return bigInt, nil
 }
