@@ -35,6 +35,10 @@ func isTypeTuple(typ string) bool {
 	return typ[0] == '(' && typ[l-1] == ')'
 }
 
+func isTypeOption(typ string) bool {
+	return strings.HasPrefix(typ, coreTypeOption)
+}
+
 func unwrapArrayType(typ string) string {
 	switch {
 	case strings.HasSuffix(typ, "*"):
@@ -47,6 +51,11 @@ func unwrapArrayType(typ string) string {
 		return strings.TrimSuffix(s, ">")
 	}
 	return typ
+}
+
+func unwrapOptionType(typ string) string {
+	s := strings.TrimPrefix(typ, coreTypeOption+"::<")
+	return strings.TrimSuffix(s, ">")
 }
 
 // DecodeExecuteCallData -
@@ -226,6 +235,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		}
 		result[input.Name] = obj
 		return tail, nil
+
 	case input.Type == coreTypeU256:
 		if len(calldata) < 2 {
 			return nil, ErrTooShortCallData
@@ -237,6 +247,43 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 			}
 		} else {
 			result[input.Name] = bigInt.String()
+		}
+		return calldata[2:], nil
+
+	case isTypeOption(input.Type):
+		if len(calldata) < 1 {
+			return nil, ErrTooShortCallData
+		}
+
+		switch calldata[0] {
+		case optionNone:
+			result[input.Name] = nil
+			return calldata[1:], nil
+		case optionSome:
+			if len(calldata) < 2 {
+				return nil, ErrTooShortCallData
+			}
+			obj := make(map[string]any)
+			tail, err := decodeItem(calldata[1:], Type{
+				Name: fmt.Sprintf("%s_some", input.Name),
+				Type: unwrapOptionType(input.Type),
+			}, structs, obj)
+			if err != nil {
+				return nil, err
+			}
+			result[input.Name] = obj
+			return tail, nil
+		}
+
+		return calldata, nil
+
+	case input.Type == coreTypeECPoint:
+		if len(calldata) < 2 {
+			return nil, ErrTooShortCallData
+		}
+		result[input.Name] = map[string]string{
+			"x": calldata[0],
+			"y": calldata[1],
 		}
 		return calldata[2:], nil
 

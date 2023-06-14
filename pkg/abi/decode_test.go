@@ -358,6 +358,86 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				"data": []any{},
 			},
+		}, {
+			name: "test 6",
+			args: args{
+				calldata: []string{
+					"0x3c0c5cb60d57873e6d74d4240300c5d0601303595b92bea80ca2f9e59aa3692",
+					"0x2a2b93d24a5278aaff4a3ec913a3d616f21d8c30f9a3b2ab123a4f24aad75de",
+					"0xd545533296acb37934b889a95b392f8021ef61633a010da565a68975be8f55",
+					"0x5498d2c9437143a390c42532ee70c750573a8a196d0070a8e478afd6f25e03c",
+					"0x7a83193b9f136a80445649a764051bbb004bd7bce7089edef9e1ae5226ff36",
+					"0xe",
+					"0x4a4d170ac5d8749bf7b7230d44b64d449f83802c0a4d8a55df5b27da5730ad",
+					"0xce0bf2d1c917a039b2663409bbfe749d2bb7a0ae4019ff32e7e69e88c8c9fb",
+					"0x2ca95f97a154230ed28be357dae4c73b635517dac78c78a3765e855b5d93402",
+					"0x3f910281f29d7078852cadc7c261bcb86e24d85e717adf9f60b5e96b4ecc652",
+					"0x1f8fbad42408418f0871372ea5272d16109b77e3a2ff748cd502f86fc06cc31",
+					"0x55495050b2b69ba162b13790cf42fcac39627e58f649fcd6fc655b10fe86b4c",
+					"0x4c08652376ec0779410ccaa9f28705dedbc273bcb4fac0c2fdaf68d74742c08",
+					"0x5f63751a7bfbbb4bc92d30a1d27abd41f41fca6961c052cbfc8b6c708f0ee1b",
+					"0xf89a68bb8715d2ca78c37f66bed1b22f13bcefec9b4fa3fa2d1cd5d02b539b",
+					"0x180a21515f534b464bb93700c9d558e84a2221b7e2d903edf2867c0dc38027e",
+					"0x3f9d8504820a9419714e74c93d8b0f9013058433000953612ad7fae6f4ccd9c",
+					"0x63b67c4ad9915a0b47292253ff6afc90c7343ca2e24dfdbcae18893441e49d0",
+					"0x59f0fc402eee19c7ed9efcdb9074a9c631b82c8c7d3089a7b9ffb9d1a690eed",
+					"0xda3f81b91d292a5c2efd960c57d4a23fa4c003facba8539a76cdddea9cb2b1",
+				},
+				endpoint: "register_proof",
+				abi: `[
+					{
+					  "name": "register_proof",
+					  "type": "function",
+					  "inputs": [
+						{
+						  "name": "A",
+						  "type": "core::ec::EcPoint"
+						},
+						{
+						  "name": "B",
+						  "type": "core::ec::EcPoint"
+						},
+						{
+						  "name": "c",
+						  "type": "core::felt252"
+						},
+						{
+						  "name": "proof_data",
+						  "type": "core::array::Array::<core::felt252>"
+						}
+					  ],
+					  "outputs": [],
+					  "state_mutability": "external"
+					}
+				  ]`,
+			},
+			want: map[string]any{
+				"A": map[string]string{
+					"x": "0x3c0c5cb60d57873e6d74d4240300c5d0601303595b92bea80ca2f9e59aa3692",
+					"y": "0x2a2b93d24a5278aaff4a3ec913a3d616f21d8c30f9a3b2ab123a4f24aad75de",
+				},
+				"B": map[string]string{
+					"x": "0xd545533296acb37934b889a95b392f8021ef61633a010da565a68975be8f55",
+					"y": "0x5498d2c9437143a390c42532ee70c750573a8a196d0070a8e478afd6f25e03c",
+				},
+				"c": "0x7a83193b9f136a80445649a764051bbb004bd7bce7089edef9e1ae5226ff36",
+				"proof_data": []any{
+					"0x4a4d170ac5d8749bf7b7230d44b64d449f83802c0a4d8a55df5b27da5730ad",
+					"0xce0bf2d1c917a039b2663409bbfe749d2bb7a0ae4019ff32e7e69e88c8c9fb",
+					"0x2ca95f97a154230ed28be357dae4c73b635517dac78c78a3765e855b5d93402",
+					"0x3f910281f29d7078852cadc7c261bcb86e24d85e717adf9f60b5e96b4ecc652",
+					"0x1f8fbad42408418f0871372ea5272d16109b77e3a2ff748cd502f86fc06cc31",
+					"0x55495050b2b69ba162b13790cf42fcac39627e58f649fcd6fc655b10fe86b4c",
+					"0x4c08652376ec0779410ccaa9f28705dedbc273bcb4fac0c2fdaf68d74742c08",
+					"0x5f63751a7bfbbb4bc92d30a1d27abd41f41fca6961c052cbfc8b6c708f0ee1b",
+					"0xf89a68bb8715d2ca78c37f66bed1b22f13bcefec9b4fa3fa2d1cd5d02b539b",
+					"0x180a21515f534b464bb93700c9d558e84a2221b7e2d903edf2867c0dc38027e",
+					"0x3f9d8504820a9419714e74c93d8b0f9013058433000953612ad7fae6f4ccd9c",
+					"0x63b67c4ad9915a0b47292253ff6afc90c7343ca2e24dfdbcae18893441e49d0",
+					"0x59f0fc402eee19c7ed9efcdb9074a9c631b82c8c7d3089a7b9ffb9d1a690eed",
+					"0xda3f81b91d292a5c2efd960c57d4a23fa4c003facba8539a76cdddea9cb2b1",
+				},
+			},
 		},
 	}
 	for _, tt := range tests {

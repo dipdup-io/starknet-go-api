@@ -25,6 +25,13 @@ const (
 	coreTypeArray           = "core::array::Array"
 	coreTypeSpan            = "core::array::Span"
 	coreTypeClassHash       = "core::starknet::class_hash::ClassHash"
+	coreTypeOption          = "core::option::Option"
+	coreTypeECPoint         = "core::ec::EcPoint"
+)
+
+const (
+	optionSome = "0x0"
+	optionNone = "0x1"
 )
 
 // Abi -

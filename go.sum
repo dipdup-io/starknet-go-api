@@ -9,8 +9,8 @@ github.com/decred/dcrd/crypto/blake256 v1.0.0 h1:/8DMNYp9SGi5f0w7uCm6d6M4OU2rGFK
 github.com/decred/dcrd/crypto/blake256 v1.0.0/go.mod h1:sQl2p6Y26YV+ZOcSTP6thNdn47hh8kt6rqSlvmrXFAc=
 github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 h1:YLtO71vCjJRCBcrPMtQ9nqBsqpA1m5sE92cU+pd5Mcc=
 github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1/go.mod h1:hyedUtir6IdtD/7lIxGeCxkaw7y45JueMRL4DIyJDKs=
-github.com/dipdup-net/indexer-sdk v0.0.0-20230413120903-791a286443f9 h1:ciwPsLGIIbQrnwI00RKeEfCuL+pvgUVezKW7Ngkedr0=
-github.com/dipdup-net/indexer-sdk v0.0.0-20230413120903-791a286443f9/go.mod h1:WZsLr9ElN3ImgLmtwhK0YZ0WgzMxYyBPXfZR7Z3DZXA=
+github.com/dipdup-net/indexer-sdk v0.0.0-20230614153224-11cee5bf9248 h1:ggURP25K+Y/eUtUHoll5CnVB11gM95uWntOIcx8i9Cg=
+github.com/dipdup-net/indexer-sdk v0.0.0-20230614153224-11cee5bf9248/go.mod h1:WZsLr9ElN3ImgLmtwhK0YZ0WgzMxYyBPXfZR7Z3DZXA=
 github.com/ethereum/go-ethereum v1.11.2 h1:z/luyejbevDCAMUUiu0rc80dxJxOnpoG58k5o0tSawc=
 github.com/ethereum/go-ethereum v1.11.2/go.mod h1:DuefStAgaxoaYGLR0FueVcVbehmn5n9QUcVrMCuOvuc=
 github.com/goccy/go-json v0.10.2 h1:CrxCmQqYDkv1z7lO7Wbh2HN93uovUHgrECaO5ZrCXAU=

@@ -219,6 +219,44 @@ func getNameAndTypeForJsonSchema(typ Type, structs map[string]jsonschema.JSONSch
 			Title:        typ.Name,
 			InternalType: typ.Type,
 		}
+	case coreTypeOption:
+		optionType := unwrapOptionType(typ.Type)
+		_, item := getNameAndTypeForJsonSchema(Type{
+			Name: fmt.Sprintf("%s_item", typ.Name),
+			Type: optionType,
+		}, structs)
+
+		return typ.Name, jsonschema.JSONSchema{
+			Type:         jsonschema.ItemTypeObject,
+			Title:        typ.Name,
+			InternalType: typ.Type,
+			OneOf: []*jsonschema.JSONSchema{
+				{
+					Type: jsonschema.ItemTypeNull,
+				},
+				&item,
+			},
+		}
+	case coreTypeECPoint:
+		return typ.Name, jsonschema.JSONSchema{
+			Type:         jsonschema.ItemTypeObject,
+			Title:        typ.Name,
+			InternalType: typ.Type,
+			ObjectItem: jsonschema.ObjectItem{
+				Properties: map[string]jsonschema.JSONSchema{
+					"x": {
+						Type:         jsonschema.ItemTypeString,
+						Title:        "x",
+						InternalType: coreTypeFelt,
+					},
+					"y": {
+						Type:         jsonschema.ItemTypeString,
+						Title:        "y",
+						InternalType: coreTypeFelt,
+					},
+				},
+			},
+		}
 	default:
 		if isTypeArray(typ.Type) {
 			itemType := unwrapArrayType(typ.Type)
@@ -234,7 +272,6 @@ func getNameAndTypeForJsonSchema(typ Type, structs map[string]jsonschema.JSONSch
 						item,
 					},
 				},
-				InternalType: typ.Type,
 			}
 		}
 
