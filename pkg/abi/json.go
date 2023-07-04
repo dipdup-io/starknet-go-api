@@ -25,6 +25,8 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 			items = append(items, &StructItem{})
 		case EnumType:
 			items = append(items, &EnumItem{})
+		case ImplType:
+			items = append(items, &ImplItem{})
 
 		default:
 			return errors.Errorf("unknown abi type: %s", types[i].Type)

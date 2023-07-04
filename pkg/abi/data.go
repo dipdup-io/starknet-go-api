@@ -8,6 +8,7 @@ const (
 	EventType       = "event"
 	StructType      = "struct"
 	EnumType        = "enum"
+	ImplType        = "impl"
 )
 
 // core types
@@ -42,6 +43,7 @@ type Abi struct {
 	Events      map[string]*EventItem    `json:"-"`
 	Structs     map[string]*StructItem   `json:"-"`
 	Enums       map[string]*EnumItem     `json:"-"`
+	Impls       map[string]*ImplItem     `json:"-"`
 
 	FunctionsBySelector   map[string]*FunctionItem `json:"-"`
 	L1HandlersBySelector  map[string]*FunctionItem `json:"-"`
@@ -88,6 +90,13 @@ type EnumItem struct {
 	Type
 
 	Variants []Type `json:"variants"`
+}
+
+// ImplItem -
+type ImplItem struct {
+	Type
+
+	InterfaceName string `json:"interface_name"`
 }
 
 // Member -
