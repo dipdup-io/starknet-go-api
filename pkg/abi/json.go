@@ -2,6 +2,7 @@ package abi
 
 import (
 	"github.com/goccy/go-json"
+	"github.com/rs/zerolog/log"
 
 	"github.com/dipdup-io/starknet-go-api/pkg/encoding"
 	"github.com/pkg/errors"
@@ -86,6 +87,16 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 		case InterfaceType:
 			item := items[i].(*InterfaceItem)
 			a.Interfaces[types[i].Name] = item
+			for _, i := range item.Items {
+				selector := encoding.GetSelectorFromName(i.Name)
+				switch i.Type.Type {
+				case FunctionType:
+					a.Functions[i.Name] = &i
+					a.FunctionsBySelector[selector] = &i
+				default:
+					log.Warn().Str("typ", i.Type.Type).Msgf("unknown interface item type: %s %s", i.Type.Name, i.Type.Type)
+				}
+			}
 		default:
 			return errors.Errorf("unknown abi type: %s", types[i].Type)
 		}
