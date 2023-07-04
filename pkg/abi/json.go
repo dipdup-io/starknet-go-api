@@ -45,6 +45,8 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 	a.L1Handlers = make(map[string]*FunctionItem)
 	a.Structs = make(map[string]*StructItem)
 	a.Enums = make(map[string]*EnumItem)
+	a.Impls = make(map[string]*ImplItem)
+	a.Interfaces = make(map[string]*InterfaceItem)
 
 	a.ConstructorBySelector = make(map[string]*FunctionItem)
 	a.EventsBySelector = make(map[string]*EventItem)
