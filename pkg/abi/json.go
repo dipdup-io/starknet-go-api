@@ -87,14 +87,16 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 		case InterfaceType:
 			item := items[i].(*InterfaceItem)
 			a.Interfaces[types[i].Name] = item
-			for _, i := range item.Items {
-				selector := encoding.GetSelectorFromName(i.Name)
-				switch i.Type.Type {
+			for i := range item.Items {
+				selector := encoding.GetSelectorFromName(item.Items[i].Name)
+				switch item.Items[i].Type.Type {
 				case FunctionType:
-					a.Functions[i.Name] = &i
-					a.FunctionsBySelector[selector] = &i
+					a.Functions[item.Items[i].Name] = &item.Items[i]
+					a.FunctionsBySelector[selector] = &item.Items[i]
 				default:
-					log.Warn().Str("typ", i.Type.Type).Msgf("unknown interface item type: %s %s", i.Type.Name, i.Type.Type)
+					log.Warn().
+						Str("typ", item.Items[i].Type.Type).
+						Msgf("unknown interface item type: %s %s", item.Items[i].Type.Name, item.Items[i].Type.Type)
 				}
 			}
 		default:

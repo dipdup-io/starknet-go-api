@@ -68,6 +68,10 @@ func TestGetSelectorFromName(t *testing.T) {
 			name:       "changeModules",
 			entrypoint: "changeModules",
 			want:       "3ffada7235f48d4811be030385f19e6d50e2cfa368ded42f1892666f834e407",
+		}, {
+			name:       "set_user1",
+			entrypoint: "set_user1",
+			want:       "3775abb253dcae6e25be4a1f04123c18ea828a02cb18a585f39d07fe093b4e4",
 		},
 	}
 	for _, tt := range tests {
