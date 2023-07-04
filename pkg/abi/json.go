@@ -78,6 +78,12 @@ func (a *Abi) UnmarshalJSON(raw []byte) error {
 		case EnumType:
 			item := items[i].(*EnumItem)
 			a.Enums[types[i].Name] = item
+		case ImplType:
+			item := items[i].(*ImplItem)
+			a.Impls[types[i].Name] = item
+		case InterfaceType:
+			item := items[i].(*InterfaceItem)
+			a.Interfaces[types[i].Name] = item
 		default:
 			return errors.Errorf("unknown abi type: %s", types[i].Type)
 		}

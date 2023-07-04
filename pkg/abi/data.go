@@ -38,14 +38,14 @@ const (
 
 // Abi -
 type Abi struct {
-	Functions   map[string]*FunctionItem `json:"-"`
-	L1Handlers  map[string]*FunctionItem `json:"-"`
-	Constructor map[string]*FunctionItem `json:"-"`
-	Events      map[string]*EventItem    `json:"-"`
-	Structs     map[string]*StructItem   `json:"-"`
-	Enums       map[string]*EnumItem     `json:"-"`
-	Impls       map[string]*ImplItem     `json:"-"`
-	Interfaces  map[string]*any          `json:"-"`
+	Functions   map[string]*FunctionItem  `json:"-"`
+	L1Handlers  map[string]*FunctionItem  `json:"-"`
+	Constructor map[string]*FunctionItem  `json:"-"`
+	Events      map[string]*EventItem     `json:"-"`
+	Structs     map[string]*StructItem    `json:"-"`
+	Enums       map[string]*EnumItem      `json:"-"`
+	Impls       map[string]*ImplItem      `json:"-"`
+	Interfaces  map[string]*InterfaceItem `json:"-"`
 
 	FunctionsBySelector   map[string]*FunctionItem `json:"-"`
 	L1HandlersBySelector  map[string]*FunctionItem `json:"-"`
