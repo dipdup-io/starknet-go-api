@@ -8,12 +8,14 @@ import (
 
 // JsonSchema -
 type JsonSchema struct {
-	Functions    map[string]JsonSchemaFunction    `json:"functions"`
-	L1Handlers   map[string]JsonSchemaFunction    `json:"l1_handlers"`
-	Constructors map[string]JsonSchemaFunction    `json:"constructors"`
-	Events       map[string]JsonSchemaEvent       `json:"events"`
-	Structs      map[string]jsonschema.JSONSchema `json:"structs"`
-	Enums        map[string]jsonschema.JSONSchema `json:"enums"`
+	Functions       map[string]JsonSchemaFunction    `json:"functions,omitempty"`
+	L1Handlers      map[string]JsonSchemaFunction    `json:"l1_handlers,omitempty"`
+	Constructors    map[string]JsonSchemaFunction    `json:"constructors,omitempty"`
+	Events          map[string]JsonSchemaEvent       `json:"events,omitempty"`
+	Structs         map[string]jsonschema.JSONSchema `json:"structs,omitempty"`
+	Enums           map[string]jsonschema.JSONSchema `json:"enums,omitempty"`
+	Interfaces      map[string]JsonSchemaInterface   `json:"interfaces,omitempty"`
+	Implementations map[string]string                `json:"impls,omitempty"`
 }
 
 // JsonSchemaFunction -
@@ -134,15 +136,31 @@ func newJsonSchemaForEnum(name string, item EnumItem) jsonschema.JSONSchema {
 	return schema
 }
 
+// JsonSchemaInterface -
+type JsonSchemaInterface map[string]JsonSchemaFunction
+
+func newJsonSchemaForInterface(item InterfaceItem, structs map[string]jsonschema.JSONSchema) JsonSchemaInterface {
+	schema := make(JsonSchemaInterface)
+
+	for i := range item.Items {
+		funcSchema := newJsonSchemaFunction(item.Items[i], structs)
+		schema[item.Items[i].Name] = funcSchema
+	}
+
+	return schema
+}
+
 // JsonSchema -
 func (abi Abi) JsonSchema() *JsonSchema {
 	schema := &JsonSchema{
-		Functions:    make(map[string]JsonSchemaFunction),
-		L1Handlers:   make(map[string]JsonSchemaFunction),
-		Constructors: make(map[string]JsonSchemaFunction),
-		Events:       make(map[string]JsonSchemaEvent),
-		Structs:      make(map[string]jsonschema.JSONSchema),
-		Enums:        make(map[string]jsonschema.JSONSchema),
+		Functions:       make(map[string]JsonSchemaFunction),
+		L1Handlers:      make(map[string]JsonSchemaFunction),
+		Constructors:    make(map[string]JsonSchemaFunction),
+		Events:          make(map[string]JsonSchemaEvent),
+		Structs:         make(map[string]jsonschema.JSONSchema),
+		Enums:           make(map[string]jsonschema.JSONSchema),
+		Interfaces:      make(map[string]JsonSchemaInterface),
+		Implementations: make(map[string]string),
 	}
 
 	for name, typ := range abi.Structs {
@@ -181,6 +199,18 @@ func (abi Abi) JsonSchema() *JsonSchema {
 			continue
 		}
 		schema.Events[name] = newJsonSchemaEvent(*typ, schema.Structs)
+	}
+	for name, typ := range abi.Interfaces {
+		if typ == nil {
+			continue
+		}
+		schema.Interfaces[name] = newJsonSchemaForInterface(*typ, schema.Structs)
+	}
+	for name, typ := range abi.Impls {
+		if typ == nil {
+			continue
+		}
+		schema.Implementations[name] = typ.InterfaceName
 	}
 	return schema
 }
