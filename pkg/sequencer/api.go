@@ -6,10 +6,8 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"time"
 
-	"github.com/dipdup-io/starknet-go-api/pkg/data"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -99,7 +97,7 @@ func (api API) get(ctx context.Context, baseURL, path, cacheFileName string, arg
 		if err != nil {
 			return err
 		}
-		return errors.Errorf("invalid status code: %d %s", response.StatusCode, string(body))
+		return errors.Wrapf(ErrRequest, "invalid status code: %d %s", response.StatusCode, string(body))
 	}
 
 	if api.cacheDir != "" && cacheFileName != "" {
@@ -156,11 +154,11 @@ func (api API) post(ctx context.Context, baseURL, path string, args map[string]s
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		var e data.Error
-		if err := json.NewDecoder(io.TeeReader(response.Body, os.Stdout)).Decode(&e); err != nil {
-			return err
+		var e Error
+		if err := json.NewDecoder(response.Body).Decode(&e); err != nil {
+			return errors.Wrap(ErrRequest, err.Error())
 		}
-		return errors.Errorf("invalid status code: %d %s", response.StatusCode, e.Message)
+		return errors.Wrap(ErrRequest, e.Error())
 	}
 
 	err = json.NewDecoder(response.Body).Decode(output)

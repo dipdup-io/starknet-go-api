@@ -34,7 +34,7 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return errors.Errorf("invalid status code: %d", response.StatusCode)
+		return errors.Wrapf(ErrRequest, "request %d invalid status code: %d", output.ID, response.StatusCode)
 	}
 
 	if err := json.NewDecoder(response.Body).Decode(output); err != nil {
@@ -42,7 +42,7 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 	}
 
 	if output.Error != nil {
-		return errors.Errorf("request %d error: %s (code %d)", output.ID, output.Error.Message, output.Error.Code)
+		return errors.Wrapf(ErrRequest, "request %d error: %s", output.ID, output.Error.Error())
 	}
 
 	return nil

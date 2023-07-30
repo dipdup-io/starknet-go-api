@@ -101,3 +101,76 @@ func (erc721 ERC721) IsApprovedForAll(ctx context.Context, owner, operator data.
 
 	return response.Result[0], nil
 }
+
+// ERC721Metadata -
+type ERC721Metadata struct {
+	api      sequencer.API
+	contract data.Felt
+
+	selectors map[string]string
+}
+
+// NewERC721Metadata -
+func NewERC721Metadata(api sequencer.API, contract data.Felt) ERC721Metadata {
+	return ERC721Metadata{
+		api:      api,
+		contract: contract,
+		selectors: map[string]string{
+			"name":     encoding.GetSelectorWithPrefixFromName("name"),
+			"symbol":   encoding.GetSelectorWithPrefixFromName("symbol"),
+			"tokenURI": encoding.GetSelectorWithPrefixFromName("tokenURI"),
+		},
+	}
+}
+
+// Name - Returns the name of the token.
+func (erc ERC721Metadata) Name(ctx context.Context, opts ...CallOption) (string, error) {
+	options := NewCallOptions(opts...)
+	selector := erc.selectors["name"]
+
+	response, err := erc.api.CallContract(ctx, options.block, erc.contract.String(), selector, []string{})
+	if err != nil {
+		return "", err
+	}
+	if len(response.Result) < 1 {
+		return "", errors.Errorf("invalid response for name: %v", response.Result)
+	}
+
+	return response.Result[0].ToAsciiString(), nil
+}
+
+// Symbol - Returns the ticker symbol of the token.
+func (erc ERC721Metadata) Symbol(ctx context.Context, opts ...CallOption) (string, error) {
+	options := NewCallOptions(opts...)
+	selector := erc.selectors["symbol"]
+
+	response, err := erc.api.CallContract(ctx, options.block, erc.contract.String(), selector, []string{})
+	if err != nil {
+		return "", err
+	}
+	if len(response.Result) < 1 {
+		return "", errors.Errorf("invalid response for symbol: %v", response.Result)
+	}
+
+	return response.Result[0].ToAsciiString(), nil
+}
+
+// TokenUri - Returns the Uniform Resource Identifier (URI) for tokenID token. If the URI is not set for the tokenId, the return value will be empty string.
+func (erc ERC721Metadata) TokenUri(ctx context.Context, tokenId data.Uint256, opts ...CallOption) (string, error) {
+	options := NewCallOptions(opts...)
+	selector := erc.selectors["tokenURI"]
+
+	response, err := erc.api.CallContract(ctx, options.block, erc.contract.String(), selector, tokenId.Calldata())
+	if err != nil {
+		return "", err
+	}
+	if len(response.Result) < 1 {
+		return "", errors.Errorf("invalid response for token uri: %v", response.Result)
+	}
+
+	if response.Result[0].String() == "0x0" {
+		return "", nil
+	}
+
+	return response.Result[0].ToAsciiString(), nil
+}

@@ -1,9 +1,5 @@
 package api
 
-import (
-	"github.com/dipdup-io/starknet-go-api/pkg/data"
-)
-
 // Request -
 type Request struct {
 	Version string `json:"jsonrpc"`
@@ -14,10 +10,10 @@ type Request struct {
 
 // Response -
 type Response[T any] struct {
-	Version string      `json:"jsonrpc"`
-	Result  T           `json:"result,omitempty"`
-	ID      uint64      `json:"id"`
-	Error   *data.Error `json:"error,omitempty"`
+	Version string `json:"jsonrpc"`
+	Result  T      `json:"result,omitempty"`
+	ID      uint64 `json:"id"`
+	Error   *Error `json:"error,omitempty"`
 }
 
 // CallRequest -

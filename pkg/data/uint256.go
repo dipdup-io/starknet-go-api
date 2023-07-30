@@ -73,7 +73,7 @@ func (uint256 Uint256) String() string {
 // Calldata -
 func (uint256 Uint256) Calldata() []string {
 	return []string{
-		uint256.Low.Decimal().String(),
-		uint256.High.Decimal().String(),
+		uint256.Low.String(),
+		uint256.High.String(),
 	}
 }
