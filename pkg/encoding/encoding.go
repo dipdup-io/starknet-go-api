@@ -5,8 +5,8 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/shopspring/decimal"
+	crypto "github.com/wealdtech/go-merkletree/keccak256"
 )
 
 // entrypoint names
@@ -33,7 +33,7 @@ var (
 
 // Keccak - A variant of eth-keccak that computes a value that fits in a StarkNet field element.
 func Keccak(data []byte) []byte {
-	bytes := crypto.Keccak256(data)
+	bytes := crypto.New().Hash(data)
 	bytes[0] &= 0x3
 	return bytes
 }
