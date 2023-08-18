@@ -20,9 +20,9 @@ type API struct {
 // NewAPI - constructor of API
 func NewAPI(baseURL string, opts ...ApiOption) API {
 	t := http.DefaultTransport.(*http.Transport).Clone()
-	t.MaxIdleConns = 100
-	t.MaxConnsPerHost = 100
-	t.MaxIdleConnsPerHost = 100
+	t.MaxIdleConns = 10
+	t.MaxConnsPerHost = 10
+	t.MaxIdleConnsPerHost = 10
 
 	client := &http.Client{
 		Transport: t,

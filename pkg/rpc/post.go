@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"context"
+	"io"
 	"net/http"
 
 	"github.com/goccy/go-json"
@@ -33,11 +34,16 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 	}
 	defer response.Body.Close()
 
+	buffer := new(bytes.Buffer)
+	if _, err := io.Copy(buffer, response.Body); err != nil {
+		return err
+	}
+
 	if response.StatusCode != http.StatusOK {
 		return errors.Wrapf(ErrRequest, "request %d invalid status code: %d", output.ID, response.StatusCode)
 	}
 
-	if err := json.NewDecoder(response.Body).Decode(output); err != nil {
+	if err := json.NewDecoder(buffer).Decode(output); err != nil {
 		return err
 	}
 

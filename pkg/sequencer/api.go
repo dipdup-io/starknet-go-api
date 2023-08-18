@@ -21,26 +21,33 @@ type API struct {
 	feederGatewayUrl string
 	cacheDir         string
 	rateLimit        *rate.Limiter
+	rps              int
 }
 
 // NewAPI - constructor of API
 func NewAPI(gatewayUrl, feederGatewayUrl string, opts ...ApiOption) API {
-	t := http.DefaultTransport.(*http.Transport).Clone()
-	t.MaxIdleConns = 100
-	t.MaxConnsPerHost = 100
-	t.MaxIdleConnsPerHost = 100
-
-	client := &http.Client{
-		Transport: t,
-	}
 	api := API{
-		client:           client,
 		gatewayUrl:       gatewayUrl,
 		feederGatewayUrl: feederGatewayUrl,
 	}
 
 	for i := range opts {
 		opts[i](&api)
+	}
+
+	t := http.DefaultTransport.(*http.Transport).Clone()
+	if api.rps < 1 || api.rps > 100 {
+		t.MaxIdleConns = 10
+		t.MaxConnsPerHost = 10
+		t.MaxIdleConnsPerHost = 10
+	} else {
+		t.MaxIdleConns = api.rps
+		t.MaxConnsPerHost = api.rps
+		t.MaxIdleConnsPerHost = api.rps
+	}
+
+	api.client = &http.Client{
+		Transport: t,
 	}
 
 	return api
@@ -153,14 +160,19 @@ func (api API) post(ctx context.Context, baseURL, path string, args map[string]s
 	}
 	defer response.Body.Close()
 
+	buffer := new(bytes.Buffer)
+	if _, err := io.Copy(buffer, response.Body); err != nil {
+		return err
+	}
+
 	if response.StatusCode != http.StatusOK {
 		var e Error
-		if err := json.NewDecoder(response.Body).Decode(&e); err != nil {
+		if err := json.NewDecoder(buffer).Decode(&e); err != nil {
 			return errors.Wrap(ErrRequest, err.Error())
 		}
 		return errors.Wrap(ErrRequest, e.Error())
 	}
 
-	err = json.NewDecoder(response.Body).Decode(output)
+	err = json.NewDecoder(buffer).Decode(output)
 	return err
 }

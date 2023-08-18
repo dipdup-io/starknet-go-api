@@ -14,6 +14,7 @@ func WithRateLimit(requestPerSecond int) ApiOption {
 	return func(api *API) {
 		if requestPerSecond > 0 {
 			api.rateLimit = rate.NewLimiter(rate.Every(time.Second/time.Duration(requestPerSecond)), requestPerSecond)
+			api.rps = requestPerSecond
 		}
 	}
 }
