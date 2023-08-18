@@ -24,6 +24,7 @@ type Block struct {
 
 // Receipt -
 type Receipt struct {
+	ExecutionStatus    string             `json:"execution_status,omitempty"`
 	TransactionIndex   uint64             `json:"transaction_index"`
 	TransactionHash    string             `json:"transaction_hash"`
 	L2ToL1Messages     []data.Message     `json:"l2_to_l1_messages"`
