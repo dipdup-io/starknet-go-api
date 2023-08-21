@@ -45,6 +45,7 @@ type BuiltinInstanceCounter struct {
 
 // Trace -
 type Trace struct {
+	RevertedError         string      `json:"revert_error,omitempty"`
 	ValidateInvocation    *Invocation `json:"validate_invocation,omitempty"`
 	FunctionInvocation    *Invocation `json:"function_invocation,omitempty"`
 	FeeTransferInvocation *Invocation `json:"fee_transfer_invocation,omitempty"`
