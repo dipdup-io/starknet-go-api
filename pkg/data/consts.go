@@ -36,6 +36,7 @@ const (
 	StatusRejected     = "REJECTED"
 	StatusAcceptedOnL2 = "ACCEPTED_ON_L2"
 	StatusAcceptedOnL1 = "ACCEPTED_ON_L1"
+	StatusReverted     = "REVERTED"
 )
 
 // length
