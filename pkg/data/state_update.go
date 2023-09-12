@@ -34,10 +34,15 @@ type DeclaredClass struct {
 type StateDiff struct {
 	StorageDiffs         map[Felt][]KeyValue `json:"storage_diffs"`
 	DeclaredClasses      []DeclaredClass     `json:"declared_classes"`
-	ReplacedClasses      []any               `json:"replaced_classes"` // TODO:
+	ReplacedClasses      []ReplacedClass     `json:"replaced_classes"`
 	OldDeclaredContracts []Felt              `json:"old_declared_contracts"`
 	DeployedContracts    []DeployedContract  `json:"deployed_contracts"`
 	Nonces               map[Felt]Felt       `json:"nonces"`
+}
+
+type ReplacedClass struct {
+	Address   Felt `json:"address"`
+	ClassHash Felt `json:"class_hash"`
 }
 
 // StateUpdate -
@@ -51,7 +56,7 @@ type StateUpdate struct {
 // StateDiffRpc -
 type StateDiffRpc struct {
 	DeclaredClasses        []DeclaredClass    `json:"declared_classes"`
-	ReplacedClasses        []any              `json:"replaced_classes"` // TODO:
+	ReplacedClasses        []ReplacedClass    `json:"replaced_classes"`
 	DeclaredContractHashes []Felt             `json:"declared_contract_hashes"`
 	DeployedContracts      []DeployedContract `json:"deployed_contracts"`
 	Nonces                 []Nonce            `json:"nonces"`
