@@ -1,10 +1,10 @@
 package abi
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/goccy/go-json"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDecodeFunctionCallData(t *testing.T) {
@@ -28,20 +28,20 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "test_re_entrance",
 				abi: `[{
-														"type": "function",
-														"name": "test_re_entrance",
-														"inputs": [
-														  {
-															"name": "other_contract_address",
-															"type": "felt"
-														  },
-														  {
-															"name": "depth",
-															"type": "felt"
-														  }
-														],
-														"outputs": []
-													}]`,
+															"type": "function",
+															"name": "test_re_entrance",
+															"inputs": [
+															  {
+																"name": "other_contract_address",
+																"type": "felt"
+															  },
+															  {
+																"name": "depth",
+																"type": "felt"
+															  }
+															],
+															"outputs": []
+														}]`,
 			},
 			want: map[string]any{
 				"other_contract_address": "0x327d34747122d7a40f4670265b098757270a449ec80c4871450fffdab7c2fa8",
@@ -61,28 +61,28 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "test_call_contract",
 				abi: `[{
-													"type": "function",
-													"name": "test_call_contract",
-													"inputs": [
-													  {
-														"name": "contract_address",
-														"type": "felt"
-													  },
-													  {
-														"name": "function_selector",
-														"type": "felt"
-													  },
-													  {
-														"name": "calldata_len",
-														"type": "felt"
-													  },
-													  {
-														"name": "calldata",
-														"type": "felt*"
-													  }
-													],
-													"outputs": []
-												}]`,
+														"type": "function",
+														"name": "test_call_contract",
+														"inputs": [
+														  {
+															"name": "contract_address",
+															"type": "felt"
+														  },
+														  {
+															"name": "function_selector",
+															"type": "felt"
+														  },
+														  {
+															"name": "calldata_len",
+															"type": "felt"
+														  },
+														  {
+															"name": "calldata",
+															"type": "felt*"
+														  }
+														],
+														"outputs": []
+													}]`,
 			},
 			want: map[string]any{
 				"contract_address":  "0x327d34747122d7a40f4670265b098757270a449ec80c4871450fffdab7c2fa8",
@@ -105,36 +105,36 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "initiate_withdraw",
 				abi: `[{
-													"type": "function",
-													"name": "initiate_withdraw",
-													"inputs": [
-													  {
-														"name": "l1_recipient",
-														"type": "felt"
-													  },
-													  {
-														"name": "amount",
-														"type": "Uint256"
-													  }
-													],
-													"outputs": []
-												},{
-													"name": "Uint256",
-													"size": 2,
-													"members": [
-													  {
-														"name": "low",
-														"type": "felt",
-														"offset": 0
-													  },
-													  {
-														"name": "high",
-														"type": "felt",
-														"offset": 1
-													  }
-													],
-													"type": "struct"
-												}]`,
+														"type": "function",
+														"name": "initiate_withdraw",
+														"inputs": [
+														  {
+															"name": "l1_recipient",
+															"type": "felt"
+														  },
+														  {
+															"name": "amount",
+															"type": "Uint256"
+														  }
+														],
+														"outputs": []
+													},{
+														"name": "Uint256",
+														"size": 2,
+														"members": [
+														  {
+															"name": "low",
+															"type": "felt",
+															"offset": 0
+														  },
+														  {
+															"name": "high",
+															"type": "felt",
+															"offset": 1
+														  }
+														],
+														"type": "struct"
+													}]`,
 			},
 			want: map[string]any{
 				"l1_recipient": "0xf899bfebffcf95f54cf61ac07a85587988678ed4",
@@ -164,38 +164,38 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "__execute__",
 				abi: `[{
-												"name": "rules_account::account::interface::Call",
-												"type": "struct",
-												"members": [
-												  {
-													"name": "to",
-													"type": "core::starknet::contract_address::ContractAddress"
-												  },
-												  {
-													"name": "selector",
-													"type": "core::felt252"
-												  },
-												  {
-													"name": "calldata",
-													"type": "core::array::Array::<core::felt252>"
-												  }
-												]
-											},{
-												"name": "__execute__",
-												"type": "function",
-												"inputs": [
-												  {
-													"name": "calls",
-													"type": "core::array::Array::<rules_account::account::interface::Call>"
-												  }
-												],
-												"outputs": [
-												  {
-													"type": "core::array::Array::<core::array::Span::<core::felt252>>"
-												  }
-												],
-												"state_mutability": "external"
-											}]`,
+													"name": "rules_account::account::interface::Call",
+													"type": "struct",
+													"members": [
+													  {
+														"name": "to",
+														"type": "core::starknet::contract_address::ContractAddress"
+													  },
+													  {
+														"name": "selector",
+														"type": "core::felt252"
+													  },
+													  {
+														"name": "calldata",
+														"type": "core::array::Array::<core::felt252>"
+													  }
+													]
+												},{
+													"name": "__execute__",
+													"type": "function",
+													"inputs": [
+													  {
+														"name": "calls",
+														"type": "core::array::Array::<rules_account::account::interface::Call>"
+													  }
+													],
+													"outputs": [
+													  {
+														"type": "core::array::Array::<core::array::Span::<core::felt252>>"
+													  }
+													],
+													"state_mutability": "external"
+												}]`,
 			},
 			want: map[string]any{
 				"calls": []any{
@@ -228,29 +228,29 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "test_deploy",
 				abi: `[{
-												"name": "test_deploy",
-												"type": "function",
-												"inputs": [
-												  {
-													"name": "class_hash",
-													"type": "core::starknet::class_hash::ClassHash"
-												  },
-												  {
-													"name": "contract_address_salt",
-													"type": "core::felt252"
-												  },
-												  {
-													"name": "calldata",
-													"type": "core::array::Array::<core::felt252>"
-												  },
-												  {
-													"name": "deploy_from_zero",
-													"type": "core::bool"
-												  }
-												],
-												"outputs": [],
-												"state_mutability": "external"
-											  }]`,
+													"name": "test_deploy",
+													"type": "function",
+													"inputs": [
+													  {
+														"name": "class_hash",
+														"type": "core::starknet::class_hash::ClassHash"
+													  },
+													  {
+														"name": "contract_address_salt",
+														"type": "core::felt252"
+													  },
+													  {
+														"name": "calldata",
+														"type": "core::array::Array::<core::felt252>"
+													  },
+													  {
+														"name": "deploy_from_zero",
+														"type": "core::bool"
+													  }
+													],
+													"outputs": [],
+													"state_mutability": "external"
+												  }]`,
 			},
 			want: map[string]any{
 				"class_hash":            "0x342be14f26ee1d8388f6bb876227311aec71cf9a38d962e78f57f18764c980a",
@@ -310,33 +310,33 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "safe_batch_transfer_from",
 				abi: `[ {
-											"name": "safe_batch_transfer_from",
-											"type": "function",
-											"inputs": [
-											  {
-												"name": "from",
-												"type": "core::starknet::contract_address::ContractAddress"
-											  },
-											  {
-												"name": "to",
-												"type": "core::starknet::contract_address::ContractAddress"
-											  },
-											  {
-												"name": "ids",
-												"type": "core::array::Span::<core::integer::u256>"
-											  },
-											  {
-												"name": "amounts",
-												"type": "core::array::Span::<core::integer::u256>"
-											  },
-											  {
-												"name": "data",
-												"type": "core::array::Span::<core::felt252>"
-											  }
-											],
-											"outputs": [],
-											"state_mutability": "external"
-										  }]`,
+												"name": "safe_batch_transfer_from",
+												"type": "function",
+												"inputs": [
+												  {
+													"name": "from",
+													"type": "core::starknet::contract_address::ContractAddress"
+												  },
+												  {
+													"name": "to",
+													"type": "core::starknet::contract_address::ContractAddress"
+												  },
+												  {
+													"name": "ids",
+													"type": "core::array::Span::<core::integer::u256>"
+												  },
+												  {
+													"name": "amounts",
+													"type": "core::array::Span::<core::integer::u256>"
+												  },
+												  {
+													"name": "data",
+													"type": "core::array::Span::<core::felt252>"
+												  }
+												],
+												"outputs": [],
+												"state_mutability": "external"
+											  }]`,
 			},
 			want: map[string]any{
 				"from": "0x2c133a0c1b78b0b16cf787bfeeb6a8978ef26e9d97a993cc7ffce9d192a313",
@@ -385,31 +385,31 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "register_proof",
 				abi: `[
-											{
-											  "name": "register_proof",
-											  "type": "function",
-											  "inputs": [
 												{
-												  "name": "A",
-												  "type": "core::ec::EcPoint"
-												},
-												{
-												  "name": "B",
-												  "type": "core::ec::EcPoint"
-												},
-												{
-												  "name": "c",
-												  "type": "core::felt252"
-												},
-												{
-												  "name": "proof_data",
-												  "type": "core::array::Array::<core::felt252>"
+												  "name": "register_proof",
+												  "type": "function",
+												  "inputs": [
+													{
+													  "name": "A",
+													  "type": "core::ec::EcPoint"
+													},
+													{
+													  "name": "B",
+													  "type": "core::ec::EcPoint"
+													},
+													{
+													  "name": "c",
+													  "type": "core::felt252"
+													},
+													{
+													  "name": "proof_data",
+													  "type": "core::array::Array::<core::felt252>"
+													}
+												  ],
+												  "outputs": [],
+												  "state_mutability": "external"
 												}
-											  ],
-											  "outputs": [],
-											  "state_mutability": "external"
-											}
-										  ]`,
+											  ]`,
 			},
 			want: map[string]any{
 				"A": map[string]string{
@@ -447,51 +447,51 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "set_user1",
 				abi: `[{
-									"name": "token_sender::hello::UserData",
-									"type": "struct",
-									"members": [
-									  {
-										"name": "address",
-										"type": "core::starknet::contract_address::ContractAddress"
-									  },
-									  {
-										"name": "is_claimed",
-										"type": "core::bool"
-									  }
-									]
-								  },{
-									"name": "token_sender::hello::IHelloStarknet",
-									"type": "interface",
-									"items": [
-									  {
-										"name": "set_user1",
-										"type": "function",
-										"inputs": [
+										"name": "token_sender::hello::UserData",
+										"type": "struct",
+										"members": [
 										  {
-											"name": "user",
-											"type": "token_sender::hello::UserData"
-										  }
-										],
-										"outputs": [],
-										"state_mutability": "external"
-									  }, {
-										"name": "array2ddd_felt",
-										"type": "function",
-										"inputs": [
+											"name": "address",
+											"type": "core::starknet::contract_address::ContractAddress"
+										  },
 										  {
-											"name": "testdd",
-											"type": "core::array::Array::<core::array::Array::<core::felt252>>"
+											"name": "is_claimed",
+											"type": "core::bool"
 										  }
-										],
-										"outputs": [
+										]
+									  },{
+										"name": "token_sender::hello::IHelloStarknet",
+										"type": "interface",
+										"items": [
 										  {
-											"type": "core::felt252"
+											"name": "set_user1",
+											"type": "function",
+											"inputs": [
+											  {
+												"name": "user",
+												"type": "token_sender::hello::UserData"
+											  }
+											],
+											"outputs": [],
+											"state_mutability": "external"
+										  }, {
+											"name": "array2ddd_felt",
+											"type": "function",
+											"inputs": [
+											  {
+												"name": "testdd",
+												"type": "core::array::Array::<core::array::Array::<core::felt252>>"
+											  }
+											],
+											"outputs": [
+											  {
+												"type": "core::felt252"
+											  }
+											],
+											"state_mutability": "view"
 										  }
-										],
-										"state_mutability": "view"
-									  }
-									]
-								  }]`,
+										]
+									  }]`,
 			},
 			want: map[string]any{
 				"user": map[string]any{
@@ -515,42 +515,42 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "redeem_voucher",
 				abi: `[{
-								"name": "redeem_voucher",
-								"type": "function",
-								"inputs": [
-								  {
-									"name": "voucher",
-									"type": "rules_tokens::core::voucher::Voucher"
-								  },
-								  {
-									"name": "signature",
-									"type": "core::array::Span::<core::felt252>"
-								  }
-								],
-								"outputs": [],
-								"state_mutability": "external"
-							  },{
-								"name": "rules_tokens::core::voucher::Voucher",
-								"type": "struct",
-								"members": [
-								  {
-									"name": "receiver",
-									"type": "core::starknet::contract_address::ContractAddress"
-								  },
-								  {
-									"name": "token_id",
-									"type": "core::integer::u256"
-								  },
-								  {
-									"name": "amount",
-									"type": "core::integer::u256"
-								  },
-								  {
-									"name": "salt",
-									"type": "core::felt252"
-								  }
-								]
-							  }]`,
+									"name": "redeem_voucher",
+									"type": "function",
+									"inputs": [
+									  {
+										"name": "voucher",
+										"type": "rules_tokens::core::voucher::Voucher"
+									  },
+									  {
+										"name": "signature",
+										"type": "core::array::Span::<core::felt252>"
+									  }
+									],
+									"outputs": [],
+									"state_mutability": "external"
+								  },{
+									"name": "rules_tokens::core::voucher::Voucher",
+									"type": "struct",
+									"members": [
+									  {
+										"name": "receiver",
+										"type": "core::starknet::contract_address::ContractAddress"
+									  },
+									  {
+										"name": "token_id",
+										"type": "core::integer::u256"
+									  },
+									  {
+										"name": "amount",
+										"type": "core::integer::u256"
+									  },
+									  {
+										"name": "salt",
+										"type": "core::felt252"
+									  }
+									]
+								  }]`,
 			},
 			want: map[string]any{
 				"voucher": map[string]any{
@@ -643,41 +643,41 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				endpoint: "__execute__",
 				abi: `[
-					{
-						"type": "struct",
-						"name": "core::starknet::account::Call",
-						"members": [
-							{
-								"name": "to",
-								"type": "core::starknet::contract_address::ContractAddress"
-							},
-							{
-								"name": "selector",
-								"type": "core::felt252"
-							},
-							{
-								"name": "calldata",
-								"type": "core::array::Array::<core::felt252>"
-							}
-						]
-					},
-					{
-						"type": "function",
-						"name": "__execute__",
-						"inputs": [
-							{
-								"name": "calls",
-								"type": "core::array::Array::<core::starknet::account::Call>"
-							}
-						],
-						"outputs": [
-							{
-								"type": "core::array::Array::<core::array::Span::<core::felt252>>"
-							}
-						],
-						"state_mutability": "external"
-					}
-				]`,
+						{
+							"type": "struct",
+							"name": "core::starknet::account::Call",
+							"members": [
+								{
+									"name": "to",
+									"type": "core::starknet::contract_address::ContractAddress"
+								},
+								{
+									"name": "selector",
+									"type": "core::felt252"
+								},
+								{
+									"name": "calldata",
+									"type": "core::array::Array::<core::felt252>"
+								}
+							]
+						},
+						{
+							"type": "function",
+							"name": "__execute__",
+							"inputs": [
+								{
+									"name": "calls",
+									"type": "core::array::Array::<core::starknet::account::Call>"
+								}
+							],
+							"outputs": [
+								{
+									"type": "core::array::Array::<core::array::Span::<core::felt252>>"
+								}
+							],
+							"state_mutability": "external"
+						}
+					]`,
 			},
 			want: map[string]any{
 				"calls": []any{
@@ -691,6 +691,110 @@ func TestDecodeFunctionCallData(t *testing.T) {
 					},
 				},
 			},
+		}, {
+			name: "test 11",
+			args: args{
+				calldata: []string{
+					"0x1",
+					"0x53c7c49260f079bf5b79dfc05227e1da316429a0",
+					"0x4",
+					"0x1",
+					"0x2",
+					"0x3",
+					"0x4",
+					"0x5678",
+					"0x0",
+					"0x4",
+					"0xffffffffffffffffffffffffffffffffffffffffff",
+					"0x1234",
+					"0x5678",
+					"0x9abc",
+				},
+				endpoint: "propose",
+				abi: `[
+					{
+						"name": "sx::types::strategy::Strategy",
+						"type": "struct",
+						"members": [
+						  {
+							"name": "address",
+							"type": "core::starknet::contract_address::ContractAddress"
+						  },
+						  {
+							"name": "params",
+							"type": "core::array::Array::<core::felt252>"
+						  }
+						]
+					},
+					{
+						"name": "core::starknet::eth_address::EthAddress",
+						"type": "struct",
+						"members": [
+						  {
+							"name": "address",
+							"type": "core::felt252"
+						  }
+						]
+					},
+					{
+						"name": "sx::types::user_address::UserAddress",
+						"type": "enum",
+						"variants": [
+						  {
+							"name": "Starknet",
+							"type": "core::starknet::contract_address::ContractAddress"
+						  },
+						  {
+							"name": "Ethereum",
+							"type": "core::starknet::eth_address::EthAddress"
+						  },
+						  {
+							"name": "Custom",
+							"type": "core::integer::u256"
+						  }
+						]
+					},
+					{
+						"name": "propose",
+						"type": "function",
+						"inputs": [
+						  {
+							"name": "author",
+							"type": "sx::types::user_address::UserAddress"
+						  },
+						  {
+							"name": "metadata_uri",
+							"type": "core::array::Array::<core::felt252>"
+						  },
+						  {
+							"name": "execution_strategy",
+							"type": "sx::types::strategy::Strategy"
+						  },
+						  {
+							"name": "user_proposal_validation_params",
+							"type": "core::array::Array::<core::felt252>"
+						  }
+						],
+						"outputs": [],
+						"state_mutability": "external"
+					}
+				]`,
+			},
+			want: map[string]any{
+				"author": map[string]any{
+					"Ethereum": map[string]any{
+						"address": "0x53c7c49260f079bf5b79dfc05227e1da316429a0",
+					},
+				},
+				"execution_strategy": map[string]any{
+					"address": "0x5678",
+					"params":  []any{},
+				},
+				"metadata_uri": []any{"0x1", "0x2", "0x3", "0x4"},
+				"user_proposal_validation_params": []any{
+					"0xffffffffffffffffffffffffffffffffffffffffff", "0x1234", "0x5678", "0x9abc",
+				},
+			},
 		},
 	}
 	for _, tt := range tests {
@@ -700,14 +804,12 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				t.Errorf("DecodeFunctionCallData() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			got, err := DecodeFunctionCallData(tt.args.calldata, *a.Functions[tt.args.endpoint], a.Structs)
+			got, err := DecodeFunctionCallData(tt.args.calldata, *a.Functions[tt.args.endpoint], a.Structs, a.Enums)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("DecodeFunctionCallData() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DecodeFunctionCallData() = %v, want %v", got, tt.want)
-			}
+			require.Equal(t, tt.want, got)
 		})
 	}
 }

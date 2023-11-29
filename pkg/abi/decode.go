@@ -62,32 +62,32 @@ func unwrapOptionType(typ string) string {
 func DecodeExecuteCallData(calldata []string) (map[string]any, error) {
 	return DecodeFunctionCallData(calldata, ExecuteFunction, map[string]*StructItem{
 		"CallArray": &CallArray,
-	})
+	}, nil)
 }
 
 // DecodeExecuteResult -
 func DecodeExecuteResult(result []string) (map[string]any, error) {
 	return DecodeFunctionCallData(result, ExecuteFunction, map[string]*StructItem{
 		"CallArray": &CallArray,
-	})
+	}, nil)
 }
 
 // DecodeChangeModulesCallData -
 func DecodeChangeModulesCallData(calldata []string) (map[string]any, error) {
 	return DecodeFunctionCallData(calldata, ChangeModules, map[string]*StructItem{
 		"ModuleFunctionAction": &ModuleFunctionAction,
-	})
+	}, nil)
 }
 
 // DecodeChangeModulesResult -
 func DecodeChangeModulesResult(result []string) (map[string]any, error) {
 	return DecodeFunctionCallData(result, ChangeModules, map[string]*StructItem{
 		"ModuleFunctionAction": &ModuleFunctionAction,
-	})
+	}, nil)
 }
 
 // DecodeFunctionCallData -
-func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[string]*StructItem) (map[string]any, error) {
+func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[string]*StructItem, enums map[string]*EnumItem) (map[string]any, error) {
 
 	var (
 		result = make(map[string]any, 0)
@@ -96,7 +96,7 @@ func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[str
 	)
 
 	for _, input := range typ.Inputs {
-		tail, err = decodeItem(tail, input, structs, result)
+		tail, err = decodeItem(tail, input, structs, enums, result)
 		if err != nil {
 			return nil, err
 		}
@@ -106,7 +106,7 @@ func DecodeFunctionCallData(calldata []string, typ FunctionItem, structs map[str
 }
 
 // DecodeEventData -
-func DecodeEventData(data []string, typ EventItem, structs map[string]*StructItem) (map[string]any, error) {
+func DecodeEventData(data []string, typ EventItem, structs map[string]*StructItem, enums map[string]*EnumItem) (map[string]any, error) {
 	var (
 		result = make(map[string]any, 0)
 		tail   = data
@@ -114,7 +114,7 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 	)
 
 	for _, input := range typ.Data {
-		tail, err = decodeItem(tail, input, structs, result)
+		tail, err = decodeItem(tail, input, structs, enums, result)
 		if err != nil {
 			return nil, err
 		}
@@ -124,7 +124,7 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 }
 
 // DecodeFunctionResult -
-func DecodeFunctionResult(data []string, typ FunctionItem, structs map[string]*StructItem) (map[string]any, error) {
+func DecodeFunctionResult(data []string, typ FunctionItem, structs map[string]*StructItem, enums map[string]*EnumItem) (map[string]any, error) {
 	var (
 		result = make(map[string]any, 0)
 		tail   = data
@@ -132,7 +132,7 @@ func DecodeFunctionResult(data []string, typ FunctionItem, structs map[string]*S
 	)
 
 	for _, output := range typ.Outputs {
-		tail, err = decodeItem(tail, output, structs, result)
+		tail, err = decodeItem(tail, output, structs, enums, result)
 		if err != nil {
 			return nil, err
 		}
@@ -141,7 +141,8 @@ func DecodeFunctionResult(data []string, typ FunctionItem, structs map[string]*S
 	return result, nil
 }
 
-func decodeItem(calldata []string, input Type, structs map[string]*StructItem, result map[string]any) ([]string, error) {
+func decodeItem(calldata []string, input Type, structs map[string]*StructItem, enums map[string]*EnumItem, result map[string]any) ([]string, error) {
+	enum, hasEnum := enums[input.Type]
 	str, hasStruct := structs[input.Type]
 	switch {
 	case isLenField(input.Name):
@@ -151,12 +152,32 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		result[input.Name] = calldata[0]
 		return calldata[1:], nil
 
+	case hasEnum:
+		if len(calldata) == 0 {
+			return nil, ErrTooShortCallData
+		}
+		enumIdx, err := strconv.ParseInt(calldata[0], 0, 64)
+		if err != nil {
+			return nil, err
+		}
+		if int(enumIdx) > len(enum.Variants)-1 {
+			return nil, errors.Errorf("too big enum index: %d", enumIdx)
+		}
+		variant := enum.Variants[enumIdx]
+		obj := make(map[string]any)
+		tail, err := decodeItem(calldata[1:], variant, structs, enums, obj)
+		if err != nil {
+			return nil, err
+		}
+		result[input.Name] = obj
+		return tail, nil
+
 	case hasStruct:
 		obj := make(map[string]any)
 		tail := calldata
 		var err error
 		for i := range str.Members {
-			tail, err = decodeItem(tail, str.Members[i].Type, structs, obj)
+			tail, err = decodeItem(tail, str.Members[i].Type, structs, enums, obj)
 			if err != nil {
 				return nil, err
 			}
@@ -207,7 +228,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 			tail, err = decodeItem(tail, Type{
 				Name: fmt.Sprintf("array_item_%d", i),
 				Type: unwrapArrayType(input.Type),
-			}, structs, obj)
+			}, structs, enums, obj)
 			if err != nil {
 				return nil, err
 			}
@@ -228,7 +249,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 		obj := make(map[string]any)
 		tail := calldata
 		for i := range tupleItems {
-			tail, err = decodeItem(tail, tupleItems[i].Type, structs, obj)
+			tail, err = decodeItem(tail, tupleItems[i].Type, structs, enums, obj)
 			if err != nil {
 				return nil, err
 			}
@@ -267,7 +288,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, r
 			tail, err := decodeItem(calldata[1:], Type{
 				Name: fmt.Sprintf("%s_some", input.Name),
 				Type: unwrapOptionType(input.Type),
-			}, structs, obj)
+			}, structs, enums, obj)
 			if err != nil {
 				return nil, err
 			}
