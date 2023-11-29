@@ -164,6 +164,12 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, e
 			return nil, errors.Errorf("too big enum index: %d", enumIdx)
 		}
 		variant := enum.Variants[enumIdx]
+
+		if variant.Type == "()" {
+			result[input.Name] = variant.Name
+			return calldata[1:], nil
+		}
+
 		obj := make(map[string]any)
 		tail, err := decodeItem(calldata[1:], variant, structs, enums, obj)
 		if err != nil {
