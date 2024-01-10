@@ -13,6 +13,7 @@ const (
 	Version0 = "0x0"
 	Version1 = "0x1"
 	Version2 = "0x2"
+	Version3 = "0x3"
 )
 
 // call types

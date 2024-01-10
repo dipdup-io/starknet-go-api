@@ -15,9 +15,11 @@ type Block struct {
 	BlockHash        string             `json:"block_hash"`
 	ParentHash       string             `json:"parent_block_hash"`
 	NewRoot          string             `json:"state_root"`
-	GasPrice         string             `json:"gas_price"`
+	GasPrice         string             `json:"gas_price,omitempty"`
 	SequencerAddress string             `json:"sequencer_address"`
 	StarknetVersion  *string            `json:"starknet_version,omitempty"`
+	EthL1GasPrice    data.Felt          `json:"eth_l1_gas_price"`
+	StrkL1GasPrice   data.Felt          `json:"strk_l1_gas_price"`
 	Transactions     []data.Transaction `json:"transactions"`
 	Receipts         []Receipt          `json:"transaction_receipts"`
 }
