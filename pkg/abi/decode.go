@@ -156,7 +156,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, e
 		if len(calldata) == 0 {
 			return nil, ErrTooShortCallData
 		}
-		enumIdx, err := strconv.ParseInt(calldata[0], 0, 64)
+		enumIdx, err := strconv.ParseInt(calldata[0], 0, 32)
 		if err != nil {
 			return nil, err
 		}
@@ -199,7 +199,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, e
 			if !ok {
 				return nil, errors.Wrap(ErrNoLenField, input.Name)
 			}
-			length, err := strconv.ParseInt(lengthHex.(string), 0, 64)
+			length, err := strconv.ParseInt(lengthHex.(string), 0, 32)
 			if err != nil {
 				return nil, errors.Wrap(err, input.Name)
 			}
@@ -208,7 +208,7 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, e
 			if len(calldata) == 0 {
 				return nil, ErrTooShortCallData
 			}
-			length, err := strconv.ParseInt(calldata[0], 0, 64)
+			length, err := strconv.ParseInt(calldata[0], 0, 32)
 			if err != nil {
 				return nil, errors.Wrap(err, input.Name)
 			}
