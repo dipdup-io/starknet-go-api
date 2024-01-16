@@ -16,7 +16,7 @@ type TraceResponse struct {
 type Invocation struct {
 	CallerAddress      data.Felt          `json:"caller_address"`
 	ContractAddress    data.Felt          `json:"contract_address"`
-	Calldata           []string           `json:"calldata"`
+	Calldata           []data.Felt        `json:"calldata"`
 	CallType           string             `json:"call_type"`
 	ClassHash          data.Felt          `json:"class_hash"`
 	Selector           data.Felt          `json:"selector"`

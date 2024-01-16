@@ -56,6 +56,8 @@ GetTransactionReceipts(ctx context.Context, hash string, opts ...RequestOption) 
 PendingTransactions(ctx context.Context, opts ...RequestOption) (*Response[Transaction], error)
 
 Syncing(ctx context.Context, opts ...RequestOption) (*Response[Syncing], error)
+
+Trace(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[[]Trace], error) 
 ```
 
 ### Creation
