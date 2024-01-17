@@ -10,13 +10,19 @@ import (
 type Receipt struct {
 	Type            string         `json:"type"`
 	TransactionHash string         `json:"transaction_hash"`
-	ActualFee       string         `json:"actual_fee"`
-	Status          string         `json:"status"`
+	ActualFee       Fee            `json:"actual_fee"`
+	ExecutionStatus string         `json:"execution_status"`
+	FinalityStatus  string         `json:"finality_status"`
 	BlockHash       string         `json:"block_hash"`
 	BlockNumber     uint64         `json:"block_number"`
 	MessagesSent    []data.Message `json:"messages_sent"`
 	Events          []data.Event   `json:"events"`
 	ContractAddress string         `json:"contract_address"`
+}
+
+type Fee struct {
+	Amount data.Felt `json:"amount"`
+	Unit   string    `json:"unit"`
 }
 
 // GetTransactionReceipts -

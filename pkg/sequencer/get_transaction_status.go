@@ -7,6 +7,8 @@ import (
 // TransactionStatus -
 type TransactionStatus struct {
 	Status    string `json:"tx_status"`
+	Finality  string `json:"finality_status"`
+	Execution string `json:"execution_status"`
 	BlockHash string `json:"block_hash"`
 }
 

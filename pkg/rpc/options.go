@@ -34,3 +34,11 @@ func WithRateLimit(requestPerSecond int) ApiOption {
 		}
 	}
 }
+
+// WithApiKey -
+func WithApiKey(header, apiKey string) ApiOption {
+	return func(api *API) {
+		api.headerApiKey = header
+		api.apiKey = apiKey
+	}
+}

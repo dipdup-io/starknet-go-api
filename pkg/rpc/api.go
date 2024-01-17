@@ -11,10 +11,12 @@ import (
 
 // API - wrapper of starknet node API.
 type API struct {
-	client    *http.Client
-	baseURL   string
-	id        *atomic.Uint64
-	rateLimit *rate.Limiter
+	client       *http.Client
+	baseURL      string
+	id           *atomic.Uint64
+	rateLimit    *rate.Limiter
+	headerApiKey string
+	apiKey       string
 }
 
 // NewAPI - constructor of API
