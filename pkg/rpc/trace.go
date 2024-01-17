@@ -8,7 +8,7 @@ import (
 
 type Trace struct {
 	TraceRoot       TraceRoot `json:"trace_root"`
-	TransactionHash string    `json:"transaction_hash"`
+	TransactionHash data.Felt `json:"transaction_hash"`
 }
 
 type TraceRoot struct {
@@ -20,12 +20,13 @@ type TraceRoot struct {
 }
 
 type Call struct {
-	CallerAddress      string             `json:"caller_address"`
-	ContractAddress    string             `json:"contract_address"`
+	CallerAddress      data.Felt          `json:"caller_address"`
+	ContractAddress    data.Felt          `json:"contract_address"`
 	CallType           string             `json:"call_type"`
-	ClassHash          string             `json:"class_hash"`
-	EntryPointSelector string             `json:"entry_point_selector"`
+	ClassHash          data.Felt          `json:"class_hash"`
+	EntryPointSelector data.Felt          `json:"entry_point_selector"`
 	EntryPointType     string             `json:"entry_point_type"`
+	RevertReason       string             `json:"revert_reason,omitempty"`
 	Calldata           []data.Felt        `json:"calldata"`
 	Result             []data.Felt        `json:"result"`
 	Calls              []Call             `json:"calls"`

@@ -29,7 +29,7 @@ func main() {
 	number := uint64(1)
 	block, err := api.GetBlock(ctx, data.BlockID{
 		Number: &number,
-	})
+	}, true)
 	if err != nil {
 		log.Panic(err)
 	}

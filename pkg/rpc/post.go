@@ -8,6 +8,7 @@ import (
 
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 )
 
 func post[T any](ctx context.Context, api API, req Request, output *Response[T]) error {
@@ -22,6 +23,10 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 	}
 	request.Header.Add("Content-Type", "application/json")
 
+	if api.apiKey != "" && api.headerApiKey != "" {
+		request.Header.Add(api.headerApiKey, api.apiKey)
+	}
+
 	if api.rateLimit != nil {
 		if err := api.rateLimit.Wait(ctx); err != nil {
 			return err
@@ -32,18 +37,13 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
-
-	buffer := new(bytes.Buffer)
-	if _, err := io.Copy(buffer, response.Body); err != nil {
-		return err
-	}
+	defer closeWithLogError(response.Body)
 
 	if response.StatusCode != http.StatusOK {
 		return errors.Wrapf(ErrRequest, "request %d invalid status code: %d", output.ID, response.StatusCode)
 	}
 
-	if err := json.NewDecoder(buffer).Decode(output); err != nil {
+	if err := json.NewDecoder(response.Body).Decode(output); err != nil {
 		return err
 	}
 
@@ -52,4 +52,13 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 	}
 
 	return nil
+}
+
+func closeWithLogError(stream io.ReadCloser) {
+	if _, err := io.Copy(io.Discard, stream); err != nil {
+		log.Err(err).Msg("api copy body response to discard")
+	}
+	if err := stream.Close(); err != nil {
+		log.Err(err).Msg("api close body request")
+	}
 }

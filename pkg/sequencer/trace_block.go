@@ -21,7 +21,7 @@ type Invocation struct {
 	ClassHash          data.Felt          `json:"class_hash"`
 	Selector           data.Felt          `json:"selector"`
 	EntrypointType     string             `json:"entry_point_type"`
-	Result             []string           `json:"result"`
+	Result             []data.Felt        `json:"result"`
 	ExecutionResources ExecutionResources `json:"execution_resources"`
 	InternalCalls      []Invocation       `json:"internal_calls"`
 	Events             []data.Event       `json:"events"`

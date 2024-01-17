@@ -95,7 +95,7 @@ func (api API) get(ctx context.Context, baseURL, path, cacheFileName string, arg
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+	defer closeWithLogError(response.Body)
 
 	log.Trace().Msgf("[%d ms] %s", time.Since(start).Milliseconds(), u.String())
 
@@ -158,21 +158,25 @@ func (api API) post(ctx context.Context, baseURL, path string, args map[string]s
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
-
-	buffer := new(bytes.Buffer)
-	if _, err := io.Copy(buffer, response.Body); err != nil {
-		return err
-	}
+	defer closeWithLogError(response.Body)
 
 	if response.StatusCode != http.StatusOK {
 		var e Error
-		if err := json.NewDecoder(buffer).Decode(&e); err != nil {
+		if err := json.NewDecoder(response.Body).Decode(&e); err != nil {
 			return errors.Wrap(ErrRequest, err.Error())
 		}
 		return errors.Wrap(ErrRequest, e.Error())
 	}
 
-	err = json.NewDecoder(buffer).Decode(output)
+	err = json.NewDecoder(response.Body).Decode(output)
 	return err
+}
+
+func closeWithLogError(stream io.ReadCloser) {
+	if _, err := io.Copy(io.Discard, stream); err != nil {
+		log.Err(err).Msg("api copy body response to discard")
+	}
+	if err := stream.Close(); err != nil {
+		log.Err(err).Msg("api close body request")
+	}
 }

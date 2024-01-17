@@ -37,7 +37,7 @@ type Receipt struct {
 }
 
 // GetBlock - Gets block
-func (api API) GetBlock(ctx context.Context, block data.BlockID) (response Block, err error) {
+func (api API) GetBlock(ctx context.Context, block data.BlockID, headerOnly bool) (response Block, err error) {
 	if err := block.Validate(); err != nil {
 		return response, err
 	}
@@ -45,6 +45,9 @@ func (api API) GetBlock(ctx context.Context, block data.BlockID) (response Block
 	args := make(map[string]string)
 	if name, value := block.GetArg(); name != "" {
 		args[name] = value
+	}
+	if headerOnly {
+		args["headerOnly"] = "true"
 	}
 
 	var cacheFileName string

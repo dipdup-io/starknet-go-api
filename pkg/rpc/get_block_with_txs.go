@@ -15,6 +15,8 @@ type BlockWithTxs struct {
 	NewRoot          string             `json:"new_root"`
 	Timestamp        int64              `json:"timestamp"`
 	SequencerAddress string             `json:"sequencer_address"`
+	Version          *string            `json:"starknet_version,omitempty"`
+	L1GasPrice       L1GasPrice         `json:"l1_gas_price"`
 	Transactions     []data.Transaction `json:"transactions"`
 }
 
