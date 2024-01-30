@@ -7,19 +7,20 @@ import (
 
 // Invoke -
 type Invoke struct {
-	MaxFee                    Felt     `json:"max_fee"`
-	Nonce                     Felt     `json:"nonce"`
-	ContractAddress           Felt     `json:"contract_address"`
-	EntrypointSelector        Felt     `json:"entry_point_selector"`
-	SenderAddress             Felt     `json:"sender_address"`
-	ChainId                   Felt     `json:"chain_id"`
-	FeeDataAvailabilityMode   Felt     `json:"fee_data_availability_mode"`
-	NonceDataAvailabilityMode Felt     `json:"nonce_data_availability_mode"`
-	Tip                       Felt     `json:"tip"`
-	Signature                 []string `json:"signature"`
-	Calldata                  []string `json:"calldata"`
-	AccountDeploymentData     []Felt   `json:"account_deployment_data"`
-	PayMasterData             []Felt   `json:"paymaster_data"`
+	MaxFee                    Felt            `json:"max_fee"`
+	Nonce                     Felt            `json:"nonce"`
+	ContractAddress           Felt            `json:"contract_address"`
+	EntrypointSelector        Felt            `json:"entry_point_selector"`
+	SenderAddress             Felt            `json:"sender_address"`
+	ChainId                   Felt            `json:"chain_id"`
+	FeeDataAvailabilityMode   uint64          `json:"fee_data_availability_mode"`
+	NonceDataAvailabilityMode uint64          `json:"nonce_data_availability_mode"`
+	ResourceBounds            *ResourceBounds `json:"resource_bounds,omitempty"`
+	Tip                       Felt            `json:"tip"`
+	Signature                 []string        `json:"signature"`
+	Calldata                  []string        `json:"calldata"`
+	AccountDeploymentData     []Felt          `json:"account_deployment_data"`
+	PayMasterData             []Felt          `json:"paymaster_data"`
 }
 
 func (i Invoke) toMap(version Felt) map[string]any {
@@ -48,6 +49,16 @@ func (i Invoke) toMap(version Felt) map[string]any {
 	return data
 }
 
+type ResourceBound struct {
+	MaxAmount       Felt `json:"max_amount"`
+	MaxPricePerUnit Felt `json:"max_price_per_unit"`
+}
+
+type ResourceBounds struct {
+	L1Gas ResourceBound `json:"L1_GAS"`
+	L2Gas ResourceBound `json:"L2_GAS"`
+}
+
 // Declare -
 type Declare struct {
 	MaxFee                    Felt     `json:"max_fee"`
@@ -60,8 +71,8 @@ type Declare struct {
 	CompiledClassHash         Felt     `json:"compiled_class_hash,omitempty"`
 	AccountDeploymentData     []Felt   `json:"account_deployment_data"`
 	ChainId                   Felt     `json:"chain_id"`
-	FeeDataAvailabilityMode   Felt     `json:"fee_data_availability_mode"`
-	NonceDataAvailabilityMode Felt     `json:"nonce_data_availability_mode"`
+	FeeDataAvailabilityMode   uint64   `json:"fee_data_availability_mode"`
+	NonceDataAvailabilityMode uint64   `json:"nonce_data_availability_mode"`
 	PayMasterData             []Felt   `json:"paymaster_data"`
 	Tip                       Felt     `json:"tip"`
 }
@@ -116,8 +127,8 @@ type DeployAccount struct {
 	ConstructorCalldata       []string `json:"constructor_calldata"`
 	Signature                 []string `json:"signature"`
 	ChainId                   Felt     `json:"chain_id"`
-	FeeDataAvailabilityMode   Felt     `json:"fee_data_availability_mode"`
-	NonceDataAvailabilityMode Felt     `json:"nonce_data_availability_mode"`
+	FeeDataAvailabilityMode   uint64   `json:"fee_data_availability_mode"`
+	NonceDataAvailabilityMode uint64   `json:"nonce_data_availability_mode"`
 	PayMasterData             []Felt   `json:"paymaster_data"`
 	Tip                       Felt     `json:"tip"`
 }
