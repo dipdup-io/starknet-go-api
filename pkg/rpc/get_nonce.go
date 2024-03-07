@@ -12,7 +12,7 @@ func (api API) GetNonce(ctx context.Context, contract string, block data.BlockID
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getNonce", []any{
+	request := api.prepareRequest("starknet_getNonce", []any{
 		block, contract,
 	}, opts...)
 

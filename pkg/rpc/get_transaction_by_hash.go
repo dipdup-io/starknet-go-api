@@ -8,7 +8,7 @@ import (
 
 // GetTransactionByHash -
 func (api API) GetTransactionByHash(ctx context.Context, hash string, opts ...RequestOption) (*Response[data.Transaction], error) {
-	request := api.prepareRequest(ctx, "starknet_getTransactionByHash", []any{
+	request := api.prepareRequest("starknet_getTransactionByHash", []any{
 		hash,
 	}, opts...)
 

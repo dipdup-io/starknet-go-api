@@ -48,7 +48,7 @@ func (api API) Trace(ctx context.Context, block data.BlockID, opts ...RequestOpt
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_traceBlockTransactions", []any{block}, opts...)
+	request := api.prepareRequest("starknet_traceBlockTransactions", []any{block}, opts...)
 
 	var response Response[[]Trace]
 	err := post(ctx, api, *request, &response)

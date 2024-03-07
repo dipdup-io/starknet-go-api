@@ -10,7 +10,7 @@ type BlockHashAndNumber struct {
 
 // BlockHashAndNumber - Get the most recent accepted block hash and number
 func (api API) BlockHashAndNumber(ctx context.Context, opts ...RequestOption) (*Response[BlockHashAndNumber], error) {
-	request := api.prepareRequest(ctx, "starknet_blockHashAndNumber", []any{}, opts...)
+	request := api.prepareRequest("starknet_blockHashAndNumber", []any{}, opts...)
 
 	var response Response[BlockHashAndNumber]
 	err := post(ctx, api, *request, &response)

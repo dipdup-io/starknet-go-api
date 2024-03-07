@@ -12,7 +12,7 @@ func (api API) GetClassHashAt(ctx context.Context, block data.BlockID, contractA
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getClassHashAt", []any{
+	request := api.prepareRequest("starknet_getClassHashAt", []any{
 		block, contractAddress,
 	}, opts...)
 

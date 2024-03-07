@@ -9,7 +9,7 @@ type TransactionStatus struct {
 
 // GetTransactionStatus -
 func (api API) GetTransactionStatus(ctx context.Context, hash string, opts ...RequestOption) (*Response[TransactionStatus], error) {
-	request := api.prepareRequest(ctx, "starknet_getTransactionReceipt", []any{
+	request := api.prepareRequest("starknet_getTransactionReceipt", []any{
 		hash,
 	}, opts...)
 

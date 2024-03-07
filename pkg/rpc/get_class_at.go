@@ -12,7 +12,7 @@ func (api API) GetClassAt(ctx context.Context, block data.BlockID, contractAddre
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getClassAt", []any{
+	request := api.prepareRequest("starknet_getClassAt", []any{
 		block, contractAddress,
 	}, opts...)
 

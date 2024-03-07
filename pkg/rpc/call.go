@@ -12,7 +12,7 @@ func (api API) Call(ctx context.Context, params CallRequest, block data.BlockID,
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_call", []any{
+	request := api.prepareRequest("starknet_call", []any{
 		params, block,
 	}, opts...)
 

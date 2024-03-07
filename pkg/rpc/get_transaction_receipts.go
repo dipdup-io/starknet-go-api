@@ -27,7 +27,7 @@ type Fee struct {
 
 // GetTransactionReceipts -
 func (api API) GetTransactionReceipts(ctx context.Context, hash string, opts ...RequestOption) (*Response[Receipt], error) {
-	request := api.prepareRequest(ctx, "starknet_getTransactionReceipt", []any{
+	request := api.prepareRequest("starknet_getTransactionReceipt", []any{
 		hash,
 	}, opts...)
 

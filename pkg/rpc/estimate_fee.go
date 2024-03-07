@@ -19,7 +19,7 @@ func (api API) EstimateFee(ctx context.Context, tx data.Transaction, block data.
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_estimateFee", []any{tx})
+	request := api.prepareRequest("starknet_estimateFee", []any{tx})
 
 	var response Response[EstmatedGas]
 	err := post(ctx, api, *request, &response)

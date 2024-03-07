@@ -6,8 +6,8 @@ import (
 	"github.com/dipdup-io/starknet-go-api/pkg/data"
 )
 
-// BlockWithTxHashes -
-type BlockWithTxHashes struct {
+// BlockWithReceipt -
+type BlockWithReceipt struct {
 	Status           string     `json:"status"`
 	BlockHash        string     `json:"block_hash"`
 	ParentHash       string     `json:"parent_hash"`
@@ -15,24 +15,25 @@ type BlockWithTxHashes struct {
 	NewRoot          string     `json:"new_root"`
 	Timestamp        int64      `json:"timestamp"`
 	SequencerAddress string     `json:"sequencer_address"`
+	Version          *string    `json:"starknet_version,omitempty"`
 	L1GasPrice       L1GasPrice `json:"l1_gas_price"`
-	Transactions     []string   `json:"transactions"`
+	Transactions     []Tx       `json:"transactions"`
 }
 
-type L1GasPrice struct {
-	PricInFri data.Felt `json:"price_in_fri"`
-	PricInWei data.Felt `json:"price_in_wei"`
+type Tx struct {
+	Transaction data.Transaction `json:"transaction"`
+	Receipt     Receipt          `json:"receipt"`
 }
 
-// GetBlockWithTxHashes -
-func (api API) GetBlockWithTxHashes(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[BlockWithTxHashes], error) {
+// GetBlockWithReceipts -
+func (api API) GetBlockWithReceipts(ctx context.Context, block data.BlockID, opts ...RequestOption) (*Response[BlockWithReceipt], error) {
 	if err := block.Validate(); err != nil {
 		return nil, err
 	}
 
-	request := api.prepareRequest("starknet_getBlockWithTxHashes", []any{block}, opts...)
+	request := api.prepareRequest("starknet_getBlockWithReceipts", []any{block}, opts...)
 
-	var response Response[BlockWithTxHashes]
+	var response Response[BlockWithReceipt]
 	err := post(ctx, api, *request, &response)
 	return &response, err
 }

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"net/http"
 	"sync/atomic"
 
@@ -42,7 +41,7 @@ func NewAPI(baseURL string, opts ...ApiOption) API {
 	return api
 }
 
-func (api API) prepareRequest(ctx context.Context, method string, params []any, opts ...RequestOption) *Request {
+func (api API) prepareRequest(method string, params []any, opts ...RequestOption) *Request {
 	req := Request{
 		Version: data.DefaultJSONRPC,
 		ID:      api.id.Add(1),
