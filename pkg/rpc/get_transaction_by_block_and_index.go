@@ -12,7 +12,7 @@ func (api API) GetTransactionByBlockNumberAndIndex(ctx context.Context, block da
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getTransactionByBlockIdAndIndex", []any{
+	request := api.prepareRequest("starknet_getTransactionByBlockIdAndIndex", []any{
 		block, index,
 	}, opts...)
 

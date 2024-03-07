@@ -26,7 +26,7 @@ func (api API) GetBlockWithTxs(ctx context.Context, block data.BlockID, opts ...
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getBlockWithTxs", []any{block}, opts...)
+	request := api.prepareRequest("starknet_getBlockWithTxs", []any{block}, opts...)
 
 	var response Response[BlockWithTxs]
 	err := post(ctx, api, *request, &response)

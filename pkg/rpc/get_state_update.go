@@ -12,7 +12,7 @@ func (api API) GetStateUpdate(ctx context.Context, block data.BlockID, opts ...R
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getStateUpdate", []any{block}, opts...)
+	request := api.prepareRequest("starknet_getStateUpdate", []any{block}, opts...)
 
 	var response Response[data.StateUpdateRpc]
 	err := post(ctx, api, *request, &response)

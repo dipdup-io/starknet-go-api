@@ -12,7 +12,7 @@ func (api API) GetStorageAt(ctx context.Context, contract, key string, block dat
 		return nil, err
 	}
 
-	request := api.prepareRequest(ctx, "starknet_getStorageAt", []any{
+	request := api.prepareRequest("starknet_getStorageAt", []any{
 		contract,
 		key,
 		block,

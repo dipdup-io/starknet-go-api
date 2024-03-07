@@ -33,7 +33,7 @@ func (api API) GetEvents(ctx context.Context, filters EventsFilters, opts ...Req
 		}
 	}
 
-	request := api.prepareRequest(ctx, "", []any{filters}, opts...)
+	request := api.prepareRequest("", []any{filters}, opts...)
 
 	var response Response[EventsResponse]
 	err := post(ctx, api, *request, &response)
