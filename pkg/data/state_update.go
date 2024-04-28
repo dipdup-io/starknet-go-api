@@ -45,6 +45,11 @@ type ReplacedClass struct {
 	ClassHash Felt `json:"class_hash"`
 }
 
+type ReplacedClassRpc struct {
+	Address   Felt `json:"contract_address"`
+	ClassHash Felt `json:"class_hash"`
+}
+
 // StateUpdate -
 type StateUpdate struct {
 	BlockHash Felt      `json:"block_hash"`
@@ -57,7 +62,7 @@ type StateUpdate struct {
 type StateDiffRpc struct {
 	DeclaredClasses           []DeclaredClass    `json:"declared_classes"`
 	DeprecatedDeclaredClasses []Felt             `json:"deprecated_declared_classes"`
-	ReplacedClasses           []ReplacedClass    `json:"replaced_classes"`
+	ReplacedClasses           []ReplacedClassRpc `json:"replaced_classes"`
 	DeclaredContractHashes    []Felt             `json:"declared_contract_hashes"`
 	DeployedContracts         []DeployedContract `json:"deployed_contracts"`
 	Nonces                    []Nonce            `json:"nonces"`
@@ -70,7 +75,7 @@ func (sdr StateDiffRpc) ToStateDiff() StateDiff {
 		StorageDiffs:         make(map[Felt][]KeyValue),
 		Nonces:               make(map[Felt]Felt),
 		DeclaredClasses:      sdr.DeclaredClasses,
-		ReplacedClasses:      sdr.ReplacedClasses,
+		ReplacedClasses:      make([]ReplacedClass, len(sdr.ReplacedClasses)),
 		OldDeclaredContracts: append(sdr.DeclaredContractHashes, sdr.DeprecatedDeclaredClasses...),
 		DeployedContracts:    sdr.DeployedContracts,
 	}
@@ -81,6 +86,11 @@ func (sdr StateDiffRpc) ToStateDiff() StateDiff {
 
 	for i := range sdr.StorageDiffs {
 		sd.StorageDiffs[sdr.StorageDiffs[i].Address] = sdr.StorageDiffs[i].StorageEntries
+	}
+
+	for i := range sdr.ReplacedClasses {
+		sd.ReplacedClasses[i].Address = sdr.ReplacedClasses[i].Address
+		sd.ReplacedClasses[i].ClassHash = sdr.ReplacedClasses[i].ClassHash
 	}
 
 	return sd
