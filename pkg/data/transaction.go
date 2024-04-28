@@ -87,9 +87,14 @@ func (d Declare) toMap(version Felt) map[string]any {
 	}
 
 	switch version {
-	case Version0, Version1, Version2:
-		return data
+	case Version0, Version1:
+		data["contract_class"] = d.ContractClass
+	case Version2:
+		data["class_hash"] = d.ClassHash
+		data["compiled_class_hash"] = d.CompiledClassHash
 	case Version3:
+		data["class_hash"] = d.ClassHash
+		data["compiled_class_hash"] = d.CompiledClassHash
 		data["chain_id"] = d.ChainId
 		data["fee_data_availability_mode"] = d.FeeDataAvailabilityMode
 		data["nonce_data_availability_mode"] = d.NonceDataAvailabilityMode

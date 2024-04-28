@@ -55,12 +55,13 @@ type StateUpdate struct {
 
 // StateDiffRpc -
 type StateDiffRpc struct {
-	DeclaredClasses        []DeclaredClass    `json:"declared_classes"`
-	ReplacedClasses        []ReplacedClass    `json:"replaced_classes"`
-	DeclaredContractHashes []Felt             `json:"declared_contract_hashes"`
-	DeployedContracts      []DeployedContract `json:"deployed_contracts"`
-	Nonces                 []Nonce            `json:"nonces"`
-	StorageDiffs           []StorageDiff      `json:"storage_diffs"`
+	DeclaredClasses           []DeclaredClass    `json:"declared_classes"`
+	DeprecatedDeclaredClasses []Felt             `json:"deprecated_declared_classes"`
+	ReplacedClasses           []ReplacedClass    `json:"replaced_classes"`
+	DeclaredContractHashes    []Felt             `json:"declared_contract_hashes"`
+	DeployedContracts         []DeployedContract `json:"deployed_contracts"`
+	Nonces                    []Nonce            `json:"nonces"`
+	StorageDiffs              []StorageDiff      `json:"storage_diffs"`
 }
 
 // ToStateDiff -
