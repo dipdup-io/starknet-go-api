@@ -71,7 +71,7 @@ func (sdr StateDiffRpc) ToStateDiff() StateDiff {
 		Nonces:               make(map[Felt]Felt),
 		DeclaredClasses:      sdr.DeclaredClasses,
 		ReplacedClasses:      sdr.ReplacedClasses,
-		OldDeclaredContracts: sdr.DeclaredContractHashes,
+		OldDeclaredContracts: append(sdr.DeclaredContractHashes, sdr.DeprecatedDeclaredClasses...),
 		DeployedContracts:    sdr.DeployedContracts,
 	}
 
