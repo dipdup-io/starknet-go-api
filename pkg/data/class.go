@@ -22,13 +22,18 @@ func (c *Class) GetAbi() (abi.Abi, error) {
 	var abi abi.Abi
 	switch c.ClassVersion {
 	case "0.1.0":
-		s, err := strconv.Unquote(string(c.RawAbi))
-		if err != nil {
-			return abi, err
+		data := c.RawAbi
+		for {
+			s, err := strconv.Unquote(string(data))
+			if err != nil {
+				break
+			}
+			data = []byte(s)
 		}
-		c.RawAbi = []byte(s)
+
+		c.RawAbi = []byte(data)
 		if !json.Valid(c.RawAbi) {
-			return abi, errors.Errorf("abi is not JSON: %s", s)
+			return abi, errors.Errorf("abi is not JSON: %s", data)
 		}
 	default:
 	}
