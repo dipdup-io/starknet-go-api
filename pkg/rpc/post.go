@@ -47,7 +47,11 @@ func post[T any](ctx context.Context, api API, req Request, output *Response[T])
 		return err
 	}
 
-	return output.Error
+	if output.Error != nil {
+		return output.Error
+	}
+
+	return nil
 }
 
 func closeWithLogError(stream io.ReadCloser) {
