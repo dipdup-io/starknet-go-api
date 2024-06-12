@@ -13,8 +13,8 @@ type Invoke struct {
 	EntrypointSelector        Felt            `json:"entry_point_selector"`
 	SenderAddress             Felt            `json:"sender_address"`
 	ChainId                   Felt            `json:"chain_id"`
-	FeeDataAvailabilityMode   uint64          `json:"fee_data_availability_mode"`
-	NonceDataAvailabilityMode uint64          `json:"nonce_data_availability_mode"`
+	FeeDataAvailabilityMode   DAMode          `json:"fee_data_availability_mode"`
+	NonceDataAvailabilityMode DAMode          `json:"nonce_data_availability_mode"`
 	ResourceBounds            *ResourceBounds `json:"resource_bounds,omitempty"`
 	Tip                       Felt            `json:"tip"`
 	Signature                 []string        `json:"signature"`
@@ -71,8 +71,8 @@ type Declare struct {
 	CompiledClassHash         Felt     `json:"compiled_class_hash,omitempty"`
 	AccountDeploymentData     []Felt   `json:"account_deployment_data"`
 	ChainId                   Felt     `json:"chain_id"`
-	FeeDataAvailabilityMode   uint64   `json:"fee_data_availability_mode"`
-	NonceDataAvailabilityMode uint64   `json:"nonce_data_availability_mode"`
+	FeeDataAvailabilityMode   DAMode   `json:"fee_data_availability_mode"`
+	NonceDataAvailabilityMode DAMode   `json:"nonce_data_availability_mode"`
 	PayMasterData             []Felt   `json:"paymaster_data"`
 	Tip                       Felt     `json:"tip"`
 }
@@ -132,8 +132,8 @@ type DeployAccount struct {
 	ConstructorCalldata       []string `json:"constructor_calldata"`
 	Signature                 []string `json:"signature"`
 	ChainId                   Felt     `json:"chain_id"`
-	FeeDataAvailabilityMode   uint64   `json:"fee_data_availability_mode"`
-	NonceDataAvailabilityMode uint64   `json:"nonce_data_availability_mode"`
+	FeeDataAvailabilityMode   DAMode   `json:"fee_data_availability_mode"`
+	NonceDataAvailabilityMode DAMode   `json:"nonce_data_availability_mode"`
 	PayMasterData             []Felt   `json:"paymaster_data"`
 	Tip                       Felt     `json:"tip"`
 }
