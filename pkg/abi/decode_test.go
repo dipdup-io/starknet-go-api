@@ -925,6 +925,137 @@ func TestDecodeFunctionCallData(t *testing.T) {
 				},
 				"min_liquidity": "5937915978828",
 			},
+		}, {
+			name: "test 13: too big enum value",
+			args: args{
+				calldata: []string{
+					"0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+					"0x53c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8",
+					"0x20c49ba5e353f80000000000000000",
+					"0x3e8",
+					"0x0",
+					"0x132bb70",
+					"0x3",
+					"0x12fae30",
+					"0x1",
+					"0x566875f644c",
+				},
+				endpoint: "mint_and_deposit",
+				abi: `[
+					{
+						"name": "core::bool",
+						"type": "enum",
+						"variants": [
+						  {
+							"name": "False",
+							"type": "()"
+						  },
+						  {
+							"name": "True",
+							"type": "()"
+						  }
+						]
+					},
+					{
+						"name": "ekubo::types::i129::i129",
+						"type": "struct",
+						"members": [
+						  {
+							"name": "mag",
+							"type": "core::integer::u128"
+						  },
+						  {
+							"name": "sign",
+							"type": "core::bool"
+						  }
+						]
+					},
+					{
+						"name": "ekubo::types::bounds::Bounds",
+						"type": "struct",
+						"members": [
+						  {
+							"name": "lower",
+							"type": "ekubo::types::i129::i129"
+						  },
+						  {
+							"name": "upper",
+							"type": "ekubo::types::i129::i129"
+						  }
+						]
+					},
+					{
+					  "name": "ekubo::types::keys::PoolKey",
+					  "type": "struct",
+					  "members": [
+						{
+						  "name": "token0",
+						  "type": "core::starknet::contract_address::ContractAddress"
+						},
+						{
+						  "name": "token1",
+						  "type": "core::starknet::contract_address::ContractAddress"
+						},
+						{
+						  "name": "fee",
+						  "type": "core::integer::u128"
+						},
+						{
+						  "name": "tick_spacing",
+						  "type": "core::integer::u128"
+						},
+						{
+						  "name": "extension",
+						  "type": "core::starknet::contract_address::ContractAddress"
+						}
+					  ]
+					},
+					{
+						"name": "mint_and_deposit",
+						"type": "function",
+						"inputs": [
+						  {
+							"name": "pool_key",
+							"type": "ekubo::types::keys::PoolKey"
+						  },
+						  {
+							"name": "bounds",
+							"type": "ekubo::types::bounds::Bounds"
+						  },
+						  {
+							"name": "min_liquidity",
+							"type": "core::integer::u128"
+						  }
+						],
+						"outputs": [
+						  {
+							"type": "(core::integer::u64, core::integer::u128)"
+						  }
+						],
+						"state_mutability": "external"
+					}
+				]`,
+			},
+			want: map[string]any{
+				"pool_key": map[string]any{
+					"token0":       "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+					"token1":       "0x53c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8",
+					"fee":          "170141183460469235273462165868118016",
+					"tick_spacing": "1000",
+					"extension":    "0x0",
+				},
+				"bounds": map[string]any{
+					"lower": map[string]any{
+						"mag":  "20102000",
+						"sign": "0x3",
+					},
+					"upper": map[string]any{
+						"mag":  "19902000",
+						"sign": "True",
+					},
+				},
+				"min_liquidity": "5937915978828",
+			},
 		},
 	}
 	for _, tt := range tests {

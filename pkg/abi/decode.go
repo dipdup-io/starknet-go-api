@@ -161,7 +161,8 @@ func decodeItem(calldata []string, input Type, structs map[string]*StructItem, e
 			return nil, err
 		}
 		if int(enumIdx) > len(enum.Variants)-1 {
-			return nil, errors.Errorf("too big enum index: %d", enumIdx)
+			result[input.Name] = calldata[0]
+			return calldata[1:], nil
 		}
 		variant := enum.Variants[enumIdx]
 
