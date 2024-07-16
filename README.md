@@ -13,3 +13,4 @@ Package contains wrapper over Sequencer API. Docs can be found [here](/pkg/seque
 ## Data
 
 Package contains general data structures. Docs can be found [here](/pkg/data/).
+
