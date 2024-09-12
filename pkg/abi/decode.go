@@ -111,10 +111,12 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 		result = make(map[string]any, 0)
 		tail   = data
 		err    error
+
+		eventData = append(typ.Keys, typ.Data...)
 	)
 
-	for _, input := range typ.Data {
-		tail, err = decodeItem(tail, input, structs, enums, result)
+	for i := range eventData {
+		tail, err = decodeItem(tail, eventData[i], structs, enums, result)
 		if err != nil {
 			return nil, err
 		}

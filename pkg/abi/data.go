@@ -1,5 +1,7 @@
 package abi
 
+import "github.com/goccy/go-json"
+
 // abi types
 const (
 	FunctionType    = "function"
@@ -60,6 +62,7 @@ type Abi struct {
 type Type struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
+	Kind string `json:"kind,omitempty"`
 }
 
 // FunctionItem -
@@ -77,6 +80,34 @@ type EventItem struct {
 	Data   []Type `json:"data"`
 	Keys   []Type `json:"keys"`
 	Inputs []Type `json:"inputs"`
+}
+
+type members struct {
+	Members []Type `json:"members"`
+}
+
+func (item *EventItem) UnmarshalJSON(data []byte) error {
+	type buf EventItem
+	if err := json.Unmarshal(data, (*buf)(item)); err != nil {
+		return err
+	}
+	if item.Data == nil && item.Keys == nil {
+		var m members
+		if err := json.Unmarshal(data, &m); err != nil {
+			return err
+		}
+		item.Data = make([]Type, 0)
+		item.Keys = make([]Type, 0)
+		for i := range m.Members {
+			switch m.Members[i].Kind {
+			case "data":
+				item.Data = append(item.Data, m.Members[i])
+			case "keys":
+				item.Keys = append(item.Keys, m.Members[i])
+			}
+		}
+	}
+	return nil
 }
 
 // StructItem -
