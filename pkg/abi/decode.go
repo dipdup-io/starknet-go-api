@@ -118,7 +118,8 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 	if len(typ.Members) > 0 {
 		eventData = typ.Members
 	} else {
-		eventData = append(typ.Keys, typ.Data...)
+		eventData = append(eventData, typ.Keys...)
+		eventData = append(eventData, typ.Data...)
 	}
 
 	for i := range eventData {

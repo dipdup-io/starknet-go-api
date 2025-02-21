@@ -1,6 +1,6 @@
 module github.com/dipdup-io/starknet-go-api
 
-go 1.21
+go 1.23.2
 
 require (
 	github.com/dipdup-net/indexer-sdk v0.0.0-20230614153224-11cee5bf9248
