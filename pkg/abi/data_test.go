@@ -43,6 +43,21 @@ func TestEventItem_UnmarshalJSON(t *testing.T) {
 					Type: "event",
 					Kind: "struct",
 				},
+				Members: []Type{
+					{
+						Kind: "data",
+						Name: "from",
+						Type: "core::starknet::contract_address::ContractAddress",
+					}, {
+						Kind: "data",
+						Name: "to",
+						Type: "core::starknet::contract_address::ContractAddress",
+					}, {
+						Kind: "data",
+						Name: "value",
+						Type: "core::integer::u256",
+					},
+				},
 				Data: []Type{
 					{
 						Kind: "data",

@@ -112,8 +112,14 @@ func DecodeEventData(data []string, typ EventItem, structs map[string]*StructIte
 		tail   = data
 		err    error
 
-		eventData = append(typ.Keys, typ.Data...)
+		eventData []Type
 	)
+
+	if len(typ.Members) > 0 {
+		eventData = typ.Members
+	} else {
+		eventData = append(typ.Keys, typ.Data...)
+	}
 
 	for i := range eventData {
 		tail, err = decodeItem(tail, eventData[i], structs, enums, result)
