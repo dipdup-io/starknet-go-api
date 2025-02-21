@@ -77,13 +77,13 @@ type FunctionItem struct {
 type EventItem struct {
 	Type
 
-	Data   []Type `json:"data"`
-	Keys   []Type `json:"keys"`
-	Inputs []Type `json:"inputs"`
+	Members []Type `json:"members,omitempty"`
+	Data    []Type `json:"data"`
+	Keys    []Type `json:"keys"`
+	Inputs  []Type `json:"inputs"`
 }
 
-type members struct {
-	Members []Type `json:"members"`
+type Members struct {
 }
 
 func (item *EventItem) UnmarshalJSON(data []byte) error {
@@ -91,19 +91,15 @@ func (item *EventItem) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*buf)(item)); err != nil {
 		return err
 	}
-	if item.Data == nil && item.Keys == nil {
-		var m members
-		if err := json.Unmarshal(data, &m); err != nil {
-			return err
-		}
+	if item.Kind == StructType {
 		item.Data = make([]Type, 0)
 		item.Keys = make([]Type, 0)
-		for i := range m.Members {
-			switch m.Members[i].Kind {
+		for i := range item.Members {
+			switch item.Members[i].Kind {
 			case "data":
-				item.Data = append(item.Data, m.Members[i])
+				item.Data = append(item.Data, item.Members[i])
 			case "keys":
-				item.Keys = append(item.Keys, m.Members[i])
+				item.Keys = append(item.Keys, item.Members[i])
 			}
 		}
 	}

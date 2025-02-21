@@ -1070,3 +1070,94 @@ func TestDecodeFunctionCallData(t *testing.T) {
 		})
 	}
 }
+
+func TestDecodeEventData(t *testing.T) {
+	type args struct {
+		data    []string
+		typ     EventItem
+		structs map[string]*StructItem
+		enums   map[string]*EnumItem
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string]any
+		wantErr bool
+	}{
+		{
+			name: "test 1",
+			args: args{
+				data: []string{
+					"0x2a",
+					"0x1a62446e05ee60540d94b2e731ed037a1798065f9b8e719e293180b493b91f7",
+				},
+				typ: EventItem{
+					Type: Type{
+						Name: "hello::HelloStarknet::BalanceIncreased",
+						Type: "event",
+						Kind: "struct",
+					},
+					Members: []Type{
+						{
+							Name: "amount",
+							Type: "core::felt252",
+							Kind: "data",
+						}, {
+							Name: "by",
+							Type: "core::starknet::contract_address::ContractAddress",
+							Kind: "key",
+						},
+					},
+					Data: []Type{
+						{
+							Name: "amount",
+							Type: "core::felt252",
+							Kind: "data",
+						},
+					},
+					Keys: []Type{
+						{
+							Name: "by",
+							Type: "core::starknet::contract_address::ContractAddress",
+							Kind: "key",
+						},
+					},
+				},
+				structs: map[string]*StructItem{
+					"hello::HelloStarknet::BalanceIncreased": {
+						Members: []Member{
+							{
+								Type: Type{
+									Name: "amount",
+									Type: "core::felt252",
+									Kind: "data",
+								},
+							}, {
+								Type: Type{
+									Name: "by",
+									Type: "core::starknet::contract_address::ContractAddress",
+									Kind: "key",
+								},
+							},
+						},
+					},
+				},
+				enums: map[string]*EnumItem{},
+			},
+			want: map[string]any{
+				"amount": "0x2a",
+				"by":     "0x1a62446e05ee60540d94b2e731ed037a1798065f9b8e719e293180b493b91f7",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := DecodeEventData(tt.args.data, tt.args.typ, tt.args.structs, tt.args.enums)
+			require.Equal(t, tt.wantErr, err != nil)
+			if !tt.wantErr {
+				require.Equal(t, tt.want, got)
+			}
+		})
+	}
+}
