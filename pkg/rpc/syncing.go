@@ -34,7 +34,7 @@ func (s *Syncing) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Syncing - Returns an object about the sync status, or false if the node is not synching
+// Syncing - Returns an object about the sync status, or false if the node is not syncing
 func (api API) Syncing(ctx context.Context, opts ...RequestOption) (*Response[Syncing], error) {
 	request := api.prepareRequest("starknet_syncing", []any{}, opts...)
 
